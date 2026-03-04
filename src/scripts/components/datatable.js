@@ -57,6 +57,9 @@ class DataTable extends Component {
         this.windowScrollHandler = null;
         this.pinnedColumns = { left: [], right: [] };
         this.onPinnedResize = null;
+        this.localRowPool = [];
+        this.localRowsVersion = 0;
+        this.localRowsRenderedVersion = -1;
 
         this.state = {
             rows: [],
@@ -70,7 +73,9 @@ class DataTable extends Component {
             filters: {},
             visibleColumns: [],
             columnChooserOpen: false,
-            hasMore: false
+            hasMore: false,
+            visibleStart: 0,
+            visibleEnd: 0
         };
         this.mandatoryFieldsResolved = [];
         this.priorityFieldsResolved = [];
@@ -180,8 +185,10 @@ class DataTable extends Component {
 
         if (action === 'view-row' || action === 'edit-row') {
             const rowIndex = Number(actionEl?.dataset?.rowIndex);
-            if (Number.isNaN(rowIndex) || rowIndex < 0 || rowIndex >= this.state.rows.length) return;
-            const row = this.state.rows[rowIndex];
+            if (Number.isNaN(rowIndex) || rowIndex < 0) return;
+            const localRows = this.isLocalDomReuseEnabled() ? this.processedRows : this.state.rows;
+            if (rowIndex >= localRows.length) return;
+            const row = localRows[rowIndex];
             void this.openDetailsDialog(action === 'edit-row' ? 'edit' : 'view', row);
             return;
         }
@@ -401,6 +408,7 @@ class DataTable extends Component {
         rows = this.applySearch(rows);
         rows = this.applySort(rows);
         this.processedRows = rows;
+        this.bumpLocalRowsVersion();
         this.applyViewport(rows);
     }
 
@@ -414,6 +422,8 @@ class DataTable extends Component {
             const end = start + pageSize;
             this.state.rows = rows.slice(start, end);
             this.state.hasMore = false;
+            this.state.visibleStart = start;
+            this.state.visibleEnd = Math.min(end, rows.length);
             return;
         }
 
@@ -423,12 +433,16 @@ class DataTable extends Component {
             this.state.rows = rows.slice(0, visibleCount);
             this.state.hasMore = visibleCount < rows.length;
             this.state.totalPages = 1;
+            this.state.visibleStart = 0;
+            this.state.visibleEnd = Math.min(visibleCount, rows.length);
             return;
         }
 
         this.state.rows = rows;
         this.state.totalPages = 1;
         this.state.hasMore = false;
+        this.state.visibleStart = 0;
+        this.state.visibleEnd = rows.length;
     }
 
     applyFilters(rows) {
@@ -485,6 +499,7 @@ class DataTable extends Component {
         if (!visible && this.isMandatoryField(field)) return;
         col.visible = visible;
         this.state.visibleColumns = this.getOrderedVisibleColumns();
+        this.bumpLocalRowsVersion();
     }
 
     hydrateFilterControls() {
@@ -594,6 +609,10 @@ class DataTable extends Component {
 
     renderRows() {
         if (!this.tbody) return;
+        if (this.isLocalDomReuseEnabled()) {
+            this.renderRowsWithLocalPool();
+            return;
+        }
         this.tbody.replaceChildren();
 
         if (!this.state.rows.length) {
@@ -627,6 +646,76 @@ class DataTable extends Component {
 
             tr.appendChild(actions);
             this.tbody.appendChild(tr);
+        });
+    }
+
+    isLocalDomReuseEnabled() {
+        return !this.config.serverSide;
+    }
+
+    bumpLocalRowsVersion() {
+        this.localRowsVersion += 1;
+    }
+
+    renderRowsWithLocalPool() {
+        if (!this.tbody) return;
+
+        if (!this.processedRows.length) {
+            this.localRowPool = [];
+            this.localRowsRenderedVersion = this.localRowsVersion;
+            this.tbody.replaceChildren();
+            if (this.config.renderMode === 'template-clone' && this.emptyRowTemplate) {
+                this.renderEmptyRowFromTemplate();
+                return;
+            }
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = Math.max(this.state.visibleColumns.length + 1, 1);
+            td.textContent = 'No matching records';
+            tr.appendChild(td);
+            this.tbody.appendChild(tr);
+            return;
+        }
+
+        if (this.localRowsRenderedVersion !== this.localRowsVersion) {
+            this.rebuildLocalRowPool();
+        } else {
+            this.applyLocalRowVisibility();
+        }
+    }
+
+    rebuildLocalRowPool() {
+        if (!this.tbody) return;
+        this.tbody.replaceChildren();
+        this.localRowPool = [];
+
+        this.processedRows.forEach((row, rowIndex) => {
+            const tr = document.createElement('tr');
+            if (this.config.renderMode === 'template-clone' && this.rowCellTemplate) {
+                this.renderRowCellsFromTemplate(tr, row);
+            } else {
+                this.state.visibleColumns.forEach((column) => {
+                    const td = document.createElement('td');
+                    td.dataset.field = column.field;
+                    const value = row?.[column.field];
+                    td.textContent = value == null ? '' : String(value);
+                    tr.appendChild(td);
+                });
+            }
+            tr.appendChild(this.createActionsCell(rowIndex));
+            this.localRowPool.push(tr);
+            this.tbody.appendChild(tr);
+        });
+
+        this.localRowsRenderedVersion = this.localRowsVersion;
+        this.applyLocalRowVisibility();
+    }
+
+    applyLocalRowVisibility() {
+        const start = Math.max(0, Number(this.state.visibleStart) || 0);
+        const end = Math.max(start, Number(this.state.visibleEnd) || 0);
+        this.localRowPool.forEach((rowEl, rowIndex) => {
+            rowEl.hidden = rowIndex < start || rowIndex >= end;
         });
     }
 
@@ -1427,6 +1516,7 @@ class DataTable extends Component {
 
         target.pinned = resolvedSide;
         this.state.visibleColumns = this.getOrderedVisibleColumns();
+        this.bumpLocalRowsVersion();
         this.updateView();
         return true;
     }
@@ -1437,6 +1527,7 @@ class DataTable extends Component {
 
         target.pinned = null;
         this.state.visibleColumns = this.getOrderedVisibleColumns();
+        this.bumpLocalRowsVersion();
         this.updateView();
         return true;
     }

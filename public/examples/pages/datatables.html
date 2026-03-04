@@ -3,76 +3,178 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>DataTable Example</title>
+        <title>DataTable Benchmark Variants</title>
         <link rel="stylesheet" href="/dist/holi.css">
         <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .bench-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+            .bench-card { border: 1px solid #d8dee4; border-radius: 8px; padding: 12px; }
+            .bench-card h3 { margin: 0 0 8px; }
+            .bench-card p { margin: 0 0 12px; color: #4b5563; }
+            .bench-tools { margin: 12px 0 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+            .bench-tools button { padding: 8px 10px; cursor: pointer; }
+            pre { background: #0f172a; color: #e2e8f0; padding: 10px; border-radius: 8px; overflow: auto; }
+        </style>
     </head>
     <body>
-        <h1>DataTable Variants</h1>
+        <h1>DataTable Matrix + Benchmarks</h1>
+        <p>Variants: remote/local x pagination/infinite x programmatic/template-clone.</p>
 
-        <h2>Variant 1A: Pagination (Programmatic)</h2>
-        <section
-            id="dt-pagination-programmatic"
-            component="datatable"
-            library="holi"
-            data-endpoint="/examples/api/sales"
-            data-column-metadata="salesColumnMetadata"
-            server-side
-            data-mode="pagination"
-            data-render-mode="programmatic"
-            data-page-size="20"
-            data-priority-fields="orderNo,customer,total,status"
-            data-mandatory-fields="orderNo,total">
+        <section class="bench-tools">
+            <button type="button" id="bench-refresh">Refresh Metrics View</button>
+            <button type="button" id="bench-clear">Clear Metrics</button>
+            <button type="button" id="bench-run-pagination">Run Pagination Bench (all pagination variants)</button>
+            <button type="button" id="bench-run-scroll">Run Infinite Scroll Bench (all infinite variants)</button>
+        </section>
+        <pre id="bench-output"></pre>
+
+        <section class="bench-grid">
+            <article class="bench-card">
+                <h3>Remote Pagination / Programmatic</h3>
+                <p>Server-side, pagination, programmatic render.</p>
+                <section
+                    id="dt-remote-pagination-programmatic"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-endpoint="/examples/api/sales"
+                    data-column-metadata="salesColumnMetadata"
+                    server-side
+                    data-mode="pagination"
+                    data-render-mode="programmatic"
+                    data-page-size="20"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Remote Pagination / Template Clone</h3>
+                <p>Server-side, pagination, template-clone render.</p>
+                <section
+                    id="dt-remote-pagination-template-clone"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-endpoint="/examples/api/sales"
+                    data-column-metadata="salesColumnMetadata"
+                    server-side
+                    data-mode="pagination"
+                    data-render-mode="template-clone"
+                    data-page-size="20"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Remote Infinite / Programmatic</h3>
+                <p>Server-side, infinite, programmatic render.</p>
+                <section
+                    id="dt-remote-infinite-programmatic"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-endpoint="/examples/api/sales"
+                    data-column-metadata="salesColumnMetadata"
+                    server-side
+                    data-mode="infinite"
+                    data-render-mode="programmatic"
+                    data-infinite-chunk="30"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Remote Infinite / Template Clone</h3>
+                <p>Server-side, infinite, template-clone render.</p>
+                <section
+                    id="dt-remote-infinite-template-clone"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-endpoint="/examples/api/sales"
+                    data-column-metadata="salesColumnMetadata"
+                    server-side
+                    data-mode="infinite"
+                    data-render-mode="template-clone"
+                    data-infinite-chunk="30"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Local Pagination / Programmatic</h3>
+                <p>Local rows loaded once into a JS variable, then paged in-memory.</p>
+                <section
+                    id="dt-local-pagination-programmatic"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-column-metadata="salesColumnMetadata"
+                    data-mode="pagination"
+                    data-render-mode="programmatic"
+                    data-page-size="20"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Local Pagination / Template Clone</h3>
+                <p>Local rows loaded once into a JS variable, then paged in-memory.</p>
+                <section
+                    id="dt-local-pagination-template-clone"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-column-metadata="salesColumnMetadata"
+                    data-mode="pagination"
+                    data-render-mode="template-clone"
+                    data-page-size="20"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Local Infinite / Programmatic</h3>
+                <p>Local rows loaded once into a JS variable, then revealed in chunks.</p>
+                <section
+                    id="dt-local-infinite-programmatic"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-column-metadata="salesColumnMetadata"
+                    data-mode="infinite"
+                    data-render-mode="programmatic"
+                    data-infinite-chunk="30"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
+
+            <article class="bench-card">
+                <h3>Local Infinite / Template Clone</h3>
+                <p>Local rows loaded once into a JS variable, then revealed in chunks.</p>
+                <section
+                    id="dt-local-infinite-template-clone"
+                    component="datatable"
+                    transform="lazy"
+                    library="holi"
+                    data-column-metadata="salesColumnMetadata"
+                    data-mode="infinite"
+                    data-render-mode="template-clone"
+                    data-infinite-chunk="30"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total">
+                </section>
+            </article>
         </section>
 
-        <h2>Variant 1B: Pagination (Template Clone)</h2>
-        <section
-            id="dt-pagination-template-clone"
-            component="datatable"
-            library="holi"
-            data-endpoint="/examples/api/sales"
-            data-column-metadata="salesColumnMetadata"
-            server-side
-            data-mode="pagination"
-            data-render-mode="template-clone"
-            data-page-size="20"
-            data-priority-fields="orderNo,customer,total,status"
-            data-mandatory-fields="orderNo,total">
-        </section>
-
-        <h2>Variant 2A: Infinite Scroll (Programmatic)</h2>
-        <section
-            id="dt-infinite-programmatic"
-            role="datatable"
-            library="holi"
-            data-endpoint="/examples/api/sales"
-            data-column-metadata="salesColumnMetadata"
-            server-side
-            data-mode="infinite"
-            data-render-mode="programmatic"
-            data-infinite-chunk="30"
-            data-priority-fields="orderNo,customer,total,status"
-            data-mandatory-fields="orderNo,total">
-        </section>
-
-        <h2>Variant 2B: Infinite Scroll (Template Clone)</h2>
-        <section
-            id="dt-infinite-template-clone"
-            role="datatable"
-            library="holi"
-            data-endpoint="/examples/api/sales"
-            data-column-metadata="salesColumnMetadata"
-            server-side
-            data-mode="infinite"
-            data-render-mode="template-clone"
-            data-infinite-chunk="30"
-            data-priority-fields="orderNo,customer,total,status"
-            data-mandatory-fields="orderNo,total">
-        </section>
-<!--
-        <h2>Variant 3: Standard (Local JSON)</h2>
-        <datatable id="dt-standard-local" library="holi" data-endpoint="/examples/api/sales.json" data-column-metadata="salesColumnMetadata"></datatable>
--->
         <script>
             window.salesColumnMetadata = {
                 orderNo: { required: true, readonly: true, label: 'Order Number', pinned: 'left' },
@@ -86,6 +188,260 @@
                 fulfilled: { formFieldType: 'checkbox', label: 'Fulfilled' },
                 etaDays: { formFieldType: 'number', constraints: { min: 0, max: 365 } }
             };
+
+            const BENCH_KEY = 'holi:datatable:benchmarks:v1';
+
+            const VARIANTS = [
+                { id: 'dt-remote-pagination-programmatic', source: 'remote', mode: 'pagination', renderMode: 'programmatic', serverSide: true, endpoint: '/examples/api/sales' },
+                { id: 'dt-remote-pagination-template-clone', source: 'remote', mode: 'pagination', renderMode: 'template-clone', serverSide: true, endpoint: '/examples/api/sales' },
+                { id: 'dt-remote-infinite-programmatic', source: 'remote', mode: 'infinite', renderMode: 'programmatic', serverSide: true, endpoint: '/examples/api/sales' },
+                { id: 'dt-remote-infinite-template-clone', source: 'remote', mode: 'infinite', renderMode: 'template-clone', serverSide: true, endpoint: '/examples/api/sales' },
+                { id: 'dt-local-pagination-programmatic', source: 'local', mode: 'pagination', renderMode: 'programmatic', serverSide: false },
+                { id: 'dt-local-pagination-template-clone', source: 'local', mode: 'pagination', renderMode: 'template-clone', serverSide: false },
+                { id: 'dt-local-infinite-programmatic', source: 'local', mode: 'infinite', renderMode: 'programmatic', serverSide: false },
+                { id: 'dt-local-infinite-template-clone', source: 'local', mode: 'infinite', renderMode: 'template-clone', serverSide: false }
+            ];
+
+            const instances = new Map();
+            let localSalesRows = [];
+            let localSalesHeaders = [];
+
+            function hasDataTableTemplate() {
+                return !!document.getElementById('datatable-template');
+            }
+
+            function injectTemplates(htmlText) {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = htmlText;
+                const templates = wrapper.querySelectorAll('template[id]');
+                templates.forEach((tpl) => {
+                    if (!document.getElementById(tpl.id)) {
+                        document.body.appendChild(tpl);
+                    }
+                });
+            }
+
+            async function ensureTemplateLibrary() {
+                if (hasDataTableTemplate()) return;
+                const urls = ['/dist/holi.html', '/holi.html'];
+                for (let i = 0; i < urls.length; i += 1) {
+                    const url = urls[i];
+                    try {
+                        const response = await fetch(url, { credentials: 'same-origin' });
+                        if (!response.ok) continue;
+                        const html = await response.text();
+                        injectTemplates(html);
+                        if (hasDataTableTemplate()) return;
+                    } catch (_error) {}
+                }
+                throw new Error('DataTable template library not found (datatable-template)');
+            }
+
+            function readBenchStore() {
+                try {
+                    const raw = localStorage.getItem(BENCH_KEY);
+                    if (!raw) return { version: 1, updatedAt: Date.now(), metrics: {} };
+                    const parsed = JSON.parse(raw);
+                    if (!parsed || typeof parsed !== 'object') return { version: 1, updatedAt: Date.now(), metrics: {} };
+                    if (!parsed.metrics || typeof parsed.metrics !== 'object') parsed.metrics = {};
+                    return parsed;
+                } catch (_error) {
+                    return { version: 1, updatedAt: Date.now(), metrics: {} };
+                }
+            }
+
+            function writeBenchStore(store) {
+                store.updatedAt = Date.now();
+                localStorage.setItem(BENCH_KEY, JSON.stringify(store));
+                return store;
+            }
+
+            function metricBucket(store, metricName, category, renderMode) {
+                if (!store.metrics[metricName]) store.metrics[metricName] = {};
+                if (!store.metrics[metricName][category]) store.metrics[metricName][category] = {};
+                if (!store.metrics[metricName][category][renderMode]) {
+                    store.metrics[metricName][category][renderMode] = {
+                        count: 0,
+                        total: 0,
+                        min: Number.POSITIVE_INFINITY,
+                        max: Number.NEGATIVE_INFINITY,
+                        avg: 0,
+                        last: 0,
+                        updatedAt: Date.now()
+                    };
+                }
+                return store.metrics[metricName][category][renderMode];
+            }
+
+            function recordMetric(metricName, category, renderMode, value) {
+                const next = Number(value);
+                if (!Number.isFinite(next) || next < 0) return;
+                const store = readBenchStore();
+                const bucket = metricBucket(store, metricName, category, renderMode);
+                bucket.count += 1;
+                bucket.total += next;
+                bucket.min = Math.min(bucket.min, next);
+                bucket.max = Math.max(bucket.max, next);
+                bucket.last = next;
+                bucket.avg = bucket.total / bucket.count;
+                bucket.updatedAt = Date.now();
+                writeBenchStore(store);
+                renderBenchStore();
+            }
+
+            function clearMetrics() {
+                localStorage.removeItem(BENCH_KEY);
+                renderBenchStore();
+            }
+
+            function renderBenchStore() {
+                const output = document.getElementById('bench-output');
+                if (!output) return;
+                output.textContent = JSON.stringify(readBenchStore(), null, 2);
+            }
+
+            async function resolveLocalRows() {
+                if (Array.isArray(localSalesRows) && localSalesRows.length) return localSalesRows;
+                const candidates = ['/examples/api/sales.json', '/examples/api/sales'];
+                for (let i = 0; i < candidates.length; i += 1) {
+                    const endpoint = candidates[i];
+                    try {
+                        const response = await fetch(endpoint, { credentials: 'same-origin' });
+                        if (!response.ok) continue;
+                        const payload = await response.json();
+                        const rows = Array.isArray(payload?.rows) ? payload.rows : (Array.isArray(payload) ? payload : []);
+                        if (rows.length) {
+                            localSalesRows = rows;
+                            if (Array.isArray(payload?.headers) && payload.headers.length) {
+                                localSalesHeaders = payload.headers.map((header) => ({
+                                    ...(header || {}),
+                                    field: String(header?.field || header?.key || ''),
+                                    label: header?.label || header?.field || header?.key || ''
+                                })).filter((header) => !!header.field);
+                            }
+                            if (!localSalesHeaders.length) {
+                                const sample = rows[0] && typeof rows[0] === 'object' ? rows[0] : {};
+                                localSalesHeaders = Object.keys(sample).map((field) => ({
+                                    field,
+                                    label: field,
+                                    visible: true
+                                }));
+                            }
+                            return localSalesRows;
+                        }
+                    } catch (_error) {}
+                }
+                localSalesRows = [];
+                localSalesHeaders = [];
+                return localSalesRows;
+            }
+
+            function categoryOf(variant) {
+                return `${variant.source}-${variant.mode}`;
+            }
+
+            async function initVariants() {
+                await ensureTemplateLibrary();
+                const rows = await resolveLocalRows();
+
+                VARIANTS.forEach((variant) => {
+                    const host = document.getElementById(variant.id);
+                    if (!host) return;
+
+                    const start = performance.now();
+                    const once = () => {
+                        const elapsed = performance.now() - start;
+                        recordMetric('initial-load', categoryOf(variant), variant.renderMode, elapsed);
+                        host.removeEventListener('stateupdate', once);
+                    };
+                    host.addEventListener('stateupdate', once);
+
+                    const config = {};
+                    if (variant.serverSide) {
+                        config.endpoint = variant.endpoint;
+                        config.serverSide = true;
+                    } else {
+                        config.rows = rows;
+                        config.headers = localSalesHeaders;
+                        config.serverSide = false;
+                    }
+
+                    const instance = new window.DataTable(host, config);
+                    instances.set(variant.id, { variant, instance, host });
+                });
+            }
+
+            async function runPaginationBench(steps = 5) {
+                const list = VARIANTS.filter((variant) => variant.mode === 'pagination');
+                for (let i = 0; i < list.length; i += 1) {
+                    const variant = list[i];
+                    const item = instances.get(variant.id);
+                    if (!item?.instance) continue;
+                    const instance = item.instance;
+                    for (let s = 0; s < steps; s += 1) {
+                        if (instance.state.page >= instance.state.totalPages) {
+                            await instance.gotoPage(1);
+                        }
+                        const nextPage = Math.min(instance.state.page + 1, Math.max(1, instance.state.totalPages));
+                        const t0 = performance.now();
+                        await instance.gotoPage(nextPage);
+                        const t1 = performance.now();
+                        recordMetric('pagination', categoryOf(variant), variant.renderMode, t1 - t0);
+                    }
+                }
+            }
+
+            async function runScrollBench(steps = 5) {
+                const list = VARIANTS.filter((variant) => variant.mode === 'infinite');
+                for (let i = 0; i < list.length; i += 1) {
+                    const variant = list[i];
+                    const item = instances.get(variant.id);
+                    if (!item?.instance) continue;
+                    const instance = item.instance;
+                    instance.resetViewport();
+                    if (!variant.serverSide) {
+                        instance.applyViewport(instance.processedRows);
+                        instance.renderRows();
+                        instance.renderMeta();
+                    } else {
+                        await instance.loadData();
+                    }
+
+                    for (let s = 0; s < steps; s += 1) {
+                        if (!instance.state.hasMore) break;
+                        const t0 = performance.now();
+                        if (instance.contentEl) {
+                            instance.contentEl.scrollTop = instance.contentEl.scrollHeight;
+                        }
+                        await instance.handleInfiniteScroll();
+                        const t1 = performance.now();
+                        recordMetric('scroll', categoryOf(variant), variant.renderMode, t1 - t0);
+                    }
+                }
+            }
+
+            window.holiDataTableBenchmark = {
+                runPaginationBench,
+                runScrollBench,
+                clear: clearMetrics,
+                get: readBenchStore
+            };
+
+            document.getElementById('bench-refresh')?.addEventListener('click', () => renderBenchStore());
+            document.getElementById('bench-clear')?.addEventListener('click', () => clearMetrics());
+            document.getElementById('bench-run-pagination')?.addEventListener('click', async () => {
+                await runPaginationBench(5);
+                renderBenchStore();
+            });
+            document.getElementById('bench-run-scroll')?.addEventListener('click', async () => {
+                await runScrollBench(5);
+                renderBenchStore();
+            });
+
+            renderBenchStore();
+            initVariants().catch((error) => {
+                console.error(error);
+            });
         </script>
     </body>
 </html>

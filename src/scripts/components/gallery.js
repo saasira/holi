@@ -76,6 +76,8 @@ class GalleryComponent extends Component {
         this.allItems = [];
         this.viewItems = [];
         this.visibleItems = [];
+        this.visibleStart = 0;
+        this.visibleEnd = 0;
         this.pendingIndex = 0;
         this.query = '';
         this.metaQuery = '';
@@ -85,6 +87,10 @@ class GalleryComponent extends Component {
         this.visibleCount = this.pageSize;
         this.observer = null;
         this.loading = false;
+        this.thumbnailPool = [];
+        this.thumbnailPoolVersion = 0;
+        this.thumbnailPoolRenderedVersion = -1;
+        this.viewSignature = '';
         this.init();
     }
 
@@ -359,6 +365,8 @@ class GalleryComponent extends Component {
         if (this.displayMode === 'infinite') {
             if (resetViewport) this.visibleCount = this.pageSize;
             const count = Math.min(this.visibleCount, this.viewItems.length);
+            this.visibleStart = 0;
+            this.visibleEnd = count;
             this.visibleItems = this.viewItems.slice(0, count).map((item, idx) => ({ ...item, viewIndex: idx }));
             return;
         }
@@ -368,13 +376,24 @@ class GalleryComponent extends Component {
         if (resetViewport) this.currentPage = 1;
         const start = (this.currentPage - 1) * this.pageSize;
         const end = start + this.pageSize;
+        this.visibleStart = start;
+        this.visibleEnd = Math.min(end, this.viewItems.length);
         this.visibleItems = this.viewItems.slice(start, end).map((item, idx) => ({ ...item, viewIndex: start + idx }));
+    }
+
+    resolveViewSignature(items) {
+        if (!Array.isArray(items) || !items.length) return '';
+        return items.map((item) => String(item.id ?? item.index ?? '')).join('|');
     }
 
     applyView(resetViewport = false) {
         if (!this.hasItems) {
             this.viewItems = [];
             this.visibleItems = [];
+            this.visibleStart = 0;
+            this.visibleEnd = 0;
+            this.thumbnailPool = [];
+            this.thumbnailPoolVersion += 1;
             this.renderThumbnails();
             this.renderSlides();
             this.updatePagination();
@@ -385,10 +404,18 @@ class GalleryComponent extends Component {
 
         const filtered = this.allItems.filter((item) => this.matchesSearch(item) && this.matchesMetaFilter(item));
         this.viewItems = this.sortItems(filtered);
+        const nextSignature = this.resolveViewSignature(this.viewItems);
+        const viewChanged = nextSignature !== this.viewSignature;
+        if (viewChanged) {
+            this.viewSignature = nextSignature;
+            this.thumbnailPoolVersion += 1;
+        }
         this.computeVisibleItems(resetViewport);
 
         this.renderThumbnails();
-        this.renderSlides();
+        if (viewChanged || resetViewport) {
+            this.renderSlides();
+        }
         this.updatePagination();
         this.updateSentinel();
         this.syncNestedComponents();
@@ -403,22 +430,44 @@ class GalleryComponent extends Component {
 
     renderThumbnails() {
         if (!this.grid) return;
-        this.grid.replaceChildren();
-        this.visibleItems.forEach((item) => {
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = 'holi-gallery-thumb';
-            button.setAttribute('data-gallery-index', String(item.viewIndex));
-            button.setAttribute('aria-label', `Open image ${item.index + 1}`);
-            button.setAttribute('title', item.name || item.thumbAlt || '');
+        if (!this.viewItems.length) {
+            this.thumbnailPool = [];
+            this.thumbnailPoolRenderedVersion = this.thumbnailPoolVersion;
+            this.grid.replaceChildren();
+            return;
+        }
 
-            const image = document.createElement('img');
-            image.src = item.thumbSrc;
-            image.alt = item.thumbAlt;
-            image.loading = 'lazy';
+        if (this.thumbnailPoolRenderedVersion !== this.thumbnailPoolVersion) {
+            this.grid.replaceChildren();
+            this.thumbnailPool = [];
+            this.viewItems.forEach((item, viewIndex) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'holi-gallery-thumb';
+                button.setAttribute('data-gallery-index', String(viewIndex));
+                button.setAttribute('aria-label', `Open image ${item.index + 1}`);
+                button.setAttribute('title', item.name || item.thumbAlt || '');
 
-            button.appendChild(image);
-            this.grid.appendChild(button);
+                const image = document.createElement('img');
+                image.src = item.thumbSrc;
+                image.alt = item.thumbAlt;
+                image.loading = 'lazy';
+
+                button.appendChild(image);
+                this.thumbnailPool.push(button);
+                this.grid.appendChild(button);
+            });
+            this.thumbnailPoolRenderedVersion = this.thumbnailPoolVersion;
+        }
+
+        this.applyThumbnailVisibility();
+    }
+
+    applyThumbnailVisibility() {
+        const start = Math.max(0, Number(this.visibleStart) || 0);
+        const end = Math.max(start, Number(this.visibleEnd) || 0);
+        this.thumbnailPool.forEach((node, index) => {
+            node.hidden = index < start || index >= end;
         });
     }
 

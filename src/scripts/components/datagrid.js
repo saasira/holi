@@ -58,6 +58,9 @@ class DataGrid extends Component {
         this.remoteLoaded = false;
         this.loadingMore = false;
         this.windowScrollHandler = null;
+        this.localCardPool = [];
+        this.localCardsVersion = 0;
+        this.localCardsRenderedVersion = -1;
 
         this.state = {
             rows: [],
@@ -71,7 +74,9 @@ class DataGrid extends Component {
             filters: {},
             visibleFields: [],
             fieldChooserOpen: false,
-            hasMore: false
+            hasMore: false,
+            visibleStart: 0,
+            visibleEnd: 0
         };
         this.mandatoryFieldsResolved = [];
         this.priorityFieldsResolved = [];
@@ -171,8 +176,10 @@ class DataGrid extends Component {
 
         if (action === 'view-row' || action === 'edit-row') {
             const rowIndex = Number(actionEl?.dataset?.rowIndex);
-            if (Number.isNaN(rowIndex) || rowIndex < 0 || rowIndex >= this.state.rows.length) return;
-            const row = this.state.rows[rowIndex];
+            if (Number.isNaN(rowIndex) || rowIndex < 0) return;
+            const localRows = this.isLocalDomReuseEnabled() ? this.processedRows : this.state.rows;
+            if (rowIndex >= localRows.length) return;
+            const row = localRows[rowIndex];
             void this.openDetailsDialog(action === 'edit-row' ? 'edit' : 'view', row);
             return;
         }
@@ -386,6 +393,7 @@ class DataGrid extends Component {
         rows = this.applySearch(rows);
         rows = this.applySort(rows);
         this.processedRows = rows;
+        this.bumpLocalCardsVersion();
         this.applyViewport(rows);
     }
 
@@ -398,6 +406,8 @@ class DataGrid extends Component {
             const start = (this.state.page - 1) * pageSize;
             this.state.rows = rows.slice(start, start + pageSize);
             this.state.hasMore = false;
+            this.state.visibleStart = start;
+            this.state.visibleEnd = Math.min(start + pageSize, rows.length);
             return;
         }
 
@@ -407,12 +417,16 @@ class DataGrid extends Component {
             this.state.rows = rows.slice(0, visibleCount);
             this.state.hasMore = visibleCount < rows.length;
             this.state.totalPages = 1;
+            this.state.visibleStart = 0;
+            this.state.visibleEnd = Math.min(visibleCount, rows.length);
             return;
         }
 
         this.state.rows = rows;
         this.state.totalPages = 1;
         this.state.hasMore = false;
+        this.state.visibleStart = 0;
+        this.state.visibleEnd = rows.length;
     }
 
     applyFilters(rows) {
@@ -471,6 +485,7 @@ class DataGrid extends Component {
             this.state.visibleFields = this.state.visibleFields.filter((f) => f !== field);
         }
         this.state.visibleFields = this.getOrderedVisibleFields(this.state.visibleFields);
+        this.bumpLocalCardsVersion();
     }
 
     hydrateFilterControls() {
@@ -526,6 +541,10 @@ class DataGrid extends Component {
 
     renderCards() {
         if (!this.cardsHost) return;
+        if (this.isLocalDomReuseEnabled()) {
+            this.renderCardsWithLocalPool();
+            return;
+        }
         this.cardsHost.replaceChildren();
 
         if (!this.state.rows.length) {
@@ -538,6 +557,56 @@ class DataGrid extends Component {
 
         this.state.rows.forEach((row, rowIndex) => {
             this.cardsHost.appendChild(this.createCard(row, rowIndex));
+        });
+    }
+
+    isLocalDomReuseEnabled() {
+        return !this.config.serverSide;
+    }
+
+    bumpLocalCardsVersion() {
+        this.localCardsVersion += 1;
+    }
+
+    renderCardsWithLocalPool() {
+        if (!this.cardsHost) return;
+
+        if (!this.processedRows.length) {
+            this.localCardPool = [];
+            this.localCardsRenderedVersion = this.localCardsVersion;
+            this.cardsHost.replaceChildren();
+            const empty = document.createElement('div');
+            empty.className = 'datagrid-empty';
+            empty.textContent = 'No matching records';
+            this.cardsHost.appendChild(empty);
+            return;
+        }
+
+        if (this.localCardsRenderedVersion !== this.localCardsVersion) {
+            this.rebuildLocalCardPool();
+        } else {
+            this.applyLocalCardVisibility();
+        }
+    }
+
+    rebuildLocalCardPool() {
+        if (!this.cardsHost) return;
+        this.cardsHost.replaceChildren();
+        this.localCardPool = [];
+        this.processedRows.forEach((row, rowIndex) => {
+            const card = this.createCard(row, rowIndex);
+            this.localCardPool.push(card);
+            this.cardsHost.appendChild(card);
+        });
+        this.localCardsRenderedVersion = this.localCardsVersion;
+        this.applyLocalCardVisibility();
+    }
+
+    applyLocalCardVisibility() {
+        const start = Math.max(0, Number(this.state.visibleStart) || 0);
+        const end = Math.max(start, Number(this.state.visibleEnd) || 0);
+        this.localCardPool.forEach((card, rowIndex) => {
+            card.hidden = rowIndex < start || rowIndex >= end;
         });
     }
 
