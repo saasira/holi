@@ -1,0 +1,17 @@
+.holi-checkbox-group {
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.holi-checkbox-options {
+    display: grid;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.holi-checkbox-option {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}

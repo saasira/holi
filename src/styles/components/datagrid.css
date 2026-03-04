@@ -1,0 +1,221 @@
+.holi.datagrid {
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+    margin: 12px 0 28px;
+    padding: 0;
+}
+
+.holi.datagrid .datagrid-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f5f7fa;
+    border-bottom: 1px solid #e6eaf0;
+}
+
+.holi.datagrid .datagrid-toolbar input[type="search"],
+.holi.datagrid .datagrid-toolbar select {
+    min-height: 32px;
+    padding: 4px 8px;
+}
+
+.holi.datagrid .datagrid-toolbar button,
+.holi.datagrid .datagrid-card-actions button {
+    border: 1px solid #cfd6df;
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.holi.datagrid .datagrid-field-chooser {
+    border: 1px solid #d9dee8;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 12px;
+    background: #f9fafb;
+}
+
+.holi.datagrid .datagrid-field-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+.holi.datagrid .datagrid-content {
+    padding: 10px 12px;
+}
+
+.holi.datagrid .datagrid-content.datagrid-scrollable {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.holi.datagrid .datagrid-cards {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.holi.datagrid[data-cards="1"] .datagrid-cards {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.holi.datagrid[data-cards="2"] .datagrid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.holi.datagrid[data-cards="3"] .datagrid-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.holi.datagrid[data-cards="4"] .datagrid-cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.holi.datagrid .datagrid-card {
+    border: 1px solid #e5e9f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 10px;
+}
+
+.holi.datagrid .datagrid-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.holi.datagrid .datagrid-card-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    object-fit: cover;
+    background: #e5e7eb;
+}
+
+.holi.datagrid .datagrid-card-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5ebf3;
+}
+
+.holi.datagrid .datagrid-card-title {
+    margin: 0;
+    font-size: 14px;
+    color: #111827;
+}
+
+.holi.datagrid .datagrid-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 4px 0;
+    border-top: 1px solid #edf1f7;
+}
+
+.holi.datagrid .datagrid-field:first-child {
+    border-top: 0;
+}
+
+.holi.datagrid .datagrid-field-label {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.holi.datagrid .datagrid-field-value {
+    color: #111827;
+    font-size: 13px;
+    text-align: right;
+}
+
+.holi.datagrid .datagrid-card-actions {
+    border-top: 1px solid #edf1f7;
+    margin-top: 8px;
+    padding-top: 8px;
+    display: flex;
+    gap: 6px;
+}
+
+.holi.datagrid .datagrid-empty {
+    border: 1px dashed #d5dbe5;
+    border-radius: 8px;
+    background: #fbfcfd;
+    color: #4b5563;
+    padding: 16px;
+    text-align: center;
+}
+
+.holi.datagrid .datagrid-footer {
+    padding: 8px 12px;
+    color: #4b5563;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #f5f7fa;
+    border-top: 1px solid #e6eaf0;
+}
+
+.holi.datagrid [data-role="pagination-controls"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.holi.datagrid [data-role="pagination-controls"][hidden] {
+    display: none;
+}
+
+.holi.datagrid [data-role="request-status"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.holi.datagrid [data-role="request-status"][data-state="idle"] {
+    display: none;
+}
+
+.holi.datagrid [data-role="request-status"][data-state="loading"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border: 2px solid #cfd6df;
+    border-top-color: #6b7280;
+    border-radius: 50%;
+    display: inline-block;
+    animation: datagrid-spin 0.7s linear infinite;
+}
+
+.holi.datagrid [data-role="request-status"][data-state="error"] {
+    color: #b91c1c;
+}
+
+@keyframes datagrid-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 1080px) {
+    .holi.datagrid[data-cards="3"] .datagrid-cards,
+    .holi.datagrid[data-cards="4"] .datagrid-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .holi.datagrid .datagrid-cards {
+        grid-template-columns: 1fr;
+    }
+}

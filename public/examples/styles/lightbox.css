@@ -1,0 +1,85 @@
+body {
+    font-family: Segoe UI, sans-serif;
+    margin: 20px;
+    background: #f6f8fb;
+    color: #0f172a;
+}
+
+.lightbox-demo {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+#gallery-lightbox > [slot] {
+    display: none;
+}
+
+.lightbox-header h1 {
+    margin: 0 0 6px;
+}
+
+.lightbox-header p {
+    margin: 0 0 16px;
+    color: #334155;
+}
+
+.thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.thumb {
+    border: 1px solid #d7dee8;
+    border-radius: 12px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    background: #fff;
+}
+
+.thumb img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+.thumb:hover,
+.thumb:focus-visible {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.lightbox-shell .holi-carousel {
+    border: 0;
+    border-radius: 0;
+    max-width: none;
+    background: #020617;
+}
+
+.lightbox-shell .holi-carousel .slide {
+    background: #020617;
+}
+
+.lightbox-shell .holi-carousel .slide img {
+    width: 100%;
+    max-height: min(78vh, 900px);
+    object-fit: contain;
+    background: #020617;
+}
+
+.lightbox-shell .holi-carousel-footer {
+    background: #0f172a;
+    border-top-color: #1e293b;
+}
+
+.lightbox-shell .holi-carousel .controls button,
+.lightbox-shell .holi-carousel .dot {
+    background: #cbd5e1;
+}
+
+.lightbox-shell .holi-carousel .dot.selected {
+    background: #38bdf8;
+}

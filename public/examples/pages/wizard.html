@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wizard Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>Wizard Example</h1>
+        <p>Template-driven wizard with provider-backed steps, lazy loading, and page navigation mode.</p>
+
+        <h2>Variant 1: Lazy inline content</h2>
+        <wizard
+            id="patient-wizard"
+            library="holi"
+            provider="workflow"
+            data-source="@{patient.workflow}"
+            autosync
+            lazy>
+        </wizard>
+
+        <h2>Variant 2: Remote step content (inline wizard)</h2>
+        <p>Step manifest and each step content URL come from API. Content may be HTML or JSON.</p>
+        <wizard
+            id="remote-wizard"
+            library="holi"
+            provider="workflowRemote"
+            data-source="@{patient.workflow.remote}"
+            lazy>
+        </wizard>
+
+        <h2>Variant 3: Multi-page workflow (recommended demo)</h2>
+        <p>
+            Open the concrete multi-page flow:
+            <a href="/examples/pages/wizard/patient.html?wf=demo-001">wizard/patient.html</a>
+            (then use Next/Previous to move across pages while preserving state).
+        </p>
+
+        <h2>Events (Variant 1)</h2>
+        <pre id="wizard-log">waiting...</pre>
+
+        <script>
+            (function () {
+                const workflowSteps = [
+                    { id: 'patient', name: 'Patient' },
+                    { id: 'vitals', name: 'Vitals' },
+                    { id: 'consult', name: 'Consultation' },
+                    { id: 'summary', name: 'Summary' }
+                ];
+                class WorkflowProvider {
+                    async resolve(expression) {
+                        if (expression !== '@{patient.workflow}') return [];
+                        return workflowSteps;
+                    }
+
+                    async getContent(step) {
+                        const form = document.createElement('form');
+                        form.setAttribute('data-step-id', step.id);
+
+                        const heading = document.createElement('h3');
+                        heading.textContent = step.name;
+
+                        const note = document.createElement('p');
+                        note.textContent = `Provide details for step: ${step.id}`;
+
+                        const label = document.createElement('label');
+                        label.textContent = 'Notes ';
+
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.name = 'notes';
+                        input.placeholder = `Type ${step.name.toLowerCase()} notes`;
+
+                        label.appendChild(input);
+                        form.append(heading, note, label);
+                        return form;
+                    }
+
+                    async saveStep(step, payload) {
+                        const log = document.getElementById('wizard-log');
+                        const line = `saved step "${step.id}" => ${JSON.stringify(payload.data || {})}`;
+                        log.textContent = `${line}\n${log.textContent}`;
+                    }
+                }
+
+                class WorkflowRemoteProvider {
+                    async resolve(expression) {
+                        if (expression !== '@{patient.workflow.remote}') return [];
+                        const response = await fetch('/examples/api/wizard/remote-steps.json', { credentials: 'same-origin' });
+                        if (!response.ok) return [];
+                        const payload = await response.json();
+                        return Array.isArray(payload?.steps) ? payload.steps : [];
+                    }
+                }
+
+                window.contentProviders = window.contentProviders || {};
+                window.contentProviders.workflow = WorkflowProvider;
+                window.contentProviders.workflowRemote = WorkflowRemoteProvider;
+
+                const wizardEl = document.getElementById('patient-wizard');
+                const logEl = document.getElementById('wizard-log');
+
+                wizardEl.addEventListener('stepchange', (event) => {
+                    const stepInfo = event.detail || {};
+                    const line = `stepchange => step ${stepInfo.step}, direction ${stepInfo.direction}`;
+                    logEl.textContent = `${line}\n${logEl.textContent}`;
+                });
+
+                wizardEl.addEventListener('complete', (event) => {
+                    const line = `complete => ${JSON.stringify(event.detail || {})}`;
+                    logEl.textContent = `${line}\n${logEl.textContent}`;
+                });
+            })();
+        </script>
+    </body>
+</html>

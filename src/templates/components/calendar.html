@@ -1,0 +1,29 @@
+<template id="calendar-template">
+    <section class="holi-calendar" role="group" aria-label="Calendar">
+        <slot name="input"></slot>
+
+        <header class="holi-calendar-nav">
+            <button type="button" data-action="prev-month" aria-label="Previous month">Prev</button>
+            <h3 class="holi-calendar-title" data-role="title"></h3>
+            <button type="button" data-action="next-month" aria-label="Next month">Next</button>
+        </header>
+
+        <table class="holi-calendar-grid">
+            <thead data-role="thead"></thead>
+            <tbody data-role="tbody"></tbody>
+        </table>
+
+        <section class="holi-calendar-time" data-role="time">
+            <slot name="time-prefix"></slot>
+            <input type="number" min="0" max="23" data-role="hour" aria-label="Hour">
+            <span class="holi-calendar-time-sep">:</span>
+            <input type="number" min="0" max="59" data-role="minute" aria-label="Minute">
+            <button type="button" data-action="toggle-ampm" aria-label="Toggle AM PM">AM</button>
+            <slot name="time-suffix"></slot>
+        </section>
+
+        <section class="holi-calendar-messages" data-role="messages"></section>
+        <section class="holi-calendar-live" data-role="live" aria-live="polite" aria-atomic="true"></section>
+        <slot name="footer"></slot>
+    </section>
+</template>

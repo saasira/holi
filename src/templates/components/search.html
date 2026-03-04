@@ -1,0 +1,25 @@
+<template id="search-template">
+    <section class="holi-search" data-role="root">
+        <form class="holi-search-form" data-role="form" role="search" novalidate>
+            <label class="holi-search-label" data-role="label">
+                <slot name="label">Search</slot>
+            </label>
+            <div class="holi-search-input-wrap">
+                <input type="search" class="holi-search-input" data-role="input">
+                <button type="submit" class="holi-search-submit" data-role="submit">Go</button>
+                <section class="holi-search-suggestions-panel" data-role="suggestions" hidden>
+                    <ul class="holi-search-suggestions" data-role="suggestions-list" role="listbox"></ul>
+                </section>
+            </div>
+        </form>
+
+        <section class="holi-search-results" data-role="results">
+            <h3 class="holi-search-results-title">Results</h3>
+            <p class="holi-search-loading" data-role="loading" hidden>Searching...</p>
+            <p class="holi-search-empty" data-role="empty" hidden>
+                <slot name="empty">No results found.</slot>
+            </p>
+            <div class="holi-search-results-list" data-role="results-list"></div>
+        </section>
+    </section>
+</template>

@@ -1,0 +1,13 @@
+.holi-select-field {
+    display: grid;
+    gap: 6px;
+}
+
+.holi-select-field .error {
+    color: #b42318;
+    font-size: 0.88rem;
+}
+
+.holi-select-field.is-invalid [data-role="input"] {
+    border-color: #b42318;
+}

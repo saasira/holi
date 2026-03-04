@@ -1,0 +1,21 @@
+<template id="dropdown-template">
+    <section class="holi-dropdown">
+        <div class="dropdown-control">
+            <input type="hidden" data-role="value">
+            <input
+                type="text"
+                data-role="input"
+                role="combobox"
+                aria-expanded="false"
+                autocomplete="off">
+            <button type="button" data-action="toggle" aria-label="Toggle dropdown">v</button>
+        </div>
+        <section class="dropdown-panel" data-role="panel" hidden>
+            <ul class="dropdown-options" data-role="list" role="listbox"></ul>
+            <p class="dropdown-loading" data-role="loading" hidden>Loading...</p>
+            <p class="dropdown-empty" data-role="empty" hidden>
+                <slot name="empty">No results</slot>
+            </p>
+        </section>
+    </section>
+</template>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <script>
+            // Page-specific ContentProviders
+            class PatientContentProvider extends ContentProvider {
+                static get name() {
+                    return 'patient';
+                }
+                resolve(expr) {
+                    if (expr === '@{patient.addresses}') {
+                        return window.appState.patientData.addresses;
+                    }
+                    return [];
+                }
+            }
+
+            // Register for auto-discovery
+            window.contentProviders = window.contentProviders || {};
+            window.contentProviders.patient = PatientContentProvider;
+
+            // Optional: Global app state injection
+            window.appState = {
+                patientData: {
+                    addresses: [
+                        { label: 'Home', street: '101 Main St' },
+                        { label: 'Work', street: '500 Market Ave' }
+                    ],
+                    encounters: []
+                }
+            };
+        </script>
+
+    <tabs library="holi" provider="patient" data-source="@{patient.addresses}" lazy>
+        <div slot="tablink">
+            <li><a data-tab="@{index}">@{address.label}</a></li>
+        </div>
+    </tabs>
+
+</body>
+</html>

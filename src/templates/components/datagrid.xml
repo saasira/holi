@@ -1,0 +1,30 @@
+
+<!-- DataGrid Template -->
+<template id="datagrid-template">
+    <div class="holi-datagrid" role="grid" aria-label="@{ariaLabel|Grid Caption}">
+        <!-- Unified Controls -->
+        <div class="grid-controls">
+            <slot name="search"></slot>
+            <slot name="filters"></slot>
+            <slot name="field-chooser"></slot>
+        </div>
+        
+        <!-- Cards (CSS controls rows) -->
+        <div class="grid-cards" data-repeat="@{rows}" data-for="row" role="row">
+            <div class="card" data-key="@{row.id}" data-visible="@{row.visible}">
+                <div class="card-header">
+                    <slot name="card-header" data-row="@{row}"></slot>
+                </div>
+                <div class="card-fields" data-repeat="@{row.fields}" data-for="field" data-show="@{field.visible}">
+                    <label>@{field.label}: @{field.value}</label>
+                </div>
+                <slot name="card-actions" data-row="@{row}"></slot>
+            </div>
+        </div>
+        
+        <!-- Pagination + Modal (shared) -->
+        <slot name="pagination"></slot>
+        <dialog class="card-modal"><!-- Same as table --></dialog>
+    </div>
+</template>
+

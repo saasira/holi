@@ -1,0 +1,70 @@
+<template id="gallery-template">
+    <section class="holi-gallery-root">
+        <section class="holi-gallery-toolbar" data-role="toolbar">
+            <label class="holi-gallery-field">
+                <span>Search</span>
+                <input type="search" data-role="search-input" placeholder="Search by name or metadata">
+            </label>
+            <label class="holi-gallery-field">
+                <span>Metadata filter</span>
+                <input type="text" data-role="meta-input" placeholder="Example: category:nature">
+            </label>
+            <label class="holi-gallery-field holi-gallery-field-sm">
+                <span>Sort by</span>
+                <select data-role="sort-field"></select>
+            </label>
+            <label class="holi-gallery-field holi-gallery-field-sm">
+                <span>Direction</span>
+                <select data-role="sort-direction">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </label>
+            <label class="holi-gallery-field holi-gallery-field-sm">
+                <span>Mode</span>
+                <select data-role="display-mode">
+                    <option value="paginate">Pagination</option>
+                    <option value="infinite">Infinite scroll</option>
+                </select>
+            </label>
+        </section>
+
+        <section class="holi-gallery-state" data-role="state" hidden></section>
+
+        <section class="holi-gallery-grid-wrap" data-role="grid-wrap">
+            <section class="holi-gallery-grid" data-role="grid" aria-label="Gallery thumbnails"></section>
+            <div class="holi-gallery-sentinel" data-role="sentinel" aria-hidden="true"></div>
+        </section>
+
+        <section class="holi-gallery-pagination" data-role="pagination">
+            <button type="button" data-action="prev-page">Previous</button>
+            <span data-role="page-status"></span>
+            <button type="button" data-action="next-page">Next</button>
+        </section>
+
+        <section
+            component="dialog"
+            data-role="dialog"
+            size="mega"
+            no-native
+            no-backdrop-close
+            title="Image Viewer"
+            footer-message="Use arrows or swipe to navigate.">
+            <div slot="content" class="holi-gallery-lightbox">
+                <section
+                    component="carousel"
+                    data-role="carousel"
+                    mode="slide"
+                    active-slides="1"
+                    move-slides="1"
+                    no-autoplay
+                    no-pause-on-hover>
+                    <div slot="slides" class="slides" data-role="slides"></div>
+                </section>
+            </div>
+            <footer slot="footer" class="holi-gallery-footer">
+                <button type="button" data-action="close" data-value="close">Close</button>
+            </footer>
+        </section>
+    </section>
+</template>

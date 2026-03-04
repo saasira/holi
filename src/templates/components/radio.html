@@ -1,0 +1,20 @@
+<template id="radio-group-template">
+    <fieldset class="holi-radio-group">
+        <legend data-if="@{legend}">
+            <slot name="legend">@{legend}</slot>
+        </legend>
+        <div class="holi-radio-options" data-role="options">
+            <label class="holi-radio-option" data-repeat="@{options}" data-for="option">
+                <input type="radio"
+                       name="@{name}"
+                       value="@{option.value}"
+                       checked="@{option.checked}"
+                       required="@{required}">
+                <span>@{option.label}</span>
+            </label>
+            <slot name="options"></slot>
+        </div>
+        <slot name="actions"></slot>
+        <div class="error" data-role="error" data-show="@{invalid}">@{errorMessage}</div>
+    </fieldset>
+</template>

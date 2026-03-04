@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gallery Component Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body {
+                font-family: Segoe UI, sans-serif;
+                margin: 20px;
+                background: #f6f8fb;
+                color: #0f172a;
+            }
+            .demo {
+                max-width: 1100px;
+                margin: 0 auto;
+            }
+            .demo h1 {
+                margin: 0 0 6px;
+            }
+            .demo p {
+                margin: 0 0 16px;
+                color: #334155;
+            }
+            .stack {
+                display: grid;
+                gap: 28px;
+            }
+            .card {
+                border: 1px solid #dbe3ee;
+                border-radius: 12px;
+                padding: 14px;
+                background: #fff;
+            }
+            .card h2 {
+                margin: 0 0 6px;
+                font-size: 18px;
+            }
+            .card p {
+                margin: 0 0 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="demo">
+            <h1>Gallery</h1>
+            <p>Supports inline HTML source and remote API source with sorting, filtering, pagination, and infinite scroll.</p>
+
+            <section class="stack">
+                <section class="card">
+                    <h2>Inline Source (HTML)</h2>
+                    <p>Try metadata filter: <code>category:nature</code> or sort by metadata fields.</p>
+                    <section component="gallery" title="Inline Travel Gallery" page-size="6" display-mode="paginate" footer-message="Use arrows or swipe to navigate images.">
+                        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80"
+                            data-name="Alpine Dawn"
+                            data-category="nature"
+                            data-location="Alps"
+                            data-year="2024"
+                            alt="Snowy mountain landscape at sunrise">
+                        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80"
+                            data-name="Dune Light"
+                            data-category="desert"
+                            data-location="Sahara"
+                            data-year="2021"
+                            alt="Orange sky over desert dunes">
+                        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=80"
+                            data-name="Lake Hills"
+                            data-category="nature"
+                            data-location="Scotland"
+                            data-year="2020"
+                            alt="Green hill by a lake with trees">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1800&q=80"
+                            data-name="Valley Mist"
+                            data-category="nature"
+                            data-location="Andes"
+                            data-year="2022"
+                            alt="Valley with fog and layered mountains">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1800&q=80"
+                            data-name="City Reflections"
+                            data-category="urban"
+                            data-location="Chicago"
+                            data-year="2025"
+                            alt="Modern skyline reflected on river water">
+                        <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80"
+                            data-full-src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=80"
+                            data-name="Forest Path"
+                            data-category="nature"
+                            data-location="Black Forest"
+                            data-year="2019"
+                            alt="Trail passing through dense forest">
+                    </section>
+                </section>
+
+                <section class="card">
+                    <h2>Remote Source (API)</h2>
+                    <p>Loads from <code>/examples/api/gallery.json</code> and defaults to infinite scroll mode.</p>
+                    <section
+                        component="gallery"
+                        title="Remote Gallery"
+                        source="/examples/api/gallery.json"
+                        page-size="4"
+                        display-mode="infinite"
+                        footer-message="Loaded from API response.">
+                    </section>
+                </section>
+            </section>
+        </main>
+    </body>
+</html>

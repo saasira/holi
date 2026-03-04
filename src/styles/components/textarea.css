@@ -1,0 +1,22 @@
+.holi-textarea {
+    display: grid;
+    gap: 6px;
+}
+
+.holi-textarea .required {
+    color: #b42318;
+}
+
+.holi-textarea textarea {
+    resize: vertical;
+    min-height: 96px;
+}
+
+.holi-textarea .error {
+    color: #b42318;
+    font-size: 0.88rem;
+}
+
+.holi-textarea.is-invalid [data-role="control"] {
+    border-color: #b42318;
+}

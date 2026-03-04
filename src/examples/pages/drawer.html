@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Drawer Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .controls { display: flex; flex-wrap: wrap; gap: 8px; }
+            .controls button { padding: 8px 12px; border: 1px solid #cfd6df; border-radius: 6px; background: #fff; cursor: pointer; }
+            .drawer-footer-actions { display: flex; gap: 8px; }
+            .variants { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+            .variant { border: 1px solid #d8dee8; background: #f8fafc; border-radius: 8px; padding: 10px; }
+            .variant h3 { margin: 0 0 6px; font-size: 14px; }
+            .variant p { margin: 0 0 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Drawer Directions</h1>
+        <p>Mobile: overlay drawer. Desktop: collapsible side/top/bottom panel behavior with animations and max-size caps.</p>
+
+        <div class="controls">
+            <button data-drawer-toggle="drawer-left">Toggle Left</button>
+            <button data-drawer-toggle="drawer-left-help">Toggle Left Help</button>
+            <button data-drawer-toggle="drawer-right">Toggle Right</button>
+            <button data-drawer-toggle="drawer-top">Toggle Top</button>
+            <button data-drawer-toggle="drawer-bottom">Toggle Bottom</button>
+            <button data-drawer-toggle="drawer-center">Toggle Center</button>
+        </div>
+
+        <section class="variants">
+            <article class="variant">
+                <h3>Left Drawer</h3>
+                <p>Navigation-style panel from left.</p>
+                <button data-drawer-open="drawer-left">Open Left</button>
+            </article>
+            <article class="variant">
+                <h3>Left Help Drawer</h3>
+                <p>Shares same left rail, only one panel can stay open at a time.</p>
+                <button data-drawer-open="drawer-left-help">Open Left Help</button>
+            </article>
+            <article class="variant">
+                <h3>Right Drawer</h3>
+                <p>Details/inspector panel from right.</p>
+                <button data-drawer-open="drawer-right">Open Right</button>
+            </article>
+            <article class="variant">
+                <h3>Top Drawer</h3>
+                <p>Toolbar/filter area from top.</p>
+                <button data-drawer-open="drawer-top">Open Top</button>
+            </article>
+            <article class="variant">
+                <h3>Bottom Drawer</h3>
+                <p>Action-sheet style panel from bottom.</p>
+                <button data-drawer-open="drawer-bottom">Open Bottom</button>
+            </article>
+            <article class="variant">
+                <h3>Center Drawer</h3>
+                <p>Animated from a center dot into a capped content panel.</p>
+                <button data-drawer-open="drawer-center">Open Center</button>
+            </article>
+        </section>
+
+        <section component="drawer" id="drawer-left" direction="left" breakpoint="900" max-size="360px" rail="main-left" trigger-label="Menu" trigger-icon="=">
+            <header slot="header">
+                <strong>Left Drawer</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>Useful for navigation and tool panels.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </section>
+
+        <section component="drawer" id="drawer-left-help" direction="left" breakpoint="900" max-size="340px" rail="main-left" trigger-label="Help" trigger-icon="?">
+            <header slot="header">
+                <strong>Left Help</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>This drawer shares the same left rail with the Menu drawer.</p>
+                <p>Opening this one will close any other open drawer automatically.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </section>
+
+        <section role="drawer" id="drawer-right" direction="right" breakpoint="900" max-size="420px">
+            <header slot="header">
+                <strong>Right Drawer</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>Great for details and inspector panes.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </section>
+
+        <drawer id="drawer-top" direction="top" breakpoint="900" max-size="40vh">
+            <header slot="header">
+                <strong>Top Drawer</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>Can host filters/search bars.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </drawer>
+
+        <drawer id="drawer-bottom" direction="bottom" breakpoint="900" max-size="46vh" no-overlay-close>
+            <header slot="header">
+                <strong>Bottom Drawer</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>Suitable for mobile action sheets and compact forms.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </drawer>
+
+        <drawer id="drawer-center" direction="center" max-size="640px" max-height="82vh">
+            <header slot="header">
+                <strong>Center Drawer</strong>
+                <button data-action="close">x</button>
+            </header>
+            <div slot="content">
+                <p>This drawer expands from a center dot to content size, capped by max-size and max-height.</p>
+                <p>Use it for spotlight actions, quick forms, and focused previews.</p>
+            </div>
+            <footer slot="footer" class="drawer-footer-actions">
+                <button data-action="close">Close</button>
+            </footer>
+        </drawer>
+    </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calendar Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+            .card { border: 1px solid #d9dee8; border-radius: 10px; background: #f8fafc; padding: 12px; }
+            .card h2 { margin: 0 0 8px; font-size: 18px; }
+            .card p { margin: 0 0 10px; color: #475569; font-size: 13px; }
+            .calendar-input { width: 100%; margin-bottom: 10px; padding: 8px 10px; border: 1px solid #cfd6df; border-radius: 6px; }
+            .out { margin-top: 10px; font-family: Consolas, monospace; font-size: 12px; background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 8px; min-height: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>Calendar Usages</h1>
+        <p>Template-driven calendar component with month navigation, time selection, validators, and i18n direction support.</p>
+
+        <section class="grid">
+            <section class="card">
+                <h2>Variant 1: component="calendar"</h2>
+                <p>24-hour mode, 5-minute steps, basic ISO commit to input.</p>
+                <section component="calendar" id="cal-basic" step="5">
+                    <input class="calendar-input" data-role="calendar-input" placeholder="Selected ISO date/time appears here">
+                </section>
+                <div class="out" id="out-basic">Waiting for selection...</div>
+            </section>
+
+            <section class="card">
+                <h2>Variant 2: role="calendar" (12-hour)</h2>
+                <p>12-hour mode with AM/PM toggle and 15-minute steps.</p>
+                <section role="calendar" id="cal-12h" hour12="true" step="15" locale="en-US">
+                    <input class="calendar-input" data-role="calendar-input" placeholder="Select with 12-hour controls">
+                </section>
+                <div class="out" id="out-12h">Waiting for selection...</div>
+            </section>
+
+            <section class="card">
+                <h2>Variant 3: &lt;calendar&gt; with validators</h2>
+                <p>Weekend dates blocked and past-date selection disallowed.</p>
+                <calendar id="cal-valid" validators="noWeekend,noPastSelection">
+                    <input class="calendar-input" data-role="calendar-input" placeholder="Validation messages show inside the widget">
+                </calendar>
+                <div class="out" id="out-valid">Waiting for selection...</div>
+            </section>
+
+            <section class="card">
+                <h2>Variant 4: RTL locale</h2>
+                <p>Arabic locale with RTL layout and localized month/day labels.</p>
+                <section component="calendar" id="cal-rtl" locale="ar-SA" dir="rtl" hour12="true">
+                    <input class="calendar-input" data-role="calendar-input" placeholder="اختيار التاريخ والوقت">
+                </section>
+                <div class="out" id="out-rtl">بانتظار الاختيار...</div>
+            </section>
+        </section>
+
+        <script>
+            if (window.Calendar?.registerValidator) {
+                window.Calendar.registerValidator({
+                    name: 'noWeekend',
+                    type: 'date',
+                    severity: 'error',
+                    validate(date) {
+                        const day = date.getDay();
+                        return day === 0 || day === 6 ? 'Weekend dates are not selectable.' : true;
+                    }
+                });
+
+                window.Calendar.registerValidator({
+                    name: 'noPastSelection',
+                    type: 'selection',
+                    severity: 'error',
+                    validate(date) {
+                        const now = new Date();
+                        const selected = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                        return selected < today ? 'Past dates are not allowed.' : true;
+                    }
+                });
+            }
+
+            const wireOutput = (calendarId, outId) => {
+                const host = document.getElementById(calendarId);
+                const out = document.getElementById(outId);
+                host?.addEventListener('calendarchange', (event) => {
+                    const value = event?.detail?.value || '';
+                    out.textContent = value ? `Selected: ${value}` : 'No date selected';
+                });
+            };
+
+            wireOutput('cal-basic', 'out-basic');
+            wireOutput('cal-12h', 'out-12h');
+            wireOutput('cal-valid', 'out-valid');
+            wireOutput('cal-rtl', 'out-rtl');
+        </script>
+    </body>
+</html>

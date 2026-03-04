@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Toast Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+            .controls button { padding: 8px 12px; border: 1px solid #cfd6df; border-radius: 6px; background: #fff; cursor: pointer; }
+            .demo-card { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px; margin-top: 12px; background: #f8fafc; }
+            .demo-card h3 { margin-top: 0; }
+            .block-zone { min-height: 180px; position: relative; }
+        </style>
+    </head>
+    <body>
+        <h1>Toast Usages</h1>
+
+        <h2>Page Scoped Toasts (Global)</h2>
+        <p>Use this for cross-page/system notifications, fixed to viewport corners.</p>
+        <div class="controls">
+            <button
+                data-toast-target="main-toast"
+                data-toast-type="success"
+                data-toast-title="Saved"
+                data-toast-message="Record saved successfully."
+                data-toast-duration="2800">
+                Success Toast
+            </button>
+            <button
+                data-toast-target="main-toast"
+                data-toast-type="warning"
+                data-toast-title="Unsaved Changes"
+                data-toast-message="Please review your edits before leaving."
+                data-toast-duration="4200">
+                Warning Toast
+            </button>
+            <button
+                data-toast-target="main-toast"
+                data-toast-type="error"
+                data-toast-title="Save Failed"
+                data-toast-message="Unable to connect to server."
+                data-toast-duration="5000">
+                Error Toast
+            </button>
+        </div>
+
+        <section component="toast" id="main-toast" scope="page" position="top-right" duration="3500" max-items="4"></section>
+
+        <h2>Inline Scoped Toasts (Section-local)</h2>
+        <p>Use this for local workflows like form save, panel sync, widget actions.</p>
+        <section class="demo-card">
+            <h3>Billing Form Panel</h3>
+            <div class="controls">
+                <button
+                    data-toast-target="inline-toast"
+                    data-toast-type="success"
+                    data-toast-title="Saved"
+                    data-toast-message="Billing details updated in this panel."
+                    data-toast-duration="2200">
+                    Inline Success
+                </button>
+                <button
+                    data-toast-target="inline-toast"
+                    data-toast-type="warning"
+                    data-toast-title="Validation"
+                    data-toast-message="Postal code format is unusual."
+                    data-toast-duration="3500">
+                    Inline Warning
+                </button>
+                <button id="btn-inline-programmatic">Inline Programmatic</button>
+                <button id="btn-inline-clear">Inline Clear</button>
+            </div>
+            <section role="toast" id="inline-toast" scope="inline" duration="4200" max-items="3" newest-bottom></section>
+        </section>
+
+        <h2>Block Scoped Toasts (Parent-bound)</h2>
+        <p>Use this to show toasts inside a specific host container using <code>scope="block"</code> and <code>block-parent</code>.</p>
+        <section class="demo-card block-zone" id="block-toast-zone">
+            <h3>Profile Card Container</h3>
+            <div class="controls">
+                <button
+                    data-toast-target="block-toast"
+                    data-toast-type="info"
+                    data-toast-title="Profile Sync"
+                    data-toast-message="Profile card is syncing in this container."
+                    data-toast-duration="2600">
+                    Block Info
+                </button>
+                <button
+                    data-toast-target="block-toast"
+                    data-toast-type="success"
+                    data-toast-title="Profile Updated"
+                    data-toast-message="Changes saved inside this card."
+                    data-toast-duration="3200">
+                    Block Success
+                </button>
+                <button id="btn-block-programmatic">Block Programmatic</button>
+                <button id="btn-block-clear">Block Clear</button>
+            </div>
+        </section>
+        <section component="toast" id="block-toast" scope="block" block-parent="#block-toast-zone" position="top-right" duration="3600" max-items="3"></section>
+
+        <script>
+            const inlineHost = document.getElementById('inline-toast');
+            const programmaticBtn = document.getElementById('btn-inline-programmatic');
+            const clearBtn = document.getElementById('btn-inline-clear');
+            const blockHost = document.getElementById('block-toast');
+            const blockProgrammaticBtn = document.getElementById('btn-block-programmatic');
+            const blockClearBtn = document.getElementById('btn-block-clear');
+
+            programmaticBtn?.addEventListener('click', () => {
+                inlineHost?.toastcomponent?.show({
+                    type: 'info',
+                    title: 'Panel Sync',
+                    message: 'This message is scoped to the billing form section.',
+                    duration: 3000
+                });
+            });
+
+            clearBtn?.addEventListener('click', () => {
+                inlineHost?.toastcomponent?.clear();
+            });
+
+            blockProgrammaticBtn?.addEventListener('click', () => {
+                blockHost?.toastcomponent?.show({
+                    type: 'warning',
+                    title: 'Card Validation',
+                    message: 'A required profile field is missing in this card.',
+                    duration: 3200
+                });
+            });
+
+            blockClearBtn?.addEventListener('click', () => {
+                blockHost?.toastcomponent?.clear();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,111 @@
+.holi-dialog-root {
+    --dialog-width: 640px;
+    --dialog-max-height: 82vh;
+}
+
+.holi-dialog-root[data-size="mini"] {
+    --dialog-width: 320px;
+    --dialog-max-height: 40vh;
+}
+
+.holi-dialog-root[data-size="small"] {
+    --dialog-width: 460px;
+    --dialog-max-height: 58vh;
+}
+
+.holi-dialog-root[data-size="medium"] {
+    --dialog-width: 640px;
+    --dialog-max-height: 82vh;
+}
+
+.holi-dialog-root[data-size="large"] {
+    --dialog-width: 920px;
+    --dialog-max-height: 90vh;
+}
+
+.holi-dialog-root[data-size="mega"] {
+    --dialog-width: 98vw;
+    --dialog-max-height: 96vh;
+}
+
+.holi-dialog-native,
+.holi-dialog-panel {
+    width: min(var(--dialog-width), 98vw);
+    max-height: var(--dialog-max-height);
+    border: 1px solid #d9dee8;
+    border-radius: 10px;
+    background: #fff;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+}
+
+.holi-dialog-native::backdrop {
+    background: rgba(15, 23, 42, 0.46);
+}
+
+.holi-dialog-fallback {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+}
+
+.holi-dialog-fallback[hidden],
+.holi-dialog-native[hidden] {
+    display: none !important;
+}
+
+.holi-dialog-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.46);
+}
+
+.holi-dialog-panel {
+    position: relative;
+    z-index: 1;
+}
+
+.holi-dialog-header,
+.holi-dialog-footer {
+    padding: 10px 14px;
+    background: #f5f7fa;
+    border-bottom: 1px solid #e6eaf0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.holi-dialog-footer {
+    border-bottom: 0;
+    border-top: 1px solid #e6eaf0;
+    justify-content: flex-start;
+}
+
+.holi-dialog-title {
+    margin: 0;
+    font-size: 15px;
+    color: #111827;
+}
+
+.holi-dialog-close {
+    border: 1px solid #d1d7e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.holi-dialog-body {
+    padding: 14px;
+    overflow: auto;
+}
+
+.holi-dialog-root[data-size="mega"] .holi-dialog-body {
+    padding: 0;
+}

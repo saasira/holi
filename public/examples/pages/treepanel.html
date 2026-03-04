@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>TreePanel Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 18px; }
+            .demo h2 { margin: 0 0 8px; font-size: 18px; }
+            .note { margin: 0 0 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>TreePanel / TreeTable Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="treepanel" (slot header/footer + datapanel)</h2>
+            <p class="note">Uses <code>data-details-source</code> and slot overrides for header/footer.</p>
+            <section component="treepanel" data-details-source="/examples/api/tree-details?node=@{id}" detail-view="datapanel" data-inline-edit="true" data-save-method="PUT">
+                <ul slot="tree">
+                    <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                    <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                </ul>
+                <div slot="header">
+                    <strong>Team Details</strong>
+                </div>
+                <div slot="footer">
+                    Select a node to refresh this panel.
+                </div>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="treepanel" (datatable mode)</h2>
+            <p class="note">Same tree interaction, rendered as a table in content area.</p>
+            <section role="treepanel" detail-view="datatable" data-details-source="/examples/api/tree-details?node=@{id}">
+                <ul slot="tree">
+                    <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                    <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: &lt;treepanel&gt; single-expand (datagrid mode)</h2>
+            <treepanel single-expand detail-view="datagrid" data-details-source="/examples/api/tree-details?node=@{id}">
+                <ul slot="tree">
+                    <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                    <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                </ul>
+            </treepanel>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 4: custom content slot</h2>
+            <p class="note">Declarative custom content mode with <code>data-content-mode="datapanel"</code> and inline save enabled.</p>
+            <section id="treepanel-custom" component="treepanel" data-details-source="/examples/api/tree-details?node=@{id}" data-inline-edit="true" data-save-method="PUT">
+                <ul slot="tree">
+                    <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                    <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                </ul>
+                <section slot="content" id="custom-treepanel-content" data-content-mode="datapanel">
+                    <h4>Custom Content Host</h4>
+                    <section data-role="detail-datapanel"></section>
+                </section>
+            </section>
+        </section>
+
+        <script>
+            window.loadTreeChildren = async ({ id }) => {
+                const parent = encodeURIComponent(String(id || ''));
+                const response = await fetch(`/examples/api/tree?parent=${parent}`, { credentials: 'same-origin' });
+                if (!response.ok) throw new Error(`Tree API failed with ${response.status}`);
+                const payload = await response.json();
+                if (Array.isArray(payload?.nodes)) return payload.nodes;
+                const grouped = payload && typeof payload.nodesByParent === 'object' ? payload.nodesByParent : {};
+                return Array.isArray(grouped[id]) ? grouped[id] : [];
+            };
+        </script>
+    </body>
+</html>

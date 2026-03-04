@@ -1,0 +1,135 @@
+.holi-search {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.holi-search-form {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.holi-search-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #243042;
+}
+
+.holi-search-input-wrap {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.holi-search-input {
+    width: 100%;
+    min-height: 2.4rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid #b9c3cf;
+    border-radius: 0.4rem 0 0 0.4rem;
+    outline: none;
+}
+
+.holi-search-input:focus {
+    border-color: #3a71c1;
+    box-shadow: 0 0 0 2px rgba(58, 113, 193, 0.2);
+}
+
+.holi-search-submit {
+    min-width: 3.2rem;
+    border: 1px solid #2f5ea2;
+    border-left: 0;
+    border-radius: 0 0.4rem 0.4rem 0;
+    background: #3a71c1;
+    color: #fff;
+    cursor: pointer;
+}
+
+.holi-search-suggestions-panel {
+    position: absolute;
+    top: calc(100% + 0.2rem);
+    left: 0;
+    right: 0;
+    z-index: 30;
+    border: 1px solid #c7d1de;
+    border-radius: 0.45rem;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(17, 34, 68, 0.12);
+    overflow: hidden;
+}
+
+.holi-search-suggestions {
+    margin: 0;
+    padding: 0.2rem 0;
+    list-style: none;
+    max-height: 16rem;
+    overflow: auto;
+}
+
+.holi-search-suggestion-row {
+    margin: 0;
+}
+
+.holi-search-suggestion {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.holi-search-suggestion:hover,
+.holi-search-suggestion.is-active {
+    background: #edf3fc;
+}
+
+.holi-search-results {
+    border: 1px solid #c7d1de;
+    border-radius: 0.45rem;
+    padding: 0.75rem;
+    background: #fff;
+}
+
+.holi-search-results-title {
+    margin: 0 0 0.55rem 0;
+    font-size: 1rem;
+}
+
+.holi-search-loading,
+.holi-search-empty {
+    margin: 0;
+    color: #55657d;
+}
+
+.holi-search-results-list {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.holi-search-result {
+    border-top: 1px solid #e5ebf3;
+    padding-top: 0.6rem;
+}
+
+.holi-search-result:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.holi-search-result-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #213044;
+    text-decoration: none;
+}
+
+.holi-search-result-title:hover {
+    color: #1b5ec0;
+}
+
+.holi-search-result-description {
+    margin: 0.2rem 0 0 0;
+    color: #4e6179;
+    font-size: 0.9rem;
+}

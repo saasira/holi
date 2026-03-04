@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>TODO write content</div>
+        
+        <!-- Holi library tabs (uses HoliApp.providers.holi) -->
+        <tabs library="holi" provider="holi" data-source="@{userProfile.addresses}" lazy>
+            <div slot="tablink">
+                <li><a data-tab="@{index}">@{address.label}</a></li>
+            </div>
+        </tabs>
+
+        <!-- IBM library tabs (uses IBM providers/styles) -->
+        <tabs library="ibm" provider="carbon" data-source="@{dashboard.widgets}">
+            <div slot="tablink">
+                <li class="ibm-tab"><a data-tab="@{index}">@{widget.title}</a></li>
+            </div>
+        </tabs>
+
+        <!-- Default library (no library attr) -->
+        <tabs provider="default" data-source="@{static.tabs}">
+            Static content here
+        </tabs>
+
+    </body>
+</html>

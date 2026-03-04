@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Accordion Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 20px; }
+            .controls { margin-top: 10px; display: flex; gap: 8px; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 6px 10px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h1>Accordion Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="accordion" (single-open)</h2>
+            <section component="accordion" id="acc-single">
+                <section data-accordion-item data-title="Demographics">
+                    <p>Patient demographic details.</p>
+                </section>
+                <section data-accordion-item data-title="Visits">
+                    <p>Patient visit history.</p>
+                </section>
+                <section data-accordion-item data-title="Orders">
+                    <p>Patient lab and medication orders.</p>
+                </section>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="accordion" (multiple-open)</h2>
+            <section role="accordion" multiple id="acc-multi">
+                <section data-accordion-item data-title="Dashboard">
+                    <p>Overall KPI content.</p>
+                </section>
+                <section data-accordion-item data-title="Billing">
+                    <p>Billing content.</p>
+                </section>
+                <section data-accordion-item data-title="Settings">
+                    <p>Settings content.</p>
+                </section>
+            </section>
+            <div class="controls">
+                <button id="btn-open-all">Open all</button>
+                <button id="btn-close-all">Close all</button>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: tag style (&lt;accordion&gt;)</h2>
+            <accordion open-index="1">
+                <section data-accordion-item data-title="API">
+                    <p>API details.</p>
+                </section>
+                <section data-accordion-item data-title="Events">
+                    <p>Event details.</p>
+                </section>
+                <section data-accordion-item data-title="Testing">
+                    <p>Testing details.</p>
+                </section>
+            </accordion>
+        </section>
+
+        <script>
+            const multi = document.getElementById('acc-multi');
+            document.getElementById('btn-open-all')?.addEventListener('click', () => {
+                multi?.accordioncomponent?.openAll();
+            });
+            document.getElementById('btn-close-all')?.addEventListener('click', () => {
+                multi?.accordioncomponent?.closeAll();
+            });
+        </script>
+    </body>
+</html>

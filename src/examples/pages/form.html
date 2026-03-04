@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>Form Component</h1>
+        <p>Template-driven form with slots, input/textarea validation, radio and checkbox groups, and dropdown-backed select fields.</p>
+
+        <holi-form data-submit-label="Create User" data-reset-label="Clear">
+            <section slot="fields">
+                <holi-input
+                    name="name"
+                    label="Full Name"
+                    placeholder="Enter full name"
+                    required
+                    data-validators="required,minLength:2">
+                    <small slot="helper">Minimum 2 characters.</small>
+                </holi-input>
+
+                <holi-select
+                    name="role"
+                    label="Role"
+                    required
+                    data-items='[
+                        {"value":"user","label":"User"},
+                        {"value":"admin","label":"Admin"},
+                        {"value":"ops","label":"Operations"}
+                    ]'>
+                    <small slot="helper">Select values are powered by the Dropdown component.</small>
+                </holi-select>
+
+                <holi-checkbox
+                    name="permissions"
+                    legend="Permissions"
+                    data-options='[
+                        {"value":"read","label":"Read"},
+                        {"value":"write","label":"Write"},
+                        {"value":"export","label":"Export"}
+                    ]'>
+                </holi-checkbox>
+
+                <holi-radio
+                    name="status"
+                    legend="Account Status"
+                    required
+                    data-options='[
+                        {"value":"active","label":"Active"},
+                        {"value":"pending","label":"Pending"},
+                        {"value":"disabled","label":"Disabled"}
+                    ]'>
+                </holi-radio>
+
+                <holi-input
+                    name="notes"
+                    type="text"
+                    role="textarea"
+                    label="Notes"
+                    placeholder="Add onboarding notes..."
+                    rows="5"
+                    data-validators="maxLength:250">
+                    <small slot="helper">Up to 250 characters.</small>
+                </holi-input>
+            </section>
+
+            <holi-button slot="actions" type="button" variant="secondary" label="Cancel" id="cancel-btn"></holi-button>
+        </holi-form>
+
+        <script>
+            const formHost = document.querySelector('holi-form');
+            formHost?.addEventListener('formsubmit', (event) => {
+                event.preventDefault();
+                console.log('Form data', event.detail?.data || {});
+            });
+            document.getElementById('cancel-btn')?.addEventListener('click', () => {
+                formHost?.querySelector('form')?.reset();
+            });
+        </script>
+    </body>
+</html>

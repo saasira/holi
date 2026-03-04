@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menubar Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 22px; }
+            .demo h2 { margin: 0 0 8px; font-size: 18px; }
+            .panel { border: 1px solid #d6dde8; border-radius: 10px; padding: 12px; background: #f8fafc; }
+            .note { margin: 0 0 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Menubar Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="menubar"</h2>
+            <div class="panel">
+                <p class="note">Desktop: top-level menu is horizontal with hover/focus submenus. At and below the breakpoint, it collapses to a labeled button (set with <code>data-mobile-toggle="button"</code>).</p>
+                <section component="menubar" label="Main Menu" mobile-breakpoint="900">
+                    <ul slot="menu">
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li>
+                            <button type="button">Products</button>
+                            <ul>
+                                <li><a href="#catalog">Catalog</a></li>
+                                <li>
+                                    <button type="button">Plans</button>
+                                    <ul>
+                                        <li><a href="#basic">Basic</a></li>
+                                        <li><a href="#enterprise">Enterprise</a></li>
+                                        <li>
+                                            <button type="button">Regions</button>
+                                            <ul>
+                                                <li><a href="#apac">APAC</a></li>
+                                                <li><a href="#emea">EMEA</a></li>
+                                                <li><a href="#amer">Americas</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li><a href="#addons">Add-ons</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#billing">Billing</a></li>
+                    </ul>
+                </section>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 1b: bar mode open-on-click</h2>
+            <div class="panel">
+                <p class="note">Desktop touch-friendly variant: open submenus on click (not hover). Also auto-collapses to the same mobile menu button at the configured breakpoint.</p>
+                <section component="menubar" open-on-click hover-close-delay="220" mobile-breakpoint="900">
+                    <ul slot="menu">
+                        <li><a href="#work">Workspace</a></li>
+                        <li>
+                            <button type="button">Projects</button>
+                            <ul>
+                                <li><a href="#active">Active</a></li>
+                                <li><a href="#archived">Archived</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#teams">Teams</a></li>
+                    </ul>
+                </section>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="menubar"</h2>
+            <div class="panel">
+                <p class="note">Role-based variant using icon collapse mode with <code>data-mobile-toggle="icon"</code> for the classic hamburger trigger.</p>
+                <section role="menubar" mobile-breakpoint="900" data-mobile-toggle="icon" mobile-icon-label="Open account menu">
+                    <ul slot="menu">
+                        <li><a href="#account">Account</a></li>
+                        <li>
+                            <button type="button">Settings</button>
+                            <ul>
+                                <li><a href="#profile">Profile</a></li>
+                                <li><a href="#privacy">Privacy</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#support">Support</a></li>
+                    </ul>
+                </section>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: &lt;menubar single-button&gt;</h2>
+            <div class="panel">
+                <p class="note">Single menu button mode opens/closes the root menu on click, with nested items still collapsed by default.</p>
+                <menubar single-button label="Open Menu">
+                    <ul slot="menu">
+                        <li><a href="#home">Home</a></li>
+                        <li>
+                            <button type="button">Explore</button>
+                            <ul>
+                                <li><a href="#articles">Articles</a></li>
+                                <li><a href="#events">Events</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </menubar>
+            </div>
+        </section>
+    </body>
+</html>

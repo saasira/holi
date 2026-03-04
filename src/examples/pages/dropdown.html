@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dropdown Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>Dropdown Variants</h1>
+
+        <h2>Variant 1: Local simple dropdown</h2>
+        <section
+            component="dropdown"
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"in","label":"India"},
+                {"value":"us","label":"United States"},
+                {"value":"de","label":"Germany"},
+                {"value":"jp","label":"Japan"}
+            ]'>
+        </section>
+
+        <h2>Variant 2: Remote autosuggest + infinite scroll</h2>
+        <section
+            role="dropdown"
+            data-source="/examples/api/sales"
+            data-label-field="customer"
+            data-value-field="id"
+            data-page-size="20"
+            data-min-query="2"
+            data-auto-suggest="true"
+            data-placeholder="Search customer...">
+        </section>
+
+        <h2>Variant 3: tag style</h2>
+        <dropdown
+            data-source="/examples/api/sales"
+            data-label-field="orderNo"
+            data-value-field="id"
+            data-page-size="15"
+            data-min-query="1"
+            data-placeholder="Search order...">
+        </dropdown>
+    </body>
+</html>

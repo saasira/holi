@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DataGrid Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>DataGrid Variants</h1>
+
+        <h2>Variant 1: Pagination</h2>
+        <section
+            component="datagrid"
+            library="holi"
+            data-endpoint="/examples/api/sales"
+            data-field-metadata="salesFieldMetadata"
+            server-side
+            data-mode="pagination"
+            data-page-size="12"
+            data-cards="3"
+            data-title-field="customer"
+            data-priority-fields="customer,total,status,region,product"
+            data-mandatory-fields="customer,total">
+        </section>
+
+        <h2>Variant 2: Infinite Scroll</h2>
+        <section
+            role="datagrid"
+            library="holi"
+            data-endpoint="/examples/api/sales"
+            data-field-metadata="salesFieldMetadata"
+            server-side
+            data-mode="infinite"
+            data-infinite-chunk="15"
+            data-cards="4"
+            data-title-field="customer"
+            data-icon-field="priority"
+            data-priority-fields="customer,total,status,region,product"
+            data-mandatory-fields="customer,total">
+        </section>
+
+        <h2>Variant 3: Standard Tag</h2>
+        <datagrid
+            library="holi"
+            data-endpoint="/examples/api/sales.json"
+            data-field-metadata="salesFieldMetadata"
+            data-cards="2"
+            data-title-field="customer">
+        </datagrid>
+
+        <script>
+            window.salesFieldMetadata = {
+                orderNo: { required: true, readonly: true, label: 'Order Number' },
+                customer: { required: true, minLength: 3, label: 'Customer' },
+                status: { required: true, formFieldType: 'select', lov: ['Active', 'Pending', 'Shipped', 'Closed', 'Refunded'] },
+                priority: { formFieldType: 'select', lov: ['High', 'Medium', 'Low'] },
+                quantity: { formFieldType: 'number', constraints: { min: 1, max: 5000 } },
+                total: { required: true, formFieldType: 'number', constraints: { min: 0 } },
+                currency: { formFieldType: 'select', lov: ['USD', 'EUR', 'INR'] },
+                fulfilled: { formFieldType: 'checkbox', label: 'Fulfilled' }
+            };
+        </script>
+    </body>
+</html>

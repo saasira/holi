@@ -1,0 +1,96 @@
+.holi-chart {
+    --chart-height: 220px;
+    --chart-border: #d9e2ef;
+    --chart-grid: #e8edf5;
+    --chart-line: #2563eb;
+    --chart-area: rgba(37, 99, 235, 0.18);
+    --chart-hole: #ffffff;
+    border: 1px solid var(--chart-border);
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 12px;
+}
+
+.holi-chart-title {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.holi-chart-svg {
+    display: block;
+    width: 100%;
+    height: var(--chart-height);
+}
+
+.holi-chart-empty {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.holi-chart-grid line {
+    stroke: var(--chart-grid);
+    stroke-width: 0.6;
+}
+
+.holi-chart-line {
+    fill: none;
+    stroke: var(--chart-line);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.holi-chart-area {
+    fill: var(--chart-area);
+}
+
+.holi-chart-dot,
+.holi-chart-bar,
+.holi-chart-slice {
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.holi-chart-dot:hover,
+.holi-chart-bar:hover,
+.holi-chart-slice:hover {
+    opacity: 0.85;
+}
+
+.holi-chart-hole {
+    fill: var(--chart-hole);
+}
+
+.holi-chart-legend {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px 12px;
+}
+
+.holi-chart-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    font-size: 12px;
+    color: #334155;
+}
+
+.holi-chart-legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex: 0 0 auto;
+}
+
+.holi-chart-legend-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

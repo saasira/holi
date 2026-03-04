@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dialog + Carousel Lightbox Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="../styles/lightbox.css">
+        <script src="/dist/holi.js"></script>
+        <script src="/examples/scripts/lightbox.js" defer></script>
+    </head>
+    <body>
+        <main class="lightbox-demo" id="main-content">
+            <header class="lightbox-header">
+                <h1>Lightbox Style Gallery</h1>
+                <p>Select an image to open a dialog with carousel navigation.</p>
+            </header>
+
+            <section class="thumb-grid" data-role="lightbox-gallery" aria-label="Image gallery">
+                <button type="button" class="thumb" data-lightbox-index="0" aria-label="Open image 1">
+                    <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80" alt="Snowy mountain landscape at sunrise">
+                </button>
+                <button type="button" class="thumb" data-lightbox-index="1" aria-label="Open image 2">
+                    <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="Orange sky over desert dunes">
+                </button>
+                <button type="button" class="thumb" data-lightbox-index="2" aria-label="Open image 3">
+                    <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=80" alt="Green hill by a lake with trees">
+                </button>
+                <button type="button" class="thumb" data-lightbox-index="3" aria-label="Open image 4">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80" alt="Valley with fog and layered mountains">
+                </button>
+            </section>
+
+            <section component="dialog" id="gallery-lightbox" size="mega" no-native title="Image Viewer" footer-message="Use arrows or swipe to navigate.">
+                <div slot="content" class="lightbox-shell">
+                    <section
+                        component="carousel"
+                        mode="slide"
+                        active-slides="1"
+                        move-slides="1"
+                        no-autoplay
+                        no-pause-on-hover
+                        interval="6000">
+                        <div slot="slides" class="slides">
+                            <article class="slide">
+                                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80" alt="Snowy mountain landscape at sunrise">
+                            </article>
+                            <article class="slide">
+                                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80" alt="Orange sky over desert dunes">
+                            </article>
+                            <article class="slide">
+                                <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=80" alt="Green hill by a lake with trees">
+                            </article>
+                            <article class="slide">
+                                <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1800&q=80" alt="Valley with fog and layered mountains">
+                            </article>
+                        </div>
+                    </section>
+                </div>
+                <footer slot="footer">
+                    <button type="button" data-action="close" data-value="close">Close</button>
+                </footer>
+            </section>
+        </main>
+    </body>
+</html>

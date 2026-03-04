@@ -1,0 +1,27 @@
+{
+    "workflowId": "remote-inline-demo",
+    "steps": [
+        {
+            "id": "remote-patient",
+            "name": "Patient (HTML)",
+            "contentUrl": "/examples/api/wizard/patient-step.html"
+        },
+        {
+            "id": "remote-address",
+            "name": "Address (JSON)",
+            "contentUrl": "/examples/api/wizard/address-step.json",
+            "contentType": "json"
+        },
+        {
+            "id": "remote-payment",
+            "name": "Payment (HTML)",
+            "contentUrl": "/examples/api/wizard/payment-step.html"
+        },
+        {
+            "id": "remote-review",
+            "name": "Review (JSON)",
+            "contentUrl": "/examples/api/wizard/review-step.json",
+            "contentType": "json"
+        }
+    ]
+}

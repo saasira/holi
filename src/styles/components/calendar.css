@@ -1,0 +1,133 @@
+.holi-calendar {
+    border: 1px solid #d9dee8;
+    border-radius: 10px;
+    padding: 10px;
+    background: #ffffff;
+    width: min(340px, 100%);
+    display: grid;
+    gap: 10px;
+}
+
+.holi-calendar-nav {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.holi-calendar-nav button {
+    border: 1px solid #cfd6df;
+    border-radius: 6px;
+    background: #fff;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.holi-calendar-title {
+    margin: 0;
+    text-align: center;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+.holi-calendar-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.holi-calendar-grid th {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    padding: 4px 0;
+}
+
+.holi-calendar-day {
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.holi-calendar-day:hover {
+    background: #eff6ff;
+}
+
+.holi-calendar-day.is-selected {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.holi-calendar-day.is-today:not(.is-selected) {
+    background: #eff6ff;
+    color: #1e3a8a;
+    box-shadow: inset 0 0 0 1px #93c5fd;
+}
+
+.holi-calendar-day.is-outside {
+    color: #cbd5e1;
+    cursor: default;
+}
+
+.holi-calendar-day.is-invalid {
+    color: #b91c1c;
+    background: #fef2f2;
+    cursor: not-allowed;
+}
+
+.holi-calendar-day.is-warning {
+    color: #92400e;
+    background: #fffbeb;
+}
+
+.holi-calendar-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.holi-calendar-time input {
+    width: 54px;
+    padding: 4px 6px;
+    border: 1px solid #cfd6df;
+    border-radius: 6px;
+}
+
+.holi-calendar-time button {
+    border: 1px solid #cfd6df;
+    border-radius: 6px;
+    background: #fff;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.holi-calendar-messages {
+    display: grid;
+    gap: 4px;
+}
+
+.holi-calendar-message {
+    font-size: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+.holi-calendar-message.is-error {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.holi-calendar-message.is-warning {
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.holi-calendar-live {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}

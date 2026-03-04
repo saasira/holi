@@ -1,0 +1,46 @@
+{
+    "nodes": {
+        "engineering": {
+            "title": "Engineering",
+            "fields": {
+                "owner": "CTO Office",
+                "headcount": 84,
+                "location": "Global"
+            },
+            "columns": ["metric", "value"],
+            "rows": [
+                { "metric": "Velocity", "value": "42 SP/sprint" },
+                { "metric": "Incidents", "value": 3 },
+                { "metric": "Deploys", "value": "18/week" }
+            ]
+        },
+        "eng-platform": {
+            "title": "Platform Team",
+            "fields": {
+                "owner": "Platform Lead",
+                "services": 23,
+                "uptime": "99.96%"
+            },
+            "columns": ["service", "status", "latency_ms"],
+            "rows": [
+                { "service": "Auth", "status": "Healthy", "latency_ms": 42 },
+                { "service": "Billing", "status": "Healthy", "latency_ms": 58 },
+                { "service": "Search", "status": "Degraded", "latency_ms": 123 }
+            ]
+        },
+        "sales": {
+            "title": "Sales",
+            "fields": {
+                "owner": "Chief Revenue Officer",
+                "regions": 3,
+                "quarter": "Q4"
+            },
+            "columns": ["region", "quota_m", "actual_m"],
+            "rows": [
+                { "region": "APAC", "quota_m": 2.4, "actual_m": 2.2 },
+                { "region": "EMEA", "quota_m": 2.8, "actual_m": 3.0 },
+                { "region": "Americas", "quota_m": 4.1, "actual_m": 4.4 }
+            ]
+        }
+    }
+}

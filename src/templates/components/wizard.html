@@ -1,0 +1,32 @@
+
+<template id="wizard">
+    <section class="wizard" role="form">
+        <!-- Progress bar -->
+        <div class="wizard-progress-bar">
+            <div class="wizard-progress" role="progressbar" aria-valuemin="0"></div>
+        </div>
+        
+        <!-- Step navigation -->
+        <nav class="wizard-nav" aria-label="Wizard steps">
+            <slot name="step-nav"></slot>
+        </nav>
+        
+        <!-- Step content -->
+        <main class="wizard-content" tabindex="-1">
+            <slot name="step-content">
+                <div class="step-loading">
+                    <q-loader size="large"></q-loader>
+                </div>
+            </slot>
+        </main>
+        
+        <!-- Footer controls -->
+        <footer class="wizard-footer">
+            <slot name="footer">
+                <button data-action="prev" disabled>Previous</button>
+                <button data-action="next">Next</button>
+                <button data-action="complete" class="hidden">Complete</button>
+            </slot>
+        </footer>
+    </section>
+</template>

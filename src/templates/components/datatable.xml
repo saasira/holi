@@ -1,0 +1,62 @@
+
+<!-- DataTable Template -->
+<template id="datatable-template">
+    <div class="holi-datatable" role="grid" aria-label="@{ariaLabel|Table Caption}">
+        <!-- Search + Filters (Declarative) -->
+        <div class="table-controls">
+            <slot name="search"></slot>
+            <slot name="filters"></slot>
+            <slot name="actions"></slot>
+        </div>
+        
+        <!-- Column Chooser -->
+        <div class="column-chooser" data-if="@{showColumnChooser}">
+            <button data-action="toggle-columns">Columns</button>
+            <div class="chooser-list" data-show="@{columnChooserOpen}">
+                <label data-repeat="@{visibleColumns}" data-for="col">
+                    <input type="checkbox" data-field="@{col.field}" checked="@{col.visible}">
+                    @{col.label}
+                </label>
+            </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="table-wrapper">
+            <table role="grid">
+                <caption>@{caption}</caption>
+                <thead>
+                    <tr data-repeat="@{headers}" data-for="header">
+                        <th data-field="@{header.field}" 
+                            data-sort="@{header.sortable ? 'click:sort' : ''}"
+                            aria-sort="@{sortStates[header.field]}">
+                            @{header.label}
+                            <span data-if="@{sortStates[header.field]}" class="@{sortIcon}"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody data-repeat="@{rows}" data-for="row">
+                    <tr data-key="@{row.id}">
+                        <td data-repeat="@{row.cells}" data-for="cell">@{cell}</td>
+                        <td>
+                            <slot name="row-actions" data-row="@{row}"></slot>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <slot name="pagination"></slot>
+        
+        <!-- Row Details Modal -->
+        <dialog class="row-modal" data-open="@{modalOpen}">
+            <div class="modal-content">
+                <slot name="row-details" data-mode="@{modalMode}" data-row="@{selectedRow}"></slot>
+                <div class="modal-actions">
+                    <button data-action="@{modalMode === 'view' ? 'editRow' : 'saveRow'}">@{modalButton}</button>
+                    <button data-action="closeModal">Cancel</button>
+                </div>
+            </div>
+        </dialog>
+    </div>
+</template>

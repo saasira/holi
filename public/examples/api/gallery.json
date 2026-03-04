@@ -1,0 +1,100 @@
+{
+    "items": [
+        {
+            "id": "g-1",
+            "name": "Alpine Dawn",
+            "thumbnail": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Snowy mountain peaks with warm sunrise light",
+            "metadata": {
+                "category": "nature",
+                "location": "Alps",
+                "year": 2024
+            }
+        },
+        {
+            "id": "g-2",
+            "name": "Dune Light",
+            "thumbnail": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Sand dunes under an orange sky",
+            "metadata": {
+                "category": "desert",
+                "location": "Sahara",
+                "year": 2021
+            }
+        },
+        {
+            "id": "g-3",
+            "name": "Valley Mist",
+            "thumbnail": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Mountain valley with morning fog",
+            "metadata": {
+                "category": "nature",
+                "location": "Andes",
+                "year": 2022
+            }
+        },
+        {
+            "id": "g-4",
+            "name": "Lake Hills",
+            "thumbnail": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Green hills and lake scene",
+            "metadata": {
+                "category": "nature",
+                "location": "Scotland",
+                "year": 2020
+            }
+        },
+        {
+            "id": "g-5",
+            "name": "Night Pier",
+            "thumbnail": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Long exposure seaside pier at dusk",
+            "metadata": {
+                "category": "seascape",
+                "location": "Pacific Coast",
+                "year": 2023
+            }
+        },
+        {
+            "id": "g-6",
+            "name": "Forest Path",
+            "thumbnail": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Trail passing through dense forest",
+            "metadata": {
+                "category": "nature",
+                "location": "Black Forest",
+                "year": 2019
+            }
+        },
+        {
+            "id": "g-7",
+            "name": "City Reflections",
+            "thumbnail": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Modern skyline reflected on river water",
+            "metadata": {
+                "category": "urban",
+                "location": "Chicago",
+                "year": 2025
+            }
+        },
+        {
+            "id": "g-8",
+            "name": "Canyon Layers",
+            "thumbnail": "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=700&q=80",
+            "url": "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1900&q=80",
+            "alt": "Layered canyon ridges at sunset",
+            "metadata": {
+                "category": "desert",
+                "location": "Arizona",
+                "year": 2018
+            }
+        }
+    ]
+}

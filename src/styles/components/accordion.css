@@ -1,0 +1,34 @@
+.holi-accordion {
+    border: 1px solid #d9dee8;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.holi-accordion-list {
+    display: grid;
+}
+
+.holi-accordion .accordion-item + .accordion-item {
+    border-top: 1px solid #e6eaf0;
+}
+
+.holi-accordion .accordion-trigger {
+    width: 100%;
+    border: 0;
+    background: #f8fafc;
+    color: #0f172a;
+    text-align: left;
+    padding: 12px 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.holi-accordion .accordion-item.is-open .accordion-trigger {
+    background: #eef4fb;
+}
+
+.holi-accordion .accordion-panel {
+    padding: 12px 14px;
+    background: #fff;
+}

@@ -1,0 +1,181 @@
+
+.holi.datatable {
+    border: 1px solid #d9dee8;
+    border-radius: 8px;
+    padding: 0;
+    margin: 12px 0 28px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.holi.datatable .datatable-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 0;
+    padding: 10px 12px;
+    background: #f5f7fa;
+    border-bottom: 1px solid #e6eaf0;
+}
+
+.holi.datatable .datatable-toolbar input[type="search"],
+.holi.datatable .datatable-toolbar select {
+    min-height: 32px;
+    padding: 4px 8px;
+}
+
+.holi.datatable .datatable-toolbar button,
+.holi.datatable .datatable-actions-cell button {
+    border: 1px solid #cfd6df;
+    background: #fff;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.holi.datatable .datatable-column-chooser {
+    border: 1px solid #d9dee8;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 12px;
+    background: #f9fafb;
+}
+
+.holi.datatable .datatable-column-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+.holi.datatable .datatable-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.holi.datatable .datatable-content.datatable-scrollable {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.holi.datatable .datatable-content {
+    overflow-x: auto;
+}
+
+.holi.datatable .datatable-table th,
+.holi.datatable .datatable-table td {
+    border-bottom: 1px solid #e7eaf0;
+    text-align: left;
+    padding: 8px;
+}
+
+.holi.datatable .datatable-actions-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 6px;
+}
+
+.holi.datatable .datatable-table thead th {
+    background: #f3f5f8;
+}
+
+.holi.datatable .datatable-table .datatable-pinned-left,
+.holi.datatable .datatable-table .datatable-pinned-right {
+    position: sticky;
+    background: #fff;
+}
+
+.holi.datatable .datatable-table .datatable-pinned-left {
+    box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.holi.datatable .datatable-table .datatable-pinned-right {
+    box-shadow: -2px 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.holi.datatable .datatable-table tbody .datatable-pinned-left,
+.holi.datatable .datatable-table tbody .datatable-pinned-right {
+    z-index: 2;
+}
+
+.holi.datatable .datatable-table thead .datatable-pinned-left,
+.holi.datatable .datatable-table thead .datatable-pinned-right {
+    z-index: 3;
+}
+
+.holi.datatable .datatable-table tbody tr:nth-child(odd) td {
+    background: #fbfcfd;
+}
+
+.holi.datatable .datatable-table tbody tr:nth-child(even) td {
+    background: #f7f9fb;
+}
+
+.holi.datatable .datatable-table th button {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    font-weight: 600;
+}
+
+.holi.datatable .datatable-footer {
+    margin-top: 0;
+    padding: 8px 12px;
+    color: #4b5563;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: #f5f7fa;
+    border-top: 1px solid #e6eaf0;
+}
+
+.holi.datatable [data-role="pagination-controls"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.holi.datatable [data-role="pagination-controls"][hidden] {
+    display: none;
+}
+
+.holi.datatable [data-role="request-status"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.holi.datatable [data-role="request-status"][data-state="idle"] {
+    display: none;
+}
+
+.holi.datatable [data-role="request-status"][data-state="loading"] {
+    color: #1f2937;
+}
+
+.holi.datatable [data-role="request-status"][data-state="loading"]::before {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border: 2px solid #cfd6df;
+    border-top-color: #6b7280;
+    border-radius: 50%;
+    display: inline-block;
+    animation: datatable-spin 0.7s linear infinite;
+}
+
+.holi.datatable [data-role="request-status"][data-state="end"] {
+    color: #374151;
+}
+
+.holi.datatable [data-role="request-status"][data-state="error"] {
+    color: #b91c1c;
+}
+
+@keyframes datatable-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

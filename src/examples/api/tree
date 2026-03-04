@@ -1,0 +1,22 @@
+{
+    "nodesByParent": {
+        "engineering": [
+            { "id": "eng-platform", "label": "Platform" },
+            { "id": "eng-ui", "label": "UI" },
+            { "id": "eng-qa", "label": "QA", "lazy": true }
+        ],
+        "eng-qa": [
+            { "id": "eng-qa-automation", "label": "Automation" },
+            { "id": "eng-qa-manual", "label": "Manual" }
+        ],
+        "sales": [
+            { "id": "sales-apac", "label": "APAC", "lazy": true },
+            { "id": "sales-emea", "label": "EMEA" },
+            { "id": "sales-amer", "label": "Americas" }
+        ],
+        "sales-apac": [
+            { "id": "sales-apac-in", "label": "India" },
+            { "id": "sales-apac-sg", "label": "Singapore" }
+        ]
+    }
+}

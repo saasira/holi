@@ -1,0 +1,44 @@
+{
+  "name": "holi",
+  "version": "1.0.0",
+  "description": "Modern UI Components Library with i18n, themes, PWA, SW",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "unpkg": "dist/umd/html-first-lib.min.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "public"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run build:types && npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:public",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:esm": "webpack --config webpack.esm.js",
+    "build:cjs": "webpack --config webpack.cjs.js",
+    "build:umd": "webpack --config webpack.umd.js",
+    "build:public": "cp -r public dist/public",
+    "clean": "rm -rf dist",
+    "dev": "webpack serve --config webpack.dev.js",
+    "release": "npm run build && npm publish --access public",
+    "lint": "eslint src/**/*.js",
+    "test": "jest"
+  },
+  "keywords": ["components", "pwa", "offline", "i18n", "themes"],
+  "author": "Samba Kolusu",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^5.94.0",
+    "webpack-cli": "^5.1.4",
+    "babel-loader": "^9.2.1",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "terser-webpack-plugin": "^5.4.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "typescript": "^5.6.3",
+    "eslint": "^9.12.0"
+  },
+  "peerDependencies": {
+    "jquery": "^3.0.0"
+  }
+}
