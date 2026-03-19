@@ -76,6 +76,24 @@ Main artifacts:
 - `dist/holi.html` (templates)
 - Example site output: `public/examples/**`
 
+## CDN Quick Start
+
+For application pages that consume Holi directly from a CDN, use the published npm package via jsDelivr:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.html" crossorigin="anonymous" />
+```
+
+Direct file URLs:
+
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.js`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.css`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.html`
+
+Pin an exact version in production so releases remain repeatable.
+
 ## CDN Usage
 
 Holi can be shipped directly from a free CDN after publishing the package to npm.
