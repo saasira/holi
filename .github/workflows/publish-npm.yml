@@ -33,14 +33,5 @@ jobs:
       - name: Validate release
         run: npm run ci:smoke
 
-      - name: Configure npm auth
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          printf "%s\n" "@saasira:registry=https://registry.npmjs.org/" > .npmrc
-          printf "%s\n" "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
-
       - name: Publish package
         run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
