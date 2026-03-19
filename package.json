@@ -2,14 +2,14 @@
   "name": "holi",
   "version": "0.1.2",
   "description": "Modern UI Components Library with i18n, themes, PWA, SW",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "unpkg": "dist/umd/holi.min.js",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/holi.js",
+  "unpkg": "dist/holi.js",
+  "jsdelivr": "dist/holi.js",
+  "style": "dist/holi.css",
   "files": [
     "dist",
     "README.md",
-    "public"
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "webpack --config webpack.config.js --mode=production && node scripts/build-examples.cjs",
