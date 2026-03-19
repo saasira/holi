@@ -1,6 +1,6 @@
 {
   "name": "@saasira/holi",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Modern UI Components Library with i18n, themes, PWA, SW",
   "main": "dist/holi.js",
   "unpkg": "dist/holi.js",

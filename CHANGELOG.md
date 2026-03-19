@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.4] - 2026-03-19
+
+### Changed
+
+- Bumped the release after the successful bootstrap publish of `0.1.3` so npm can accept the next trusted-publishing run.
+- Carried forward the GitHub Actions workflow fixes for Node `22.14.0`, npm `11.5.1`, and npm trusted publishing.
+
+### Validation
+
+- Verified packaging metadata with `npm pack --dry-run`.
+
 ## [0.1.3] - 2026-03-19
 
 ### Changed
