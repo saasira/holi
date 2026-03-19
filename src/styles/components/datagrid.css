@@ -9,6 +9,7 @@
 
 .holi.datagrid .datagrid-toolbar {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     align-items: center;
     padding: 10px 12px;
@@ -20,6 +21,7 @@
 .holi.datagrid .datagrid-toolbar select {
     min-height: 32px;
     padding: 4px 8px;
+    max-width: 100%;
 }
 
 .holi.datagrid .datagrid-toolbar button,
@@ -143,6 +145,7 @@
     margin-top: 8px;
     padding-top: 8px;
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
 }
 
@@ -215,6 +218,35 @@
 }
 
 @media (max-width: 700px) {
+    .holi.datagrid .datagrid-toolbar > * {
+        flex: 1 1 100%;
+    }
+
+    .holi.datagrid .datagrid-toolbar input[type="search"],
+    .holi.datagrid .datagrid-toolbar select,
+    .holi.datagrid .datagrid-toolbar button {
+        width: 100%;
+        min-height: 36px;
+    }
+
+    .holi.datagrid .datagrid-footer {
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .holi.datagrid [data-role="pagination-controls"] {
+        flex-wrap: wrap;
+    }
+
+    .holi.datagrid .datagrid-field {
+        grid-template-columns: 1fr;
+        gap: 2px;
+    }
+
+    .holi.datagrid .datagrid-field-value {
+        text-align: left;
+    }
+
     .holi.datagrid .datagrid-cards {
         grid-template-columns: 1fr;
     }

@@ -1,0 +1,44 @@
+.holi-panel {
+    --holi-panel-border: #dce3ea;
+    --holi-panel-bg: #ffffff;
+    --holi-panel-muted: #5f6b7a;
+    --holi-panel-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid var(--holi-panel-border);
+    border-radius: 12px;
+    background: var(--holi-panel-bg);
+    box-shadow: var(--holi-panel-shadow);
+    box-sizing: border-box;
+}
+
+.holi-panel-header[hidden],
+.holi-panel-footer[hidden] {
+    display: none;
+}
+
+.holi-panel-header,
+.holi-panel-footer {
+    display: grid;
+    gap: 6px;
+}
+
+.holi-panel-title,
+.holi-panel-subtitle {
+    margin: 0;
+}
+
+.holi-panel-title {
+    font-size: 1.125rem;
+    line-height: 1.2;
+}
+
+.holi-panel-subtitle {
+    color: var(--holi-panel-muted);
+    font-size: 0.95rem;
+}
+
+.holi-panel-content {
+    min-width: 0;
+}

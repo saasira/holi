@@ -36,6 +36,31 @@ Canonical reference: `docs/holi-principles.md`.
 - jQuery-like utility surface (`Q`) and native HTTP helper (`HTTP`).
 - Prebuilt component set including accordion, calendar, carousel, chart, datagrid, datatable, dialog, drawer, dropdown, form controls, gallery, tabs, toast, tree, wizard, and more.
 
+## Declarative Dependencies
+
+Holi supports declarative dependent updates between components.
+
+- Source components publish change notifications through the central runtime.
+- Subscriber components declare interest in one or more source components.
+- The framework only resolves and delivers the notification.
+- The subscriber decides how to react based on its own data source and behavior.
+
+This means "local refresh" vs "remote/PPR reload" is not decided by the framework. It is decided by the subscriber component after it receives the dependency update.
+
+Common attributes:
+
+- Source side: `update`, `render`, `data-ppr-update`
+- Subscriber side: `data-ppr-listen`, `data-ppr-source`
+
+Common subscriber hook contract:
+
+- `handlePprUpdate(payload)`
+- `refreshPpr(payload)`
+- `refresh(payload)`
+- `updateView(payload)`
+
+JSF-style target tokens such as `@this`, `@parent`, `@form`, `@all`, and explicit ids are supported by the dependency resolver.
+
 ## Quick Start
 
 ```bash

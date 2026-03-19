@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Panel Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .stack { display: grid; gap: 16px; max-width: 920px; }
+            .panel-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+            .note { margin: 0; color: #566273; }
+        </style>
+    </head>
+    <body>
+        <section class="stack">
+            <section
+                id="panel-country"
+                data-ppr-id="panelCountry"
+                component="dropdown"
+                update="location-panel"
+                data-auto-suggest="false"
+                data-items='[
+                    {"value":"in","label":"India"},
+                    {"value":"us","label":"United States"}
+                ]'>
+            </section>
+
+            <section
+                id="location-panel"
+                component="panel"
+                title="Location Panel"
+                subtitle="The panel receives direct dependency updates and delegates them to its child components.">
+                <p slot="footer" class="note">Province updates are delegated by the panel. Province selections also update the panel so district can react.</p>
+
+                <section class="panel-grid">
+                    <section
+                        id="panel-province"
+                        data-ppr-id="panelProvince"
+                        component="dropdown"
+                        update="location-panel"
+                        data-local-filter-map='{"country":"ppr.panelCountry.value"}'
+                        data-auto-suggest="false"
+                        data-items='[
+                            {"value":"mh","label":"Maharashtra","country":"in"},
+                            {"value":"gj","label":"Gujarat","country":"in"},
+                            {"value":"ca","label":"California","country":"us"},
+                            {"value":"ny","label":"New York","country":"us"}
+                        ]'>
+                    </section>
+
+                    <section
+                        id="panel-district"
+                        component="dropdown"
+                        data-local-filter-map='{"country":"ppr.panelCountry.value","province":"ppr.panelProvince.value"}'
+                        data-auto-suggest="false"
+                        data-items='[
+                            {"value":"mumbai","label":"Mumbai","country":"in","province":"mh"},
+                            {"value":"pune","label":"Pune","country":"in","province":"mh"},
+                            {"value":"ahmedabad","label":"Ahmedabad","country":"in","province":"gj"},
+                            {"value":"los-angeles","label":"Los Angeles","country":"us","province":"ca"},
+                            {"value":"albany","label":"Albany","country":"us","province":"ny"}
+                        ]'>
+                    </section>
+
+                    <article>
+                        <h3>Plain HTML</h3>
+                        <p class="note">Panels can also wrap plain HTML content alongside child components.</p>
+                    </article>
+                </section>
+            </section>
+        </section>
+    </body>
+</html>

@@ -1,4 +1,5 @@
 import { Component } from './component.js';
+import { buildChoiceProjection, copyAttributes } from '../utils/native_host.js';
 
 class CheckboxGroupComponent extends Component {
     static get selector() {
@@ -14,6 +15,38 @@ class CheckboxGroupComponent extends Component {
     }
 
     static templateId = 'checkbox-group-template';
+
+    static getNativeSelectors() {
+        return [
+            'input[type="checkbox"][component="checkbox"]',
+            'input[type="checkbox"][role="checkbox"]'
+        ];
+    }
+
+    static prepareHost(element) {
+        if (!(element instanceof HTMLInputElement) || element.type !== 'checkbox') {
+            return element;
+        }
+
+        const host = document.createElement('section');
+        copyAttributes(element, host, {
+            exclude: ['component', 'role', 'type', 'checked', 'value']
+        });
+        host.setAttribute('component', 'checkbox-group');
+        host.setAttribute('type', 'checkbox');
+
+        const originalId = element.getAttribute('id');
+        if (originalId) {
+            host.setAttribute('id', originalId);
+            element.removeAttribute('id');
+        }
+
+        const projectedOption = buildChoiceProjection(element);
+        const replaceTarget = projectedOption === element.parentElement ? projectedOption : element;
+        replaceTarget.replaceWith(host);
+        if (projectedOption) host.appendChild(projectedOption);
+        return host;
+    }
 
     constructor(container, options = {}) {
         super(container, options);

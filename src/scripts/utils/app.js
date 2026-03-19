@@ -13,6 +13,7 @@ import { ButtonComponent } from '../components/button.js';
 import { LayoutComponent } from '../components/layout.js';
 import { LoaderComponent } from '../components/loader.js';
 import { BlockComponent } from '../components/block.js';
+import { PanelComponent } from '../components/panel.js';
 import { RegionComponent } from '../components/region.js';
 import { AccordionComponent } from '../components/accordion.js';
 import { CalendarComponent } from '../components/calendar.js';
@@ -30,10 +31,12 @@ import { TreePanelComponent } from '../components/treepanel.js';
 import { SearchComponent } from '../components/search.js';
 import { WizardComponent } from '../components/wizard.js';
 import { StatsCard } from '../components/statscard.js';
+import { ServiceWorkerManager } from './sw.js';
 
 class HoliApp {
     
     static contentProviders = {};
+    static swManager = null;
     
     static instance = null;
     static librariesRegistered = false;
@@ -45,7 +48,7 @@ class HoliApp {
     
     static ensureLibraries() {
         if (this.librariesRegistered) return;
-        const builtIns = [LayoutComponent, LoaderComponent, BlockComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, WizardComponent, StatsCard].filter(Boolean);
+        const builtIns = [LayoutComponent, LoaderComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, WizardComponent, StatsCard].filter(Boolean);
         ComponentRegistry.registerLibrary('holi', builtIns);
         this.librariesRegistered = true;
     }
@@ -54,6 +57,13 @@ class HoliApp {
         this.ensureLibraries();
         ComponentRegistry.initAll(container);
         ComponentRegistry.observeLifecycle(container);
+    }
+
+    static getServiceWorkerManager(options = {}) {
+        if (!this.swManager) {
+            this.swManager = ServiceWorkerManager.getInstance(options);
+        }
+        return this.swManager;
     }
     
     // Site-wide i18n
@@ -81,9 +91,22 @@ class HoliApp {
     }
     
     // Site-wide ServiceWorker
-    initServiceWorker() {
-        Component.initServiceWorker(); // Legacy call
-        this.registerSWHandlers();
+    async initServiceWorker(options = {}) {
+        const manager = HoliApp.getServiceWorkerManager(options);
+        const scriptUrl = options.scriptUrl || '/sw.js';
+        const registrationOptions = options.registrationOptions || {};
+        await manager.registerWorker(scriptUrl, registrationOptions);
+        return manager;
+    }
+
+    async registerSWHandlers(handlers = []) {
+        const manager = HoliApp.getServiceWorkerManager();
+        return manager.registerHandlers(handlers);
+    }
+
+    async clearSWHandlers(eventType = null) {
+        const manager = HoliApp.getServiceWorkerManager();
+        return manager.clearHandlers(eventType);
     }
     
     // Site-wide PWA

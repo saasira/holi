@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #f4f7fb;
+    color: #0f172a;
+}
+
+.validator-page {
+    max-width: 960px;
+    margin: 24px auto;
+    padding: 0 16px 30px;
+    display: grid;
+    gap: 14px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #d6deea;
+    border-radius: 12px;
+    padding: 14px;
+    display: grid;
+    gap: 10px;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 1.06rem;
+}
+
+.card p {
+    margin: 0;
+    color: #334155;
+}
+
+label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+input {
+    border: 1px solid #c6d3e2;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font: inherit;
+}
+
+input[aria-invalid="true"] {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+.hint {
+    color: #475569;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    border: 1px solid #0f766e;
+    border-radius: 8px;
+    background: #0f766e;
+    color: #fff;
+    padding: 9px 12px;
+    cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+    background: #115e59;
+    outline: none;
+}
+
+.validation-log {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 4px;
+}
+
+.validation-log .pass {
+    color: #047857;
+}
+
+.validation-log .fail {
+    color: #b91c1c;
+}

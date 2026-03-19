@@ -1,4 +1,5 @@
 import { Component } from './component.js';
+import { Validator } from '../utils/validator.js';
 
 class TextAreaComponent extends Component {
     static get selector() {
@@ -25,7 +26,9 @@ class TextAreaComponent extends Component {
             rows: Number(this.readAttr('rows', '4')) || 4,
             required: this.readBoolAttr('required', false),
             disabled: this.readBoolAttr('disabled', false),
-            validators: this.parseValidators(this.readAttr('data-validators'))
+            validators: this.parseValidators(
+                this.readAttr('data-validator') || this.readAttr('data-validators')
+            )
         };
         this.state = {
             name: this.config.name,
@@ -56,8 +59,7 @@ class TextAreaComponent extends Component {
     }
 
     parseValidators(raw) {
-        if (!raw) return [];
-        return String(raw).split(',').map((entry) => entry.trim()).filter(Boolean);
+        return Validator.parseList(raw);
     }
 
     init() {
@@ -151,28 +153,10 @@ class TextAreaComponent extends Component {
     }
 
     runValidator(validator, value) {
-        const token = String(validator || '').trim();
-        const input = String(value || '');
-        if (!token) return { valid: true, message: '' };
-
-        if (token === 'required') {
-            const valid = input.trim().length > 0;
-            return { valid, message: valid ? '' : 'This field is required.' };
-        }
-
-        if (token.startsWith('minLength:')) {
-            const min = Number(token.split(':')[1]);
-            const valid = Number.isFinite(min) ? input.length >= min : true;
-            return { valid, message: valid ? '' : `Minimum length is ${min}.` };
-        }
-
-        if (token.startsWith('maxLength:')) {
-            const max = Number(token.split(':')[1]);
-            const valid = Number.isFinite(max) ? input.length <= max : true;
-            return { valid, message: valid ? '' : `Maximum length is ${max}.` };
-        }
-
-        return { valid: true, message: '' };
+        return Validator.validateToken(validator, value, {
+            element: this.inputEl,
+            component: this
+        });
     }
 
     updateView() {

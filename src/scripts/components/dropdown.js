@@ -1,6 +1,7 @@
 import { Component } from './component.js';
 import { attachLoaderState } from '../utils/loader_state.js';
 import { attachComponentStateBinding } from '../utils/component_state_binding.js';
+import { copyAttributes, readNativeValue, serializeSelectOptions } from '../utils/native_host.js';
 
 class DropdownComponent extends Component {
     static get selector() {
@@ -16,6 +17,27 @@ class DropdownComponent extends Component {
     }
 
     static templateId = 'dropdown-template';
+
+    static getNativeSelectors() {
+        return [
+            'select[component="dropdown"]',
+            'select[role="dropdown"]'
+        ];
+    }
+
+    static prepareHost(element) {
+        if (!(element instanceof HTMLSelectElement)) return element;
+
+        const host = document.createElement('section');
+        copyAttributes(element, host, {
+            exclude: ['component', 'role']
+        });
+        host.setAttribute('component', 'dropdown');
+        host.setAttribute('data-items', JSON.stringify(serializeSelectOptions(element)));
+        host.setAttribute('value', readNativeValue(element));
+        element.replaceWith(host);
+        return host;
+    }
 
     constructor(container, options = {}) {
         super(container, options);
@@ -34,7 +56,11 @@ class DropdownComponent extends Component {
             autoSuggest: this.readBooleanAttr('data-auto-suggest', true),
             placeholder: this.container.getAttribute('placeholder') || this.container.getAttribute('data-placeholder') || 'Select...',
             noCache: this.readBooleanAttr('no-cache', false),
-            localItems: this.parseItemsAttr('data-items')
+            localItems: this.parseItemsAttr('data-items'),
+            localFilterMap: this.parseObjectAttr('data-local-filter-map'),
+            requestParams: this.parseObjectAttr('data-request-params'),
+            clearOnPpr: this.readBooleanAttr('data-ppr-clear', true),
+            autoLoadOnPpr: this.readBooleanAttr('data-ppr-autoload', true)
         };
         this.state = {
             open: false,
@@ -70,6 +96,17 @@ class DropdownComponent extends Component {
             return Array.isArray(parsed) ? parsed : [];
         } catch (_error) {
             return [];
+        }
+    }
+
+    parseObjectAttr(attrName) {
+        const raw = String(this.container.getAttribute(attrName) || '').trim();
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch (_error) {
+            return {};
         }
     }
 
@@ -116,6 +153,8 @@ class DropdownComponent extends Component {
         this.state.activeIndex = this.state.items.length ? 0 : -1;
         this.state.hasMore = false;
         this.renderItems();
+        const defaultValue = this.container.getAttribute('value') || this.container.getAttribute('data-value');
+        if (defaultValue) this.value = defaultValue;
         this.bindEvents();
     }
 
@@ -210,17 +249,57 @@ class DropdownComponent extends Component {
     }
 
     applyLocalFilter() {
-        const query = String(this.state.query || '').trim().toLowerCase();
-        if (!query) {
-            this.state.filteredLocalItems = [...this.state.allLocalItems];
-        } else {
+        const criteria = this.resolveLocalFilterCriteria();
+        if (criteria && Object.keys(criteria).length === 0) {
+            this.state.filteredLocalItems = [];
+        } else if (criteria) {
             this.state.filteredLocalItems = this.state.allLocalItems.filter((item) => {
-                return item.label.toLowerCase().includes(query) || item.value.toLowerCase().includes(query);
+                return Object.entries(criteria).every(([field, expected]) => {
+                    const actual = item?.item?.[field];
+                    return String(actual ?? '') === String(expected);
+                });
+            });
+        } else {
+            this.state.filteredLocalItems = [...this.state.allLocalItems];
+        }
+
+        const query = String(this.state.query || '').trim().toLowerCase();
+        if (query) {
+            this.state.filteredLocalItems = this.state.allLocalItems.filter((item) => {
+                const matchesQuery = item.label.toLowerCase().includes(query) || item.value.toLowerCase().includes(query);
+                if (!matchesQuery) return false;
+                if (!criteria) return true;
+                if (Object.keys(criteria).length === 0) return false;
+                return Object.entries(criteria).every(([field, expected]) => {
+                    const actual = item?.item?.[field];
+                    return String(actual ?? '') === String(expected);
+                });
             });
         }
         this.state.items = [...this.state.filteredLocalItems];
         this.state.hasMore = false;
         this.renderItems();
+    }
+
+    resolveLocalFilterCriteria() {
+        const entries = Object.entries(this.config.localFilterMap || {});
+        if (!entries.length) return null;
+
+        const criteria = {};
+        for (let i = 0; i < entries.length; i += 1) {
+            const [field, expression] = entries[i];
+            if (!field) continue;
+            const rawExpr = String(expression || '').trim();
+            if (!rawExpr) continue;
+            const expr = this.extractExpression(rawExpr);
+            const value = this.evaluateExpression(expr, this.getBindingContext());
+            if (value == null || value === '') {
+                return {};
+            }
+            criteria[field] = value;
+        }
+
+        return Object.keys(criteria).length ? criteria : null;
     }
 
     async loadRemotePage(page = 1, append = false) {
@@ -273,7 +352,30 @@ class DropdownComponent extends Component {
             limit: String(this.config.pageSize),
             q: query
         });
+        const extraParams = this.resolveRequestParams();
+        Object.entries(extraParams).forEach(([key, value]) => {
+            if (value == null || value === '') return;
+            params.set(key, String(value));
+        });
         return `${this.config.endpoint}${hasQuery ? '&' : '?'}${params.toString()}`;
+    }
+
+    resolveRequestParams() {
+        const entries = Object.entries(this.config.requestParams || {});
+        if (!entries.length) return {};
+
+        const resolved = {};
+        entries.forEach(([paramName, expression]) => {
+            if (!paramName) return;
+            const rawExpr = String(expression || '').trim();
+            if (!rawExpr) return;
+            const expr = this.extractExpression(rawExpr);
+            const value = this.evaluateExpression(expr, this.getBindingContext());
+            if (typeof value !== 'undefined' && value !== null && value !== '') {
+                resolved[paramName] = value;
+            }
+        });
+        return resolved;
     }
 
     applyRemotePayload(payload, append, page) {
@@ -367,9 +469,9 @@ class DropdownComponent extends Component {
     }
 
     selectItem(item) {
-        this.state.selected = item;
         if (this.input) this.input.value = item.label;
         if (this.valueInput) this.valueInput.value = item.value;
+        this.state.selected = item;
         this.dispatchEvent('dropdownselect', {
             label: item.label,
             value: item.value,
@@ -473,6 +575,25 @@ class DropdownComponent extends Component {
         };
     }
 
+    getStateSnapshot() {
+        return {
+            open: !!this.state.open,
+            value: this.value,
+            label: this.input?.value || '',
+            selected: this.state.selected
+                ? {
+                    value: this.state.selected.value,
+                    label: this.state.selected.label
+                }
+                : null
+        };
+    }
+
+    shouldDispatchPprChange(path, _value, initial) {
+        if (initial) return true;
+        return path === 'selected';
+    }
+
     applyBindableState(snapshot) {
         if (!snapshot || typeof snapshot !== 'object') return;
         if (typeof snapshot.query === 'string' && snapshot.query !== this.state.query) {
@@ -483,6 +604,35 @@ class DropdownComponent extends Component {
             const next = String(snapshot.value);
             if (next !== this.value) this.value = next;
         }
+    }
+
+    handlePprUpdate(_detail = {}) {
+        this.refreshPpr();
+    }
+
+    refreshPpr() {
+        if (this.config.clearOnPpr) {
+            this.state.query = '';
+            this.state.selected = null;
+            this.state.page = 1;
+            this.state.hasMore = false;
+            this.state.activeIndex = -1;
+            if (this.input) this.input.value = '';
+            if (this.valueInput) this.valueInput.value = '';
+        }
+
+        if (this.config.endpoint) {
+            this.remoteCache.clear();
+            this.state.items = [];
+            this.renderItems();
+            if (this.config.autoLoadOnPpr) {
+                void this.loadRemotePage(1, false);
+            }
+            return;
+        }
+
+        this.state.allLocalItems = this.normalizeItems(this.collectLocalItems());
+        this.applyLocalFilter();
     }
 
     destroy() {

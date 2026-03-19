@@ -1,4 +1,5 @@
 import { DropdownComponent } from './dropdown.js';
+import { copyAttributes, readNativeValue, serializeSelectOptions } from '../utils/native_host.js';
 
 class SelectComponent extends DropdownComponent {
     static get selector() {
@@ -14,6 +15,29 @@ class SelectComponent extends DropdownComponent {
     }
 
     static templateId = 'select-field-template';
+
+    static getNativeSelectors() {
+        return [
+            'select[component="select"]',
+            'select[role="select"]',
+            'select[component="select-field"]',
+            'select[role="select-field"]'
+        ];
+    }
+
+    static prepareHost(element) {
+        if (!(element instanceof HTMLSelectElement)) return element;
+
+        const host = document.createElement('section');
+        copyAttributes(element, host, {
+            exclude: ['component', 'role']
+        });
+        host.setAttribute('component', 'select-field');
+        host.setAttribute('data-items', JSON.stringify(serializeSelectOptions(element)));
+        host.setAttribute('value', readNativeValue(element));
+        element.replaceWith(host);
+        return host;
+    }
 
     getBindingContext(extra = {}) {
         return super.getBindingContext({

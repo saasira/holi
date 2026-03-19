@@ -1,8 +1,13 @@
 
 import { ComponentRegistry } from '../utils/component_registry.js';
+import { Validator } from '../utils/validator.js';
+import { ComponentStateBridge } from '../utils/component_state_bridge.js';
+import { ComponentPPR } from '../utils/ppr.js';
 
 class Component {
-    
+    static nextComponentId = 1;
+    static pprHookNames = ['refreshPpr', 'refresh', 'updateView'];
+
     // NEW: Auto-detection selector
     static get selector() {
         return null; // Override in subclasses
@@ -23,7 +28,12 @@ class Component {
         this.container = container;
         this.children = new Map();
         this.isDestroyed = false;
+        this.ppr = {};
+        this.pprMeta = {};
         Object.assign(this, options);
+        if (this.container instanceof Element && !this.container.getAttribute('data-component-id')) {
+            this.container.setAttribute('data-component-id', `holi-${Component.nextComponentId++}`);
+        }
         // auto-expose instance on element; 
         // with this, all components now accessible as: el.modal, el.toast, el.loader, etc.
         this.instanceKey = this.constructor.name.toLowerCase();
@@ -40,13 +50,109 @@ class Component {
             writable: false,
             configurable: true
         });
+
+        this.stateBridge = new ComponentStateBridge(this);
+        this.stateBridge.install();
+
+        this.pprBridge = new ComponentPPR(this);
+        this.pprBridge.install();
+
         ComponentRegistry.registerInstance(this.container, this);
     }
     
     init() {
+        if (this.initializing) return;  // Prevent re-entry
+        this.initializing = true;
+
+        // Max 100ms per component (safety)
+        const start = performance.now();
+        super.init?.();
+
         this.validateStructure();
+
+        if (performance.now() - start > 100) {
+            console.warn('Component init slow:', this.constructor.name);
+        }
+
+        this.initializing = false;
     }
-    
+
+    static registerValidator(name, fn) {
+        Validator.register(name, fn);
+    }
+
+    static unregisterValidator(name) {
+        return Validator.unregister(name);
+    }
+
+    static parseValidators(raw) {
+        return Validator.parseList(raw);
+    }
+
+    parseValidators(raw) {
+        return Validator.parseList(raw);
+    }
+
+    runValidator(token, value, context = {}) {
+        return Validator.validateToken(token, value, {
+            component: this,
+            ...context
+        });
+    }
+
+    toCamelCase(value) {
+        return String(value || '')
+            .replace(/[-_\s]+(.)?/g, (_m, ch) => (ch ? ch.toUpperCase() : ''))
+            .replace(/^(.)/, (m) => m.toLowerCase());
+    }
+
+    onStateReflect(path, value) {
+        const key = String(path || '').trim();
+        if (!key || key.includes('.')) return;
+        if (this.isReflectingState) return;
+
+        this.isReflectingState = true;
+        try {
+            const camelKey = this.toCamelCase(key);
+            const textAlias = `${camelKey}Text`;
+
+            if (camelKey in this && typeof this[camelKey] !== 'function') {
+                this[camelKey] = value;
+            }
+
+            if (textAlias in this && typeof this[textAlias] !== 'function') {
+                this[textAlias] = value == null ? '' : String(value);
+            }
+
+            if (this.config && typeof this.config === 'object') {
+                if (Object.prototype.hasOwnProperty.call(this.config, key)) {
+                    this.config[key] = value;
+                } else if (Object.prototype.hasOwnProperty.call(this.config, camelKey)) {
+                    this.config[camelKey] = value;
+                }
+            }
+
+            if (typeof this.applyStateUpdate === 'function') {
+                this.applyStateUpdate(camelKey, value);
+                return;
+            }
+
+            if (typeof this.applyLayoutState === 'function') {
+                this.applyLayoutState();
+            }
+
+            if (typeof this.applyDialogContent === 'function') {
+                this.applyDialogContent();
+            }
+
+            if (typeof this.updateView === 'function') {
+                this.updateView();
+            }
+        } finally {
+            this.isReflectingState = false;
+        }
+    }
+
     // Pure component lifecycle
     async render() {
         const template = document.getElementById(this.templateId);
@@ -79,6 +185,115 @@ class Component {
         this.refreshChildren();
     }
 
+    // Declarative dependency-update contract:
+    // the framework routes source notifications here, and the subscriber picks
+    // its own update strategy through refreshPpr/refresh/updateView.
+    handlePprUpdate(payload = {}) {
+        const handler = this.resolvePprHandler();
+        if (!handler) {
+            this.reportMissingPprContract(payload);
+            return false;
+        }
+        handler(payload);
+        return true;
+    }
+
+    receiveDependencyUpdate(payload = {}) {
+        this.recordDependencySnapshot(payload);
+        this.isApplyingDependencyUpdate = true;
+        try {
+            return this.handlePprUpdate(payload);
+        } finally {
+            this.isApplyingDependencyUpdate = false;
+        }
+    }
+
+    recordDependencySnapshot(payload = {}) {
+        const sourceElement = payload?.sourceElement;
+        const snapshot = payload?.snapshot;
+        if (!(sourceElement instanceof Element)) return;
+        if (!this.ppr || typeof this.ppr !== 'object') this.ppr = {};
+
+        const aliases = this.resolveDependencyAliases(sourceElement);
+        aliases.forEach((alias) => {
+            this.ppr[alias] = snapshot;
+        });
+        this.pprMeta = {
+            source: aliases[0] || '',
+            path: payload?.path || '',
+            initial: !!payload?.initial
+        };
+    }
+
+    resolveDependencyAliases(element) {
+        if (!(element instanceof Element)) return [];
+        const aliases = [];
+        const values = [
+            element.id,
+            element.getAttribute('data-ppr-id'),
+            element.getAttribute('data-component-id'),
+            element.getAttribute('component'),
+            element.getAttribute('role'),
+            element.getAttribute('data-holi-component-class'),
+            String(element.tagName || '').toLowerCase()
+        ];
+        values.forEach((value) => {
+            const raw = String(value || '').trim();
+            const lower = raw.toLowerCase();
+            [raw, lower].forEach((next) => {
+                if (next && !aliases.includes(next)) aliases.push(next);
+            });
+        });
+        return aliases;
+    }
+
+    resolvePprHandler() {
+        const hookNames = Array.isArray(this.constructor?.pprHookNames)
+            ? this.constructor.pprHookNames
+            : Component.pprHookNames;
+
+        for (let i = 0; i < hookNames.length; i += 1) {
+            const hookName = hookNames[i];
+            const candidate = this[hookName];
+            if (typeof candidate === 'function') {
+                return candidate.bind(this);
+            }
+        }
+        return null;
+    }
+
+    getPprMissingHookPolicy() {
+        const attrValue = this.container?.getAttribute?.('data-ppr-missing-hook-policy');
+        const globalValue = typeof window !== 'undefined' ? window.HoliPprMissingHookPolicy : '';
+        const value = String(attrValue || globalValue || 'warn').trim().toLowerCase();
+        if (value === 'throw' || value === 'ignore') return value;
+        return 'warn';
+    }
+
+    reportMissingPprContract(payload = {}) {
+        const policy = this.getPprMissingHookPolicy();
+        if (policy === 'ignore') return;
+
+        const hostLabel = this.container?.id
+            || this.container?.getAttribute?.('data-component-id')
+            || this.constructor?.name
+            || 'component';
+        const sourceLabel = payload?.sourceElement?.id
+            || payload?.sourceElement?.getAttribute?.('data-component-id')
+            || payload?.sourceComponent?.constructor?.name
+            || 'unknown-source';
+        const message = `PPR target "${hostLabel}" cannot handle updates from "${sourceLabel}". Implement one of: ${Component.pprHookNames.join(', ')}`;
+
+        if (policy === 'throw') {
+            throw new Error(message);
+        }
+
+        console.warn(message, {
+            component: this,
+            payload
+        });
+    }
+
     async createChildren() {
         const scope = this.element || this.container;
         if (!(scope instanceof Element)) return;
@@ -108,6 +323,8 @@ class Component {
     }
 	
     destroy() {
+        this.pprBridge?.uninstall?.();
+        this.stateBridge?.uninstall?.();
         this.children.forEach(child => child.destroy());
         this.children.clear();
         this.element?.remove();
@@ -153,8 +370,21 @@ class Component {
             ...this,
             ...(this.state || {}),
             data: this.data,
+            ppr: this.ppr || {},
+            pprMeta: this.pprMeta || {},
             ...extra
         };
+    }
+
+    getStateSnapshot() {
+        if (this.stateBridge && typeof this.stateBridge.cloneSerializable === 'function') {
+            return this.stateBridge.cloneSerializable(this.state || {});
+        }
+        try {
+            return JSON.parse(JSON.stringify(this.state || {}));
+        } catch (_error) {
+            return this.state || {};
+        }
     }
 
     applyBindings(root, context = {}) {
@@ -341,6 +571,11 @@ class Component {
         }
         return path.split('.').reduce((acc, key) => (acc == null ? undefined : acc[key]), source);
     }
+}
+
+if (typeof window !== 'undefined') {
+    window.Component = Component;
+    Validator.enableAutoBind();
 }
 
 export { Component };

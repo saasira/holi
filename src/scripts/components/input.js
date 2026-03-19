@@ -1,4 +1,6 @@
 import { Component } from './component.js';
+import { Validator } from '../utils/validator.js';
+import { copyAttributes, readNativeValue } from '../utils/native_host.js';
 
 class InputComponent extends Component {
     static get selector() {
@@ -14,6 +16,46 @@ class InputComponent extends Component {
     }
 
     static templateId = 'input-field-template';
+
+    static getNativeSelectors() {
+        return [
+            'input[component="input"]',
+            'input[role="input"]',
+            'input[component="input-field"]',
+            'input[role="input-field"]',
+            'input[component="textarea"]',
+            'input[role="textarea"]',
+            'textarea[component="input"]',
+            'textarea[role="input"]',
+            'textarea[component="input-field"]',
+            'textarea[role="input-field"]',
+            'textarea[component="textarea"]',
+            'textarea[role="textarea"]'
+        ];
+    }
+
+    static prepareHost(element) {
+        if (!(element instanceof HTMLInputElement) && !(element instanceof HTMLTextAreaElement)) {
+            return element;
+        }
+
+        const host = document.createElement('section');
+        copyAttributes(element, host, {
+            exclude: ['component', 'role', 'value', 'type']
+        });
+        host.setAttribute('component', 'input-field');
+        host.setAttribute(
+            'type',
+            element instanceof HTMLTextAreaElement
+                ? 'textarea'
+                : ((element.getAttribute('role') || element.getAttribute('component')) === 'textarea'
+                    ? 'textarea'
+                    : (element.getAttribute('type') || 'text'))
+        );
+        host.setAttribute('value', readNativeValue(element));
+        element.replaceWith(host);
+        return host;
+    }
 
     constructor(container, options = {}) {
         super(container, options);
@@ -32,7 +74,9 @@ class InputComponent extends Component {
             required: this.readBoolAttr('required', false),
             disabled: this.readBoolAttr('disabled', false),
             errorMessage: this.readAttr('error-message', 'Invalid value.'),
-            validators: this.parseValidators(this.readAttr('data-validators'))
+            validators: this.parseValidators(
+                this.readAttr('data-validator') || this.readAttr('data-validators')
+            )
         };
         this.state = {
             label: this.config.label,
@@ -66,12 +110,7 @@ class InputComponent extends Component {
     }
 
     parseValidators(raw) {
-        if (!raw) return [];
-        if (Array.isArray(raw)) return raw;
-        return String(raw)
-            .split(',')
-            .map((entry) => entry.trim())
-            .filter(Boolean);
+        return Validator.parseList(raw);
     }
 
     resolveControlType() {
@@ -203,44 +242,14 @@ class InputComponent extends Component {
     }
 
     runValidator(validator, value) {
-        const token = String(validator || '').trim();
-        const input = String(value || '');
-        if (!token) return { valid: true, message: '' };
-
-        if (token === 'required') {
-            const valid = input.trim().length > 0;
-            return { valid, message: valid ? '' : 'This field is required.' };
+        const result = Validator.validateToken(validator, value, {
+            element: this.controlEl,
+            component: this
+        });
+        if (!result.valid && (!result.message || result.message === 'Invalid value.')) {
+            result.message = this.config.errorMessage || 'Invalid value.';
         }
-
-        if (token.startsWith('minLength:')) {
-            const min = Number(token.split(':')[1]);
-            const valid = Number.isFinite(min) ? input.length >= min : true;
-            return { valid, message: valid ? '' : `Minimum length is ${min}.` };
-        }
-
-        if (token.startsWith('maxLength:')) {
-            const max = Number(token.split(':')[1]);
-            const valid = Number.isFinite(max) ? input.length <= max : true;
-            return { valid, message: valid ? '' : `Maximum length is ${max}.` };
-        }
-
-        if (token === 'email') {
-            const valid = !input || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
-            return { valid, message: valid ? '' : 'Enter a valid email address.' };
-        }
-
-        if (token.startsWith('pattern:')) {
-            const source = token.slice('pattern:'.length).trim();
-            try {
-                const regex = new RegExp(source);
-                const valid = regex.test(input);
-                return { valid, message: valid ? '' : this.config.errorMessage };
-            } catch (_error) {
-                return { valid: true, message: '' };
-            }
-        }
-
-        return { valid: true, message: '' };
+        return result;
     }
 
     updateView() {

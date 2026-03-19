@@ -49,6 +49,8 @@ class DataTable extends Component {
             headers: [],
             ...normalized.config
         };
+        this.config.endpointTemplate = this.config.endpoint;
+        this.config.requestParams = this.parseObjectAttr('data-request-params');
 
         this.rawRows = [];
         this.processedRows = [];
@@ -270,7 +272,7 @@ class DataTable extends Component {
     }
 
     async loadData() {
-        if (this.config.endpoint) {
+        if (this.resolveConfiguredEndpoint()) {
             const ok = await this.loadRemote(this.config.serverSide, false);
             if (!ok) {
                 this.updateView();
@@ -296,6 +298,7 @@ class DataTable extends Component {
         }
 
         const endpoint = this.buildEndpointUrl(true);
+        if (!endpoint) return false;
         this.setRequestStatus('loading', `Loading page ${this.state.page}...`);
 
         let data;
@@ -348,7 +351,9 @@ class DataTable extends Component {
     }
 
     buildEndpointUrl(includeQuery) {
-        if (!includeQuery) return this.config.endpoint;
+        const endpoint = this.resolveConfiguredEndpoint();
+        if (!endpoint) return '';
+        if (!includeQuery) return endpoint;
 
         const limit = this.config.mode === 'pagination'
             ? this.config.pageSize
@@ -363,7 +368,12 @@ class DataTable extends Component {
             q: this.state.searchTerm,
             ...this.state.filters
         });
-        return `${this.config.endpoint}?${params}`;
+        const extraParams = this.resolveRequestParams();
+        Object.entries(extraParams).forEach(([key, value]) => {
+            if (value == null || value === '') return;
+            params.set(key, String(value));
+        });
+        return `${endpoint}?${params}`;
     }
 
     deriveHeaders(rows) {
@@ -714,6 +724,15 @@ class DataTable extends Component {
     applyLocalRowVisibility() {
         const start = Math.max(0, Number(this.state.visibleStart) || 0);
         const end = Math.max(start, Number(this.state.visibleEnd) || 0);
+
+        if (this.config.mode === 'infinite') {
+            const visibleCount = Math.max(0, end - start);
+            this.localRowPool.forEach((rowEl, rowIndex) => {
+                rowEl.hidden = rowIndex >= visibleCount;
+            });
+            return;
+        }
+
         this.localRowPool.forEach((rowEl, rowIndex) => {
             rowEl.hidden = rowIndex < start || rowIndex >= end;
         });
@@ -1376,6 +1395,47 @@ class DataTable extends Component {
         return {};
     }
 
+    parseObjectAttr(attrName) {
+        const raw = String(this.container?.getAttribute(attrName) || '').trim();
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch (_error) {
+            return {};
+        }
+    }
+
+    resolveConfiguredEndpoint() {
+        const raw = String(this.config.endpointTemplate || this.config.endpoint || '').trim();
+        if (!raw) {
+            this.config.endpoint = '';
+            return '';
+        }
+        const resolved = raw.includes('@{')
+            ? this.resolveTemplateString(raw, this.getBindingContext())
+            : raw;
+        this.config.endpoint = String(resolved || '').trim();
+        return this.config.endpoint;
+    }
+
+    resolveRequestParams() {
+        const entries = Object.entries(this.config.requestParams || {});
+        if (!entries.length) return {};
+        const resolved = {};
+        entries.forEach(([paramName, expression]) => {
+            if (!paramName) return;
+            const rawExpr = String(expression || '').trim();
+            if (!rawExpr) return;
+            const expr = this.extractExpression(rawExpr);
+            const value = this.evaluateExpression(expr, this.getBindingContext());
+            if (typeof value !== 'undefined' && value !== null && value !== '') {
+                resolved[paramName] = value;
+            }
+        });
+        return resolved;
+    }
+
     resolveConfiguredFields(configured, available) {
         if (!Array.isArray(configured) || configured.length === 0) return [];
         const availableSet = new Set(available);
@@ -1541,6 +1601,26 @@ class DataTable extends Component {
             page: Number(this.state.page) || 1,
             visibleColumns: this.state.headers.filter((h) => h.visible !== false).map((h) => h.field)
         };
+    }
+
+    getStateSnapshot() {
+        return this.getBindableState();
+    }
+
+    shouldDispatchPprChange(path, _value, initial) {
+        if (initial) return true;
+        return ['searchTerm', 'sortField', 'sortDir', 'filters', 'page', 'visibleColumns'].includes(path);
+    }
+
+    refreshPpr() {
+        this.resetViewport();
+        this.remoteLoaded = false;
+        if (this.resolveConfiguredEndpoint()) {
+            void this.loadData();
+            return;
+        }
+        this.applyClientProcessing();
+        this.updateView();
     }
 
     applyBindableState(snapshot) {

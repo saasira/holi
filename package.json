@@ -1,6 +1,6 @@
 {
   "name": "holi",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Modern UI Components Library with i18n, themes, PWA, SW",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

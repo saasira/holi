@@ -52,6 +52,8 @@ class DataGrid extends Component {
             visibleFields: [],
             ...normalized.config
         };
+        this.config.endpointTemplate = this.config.endpoint;
+        this.config.requestParams = this.parseObjectAttr('data-request-params');
 
         this.rawRows = [];
         this.processedRows = [];
@@ -268,7 +270,7 @@ class DataGrid extends Component {
     }
 
     async loadData() {
-        if (this.config.endpoint) {
+        if (this.resolveConfiguredEndpoint()) {
             const ok = await this.loadRemote(this.config.serverSide, false);
             if (!ok) {
                 this.updateView();
@@ -294,6 +296,7 @@ class DataGrid extends Component {
 
         this.setRequestStatus('loading', `Loading page ${this.state.page}...`);
         const endpoint = this.buildEndpointUrl(true);
+        if (!endpoint) return false;
 
         let data;
         try {
@@ -360,7 +363,9 @@ class DataGrid extends Component {
     }
 
     buildEndpointUrl(includeQuery) {
-        if (!includeQuery) return this.config.endpoint;
+        const endpoint = this.resolveConfiguredEndpoint();
+        if (!endpoint) return '';
+        if (!includeQuery) return endpoint;
         const limit = this.config.mode === 'pagination'
             ? this.config.pageSize
             : this.config.mode === 'infinite'
@@ -374,7 +379,12 @@ class DataGrid extends Component {
             q: this.state.searchTerm,
             ...this.state.filters
         });
-        return `${this.config.endpoint}?${params}`;
+        const extraParams = this.resolveRequestParams();
+        Object.entries(extraParams).forEach(([key, value]) => {
+            if (value == null || value === '') return;
+            params.set(key, String(value));
+        });
+        return `${endpoint}?${params}`;
     }
 
     deriveHeaders(rows) {
@@ -1298,6 +1308,47 @@ class DataGrid extends Component {
         return {};
     }
 
+    parseObjectAttr(attrName) {
+        const raw = String(this.container?.getAttribute(attrName) || '').trim();
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch (_error) {
+            return {};
+        }
+    }
+
+    resolveConfiguredEndpoint() {
+        const raw = String(this.config.endpointTemplate || this.config.endpoint || '').trim();
+        if (!raw) {
+            this.config.endpoint = '';
+            return '';
+        }
+        const resolved = raw.includes('@{')
+            ? this.resolveTemplateString(raw, this.getBindingContext())
+            : raw;
+        this.config.endpoint = String(resolved || '').trim();
+        return this.config.endpoint;
+    }
+
+    resolveRequestParams() {
+        const entries = Object.entries(this.config.requestParams || {});
+        if (!entries.length) return {};
+        const resolved = {};
+        entries.forEach(([paramName, expression]) => {
+            if (!paramName) return;
+            const rawExpr = String(expression || '').trim();
+            if (!rawExpr) return;
+            const expr = this.extractExpression(rawExpr);
+            const value = this.evaluateExpression(expr, this.getBindingContext());
+            if (typeof value !== 'undefined' && value !== null && value !== '') {
+                resolved[paramName] = value;
+            }
+        });
+        return resolved;
+    }
+
     resolveConfiguredFields(configured, available) {
         if (!Array.isArray(configured) || configured.length === 0) return [];
         const availableSet = new Set(available);
@@ -1366,6 +1417,26 @@ class DataGrid extends Component {
             page: Number(this.state.page) || 1,
             visibleFields: [...(this.state.visibleFields || [])]
         };
+    }
+
+    getStateSnapshot() {
+        return this.getBindableState();
+    }
+
+    shouldDispatchPprChange(path, _value, initial) {
+        if (initial) return true;
+        return ['searchTerm', 'sortField', 'sortDir', 'filters', 'page', 'visibleFields'].includes(path);
+    }
+
+    refreshPpr() {
+        this.resetViewport();
+        this.remoteLoaded = false;
+        if (this.resolveConfiguredEndpoint()) {
+            void this.loadData();
+            return;
+        }
+        this.applyClientProcessing();
+        this.updateView();
     }
 
     applyBindableState(snapshot) {

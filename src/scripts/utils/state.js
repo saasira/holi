@@ -1,11 +1,13 @@
 class StateHub {
     static stores = new Map();
     static nextId = 1;
+    static defaultStoreId = 'global';
 
     constructor(initialState = {}, options = {}) {
         this.state = { ...initialState };
         this.listeners = new Set();
         this.id = options.id || `hub_${StateHub.nextId++}`;
+        this.proxyCache = new WeakMap();
         this.proxy = this.createProxy(this.state, []);
         StateHub.stores.set(this.id, this);
     }
@@ -16,6 +18,12 @@ class StateHub {
 
     static get(storeId) {
         return this.stores.get(storeId) || null;
+    }
+
+    static ensure(storeId = this.defaultStoreId, initialState = {}) {
+        const existing = this.get(storeId);
+        if (existing) return existing;
+        return this.create(initialState, { id: storeId });
     }
 
     static destroy(storeId) {
@@ -58,11 +66,20 @@ class StateHub {
         return true;
     }
 
+    static publish(path, value, storeId = this.defaultStoreId) {
+        if (!path || typeof path !== 'string') return false;
+        const store = this.ensure(storeId);
+        return this.setByPath(store.proxy, path, value);
+    }
+
     createProxy(target, path = []) {
         if (target == null || typeof target !== 'object') return target;
+        if (this.proxyCache.has(target)) {
+            return this.proxyCache.get(target);
+        }
 
         const hub = this;
-        return new Proxy(target, {
+        const proxy = new Proxy(target, {
             get(obj, key) {
                 const value = obj[key];
                 if (value != null && typeof value === 'object') {
@@ -86,6 +103,8 @@ class StateHub {
                 return true;
             }
         });
+        this.proxyCache.set(target, proxy);
+        return proxy;
     }
 
     subscribe(callback, selector = null) {
@@ -178,6 +197,39 @@ class StateConnector {
         container.querySelectorAll('[data-state]').forEach((el) => this.disconnectElement(el));
     }
 }
+
+StateHub.subscribe = function(pathOrCallback, callbackOrStoreId, maybeStoreId) {
+    if (typeof pathOrCallback === 'function') {
+        const storeId = typeof callbackOrStoreId === 'string'
+            ? callbackOrStoreId
+            : StateHub.defaultStoreId;
+        const store = StateHub.ensure(storeId);
+        return store.subscribe(pathOrCallback);
+    }
+
+    const path = String(pathOrCallback || '').trim();
+    const callback = callbackOrStoreId;
+    const storeId = typeof maybeStoreId === 'string' ? maybeStoreId : StateHub.defaultStoreId;
+    if (!path || typeof callback !== 'function') {
+        return () => {};
+    }
+
+    const store = StateHub.ensure(storeId);
+    const initial = StateHub.getByPath(store.proxy, path);
+    callback(initial, { path, initial: true });
+
+    return store.subscribe((state, change) => {
+        const changedPath = change?.path || '';
+        if (
+            changedPath === path
+            || changedPath.startsWith(`${path}.`)
+            || path.startsWith(`${changedPath}.`)
+        ) {
+            const nextValue = StateHub.getByPath(state, path);
+            callback(nextValue, change);
+        }
+    });
+};
 
 if (typeof window !== 'undefined') {
     window.StateHub = StateHub;

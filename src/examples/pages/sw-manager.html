@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ServiceWorkerManager Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="./sw-manager.css">
+        <script src="/dist/holi.js"></script>
+        <script src="./sw-manager.js" defer></script>
+    </head>
+    <body>
+        <main class="sw-demo">
+            <header>
+                <h1>ServiceWorkerManager Handlers Demo</h1>
+                <p>Registers declarative handlers for fetch, sync, and push-style notifications through Holi ServiceWorkerManager.</p>
+            </header>
+
+            <section class="panel">
+                <h2>1) Register Worker + Handlers</h2>
+                <div class="actions">
+                    <button type="button" id="btn-register-sw">Register /sw.js</button>
+                    <button type="button" id="btn-register-handlers">Register Handler Set</button>
+                </div>
+                <p class="hint">Handlers: image optimization fetch, sales sync tag, and data-update notifications.</p>
+            </section>
+
+            <section class="panel">
+                <h2>2) Execute Background Sync</h2>
+                <div class="actions">
+                    <button type="button" id="btn-queue-sync">Queue Sales Sync Task</button>
+                    <button type="button" id="btn-run-sync">Trigger Sync Tag</button>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>3) Trigger Notification On Data Update</h2>
+                <div class="actions">
+                    <button type="button" id="btn-notify-update">Notify Data Update</button>
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>4) Client-Side Image Optimization (via fetch handler)</h2>
+                <p class="hint">After handler registration, image requests to Unsplash are rewritten with optimization params and cached.</p>
+                <div class="gallery">
+                    <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" alt="Mountain sunrise">
+                    <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e" alt="Lake and trees">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e" alt="Misty mountain valley">
+                </div>
+            </section>
+
+            <section class="panel">
+                <h2>Event Log</h2>
+                <ul id="log" class="log"></ul>
+            </section>
+        </main>
+    </body>
+</html>

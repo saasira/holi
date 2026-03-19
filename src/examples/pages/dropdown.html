@@ -43,5 +43,98 @@
             data-min-query="1"
             data-placeholder="Search order...">
         </dropdown>
+
+        <h2>Variant 4: Declarative PPR chain</h2>
+        <p>
+            Downstream dropdowns subscribe declaratively using JSF-style target references.
+            Changing an upstream selection clears and refreshes the dependents.
+        </p>
+
+        <section
+            id="country"
+            component="dropdown"
+            update="province district block town"
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"in","label":"India"},
+                {"value":"us","label":"United States"}
+            ]'>
+        </section>
+
+        <section
+            id="province"
+            component="dropdown"
+            data-ppr-listen="country"
+            data-local-filter-map='{"country":"ppr.country.value"}'
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"mh","label":"Maharashtra","country":"in"},
+                {"value":"gj","label":"Gujarat","country":"in"},
+                {"value":"ka","label":"Karnataka","country":"in"},
+                {"value":"ca","label":"California","country":"us"},
+                {"value":"ny","label":"New York","country":"us"},
+                {"value":"tx","label":"Texas","country":"us"}
+            ]'>
+        </section>
+
+        <section
+            id="district"
+            component="dropdown"
+            data-ppr-listen="country province"
+            data-local-filter-map='{"country":"ppr.country.value","province":"ppr.province.value"}'
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"mumbai","label":"Mumbai","country":"in","province":"mh"},
+                {"value":"pune","label":"Pune","country":"in","province":"mh"},
+                {"value":"ahmedabad","label":"Ahmedabad","country":"in","province":"gj"},
+                {"value":"surat","label":"Surat","country":"in","province":"gj"},
+                {"value":"bengaluru","label":"Bengaluru","country":"in","province":"ka"},
+                {"value":"mysuru","label":"Mysuru","country":"in","province":"ka"},
+                {"value":"los-angeles","label":"Los Angeles","country":"us","province":"ca"},
+                {"value":"san-diego","label":"San Diego","country":"us","province":"ca"},
+                {"value":"albany","label":"Albany","country":"us","province":"ny"},
+                {"value":"buffalo","label":"Buffalo","country":"us","province":"ny"},
+                {"value":"austin","label":"Austin","country":"us","province":"tx"},
+                {"value":"dallas","label":"Dallas","country":"us","province":"tx"}
+            ]'>
+        </section>
+
+        <section
+            id="block"
+            component="dropdown"
+            data-ppr-listen="country province district"
+            data-local-filter-map='{"country":"ppr.country.value","province":"ppr.province.value","district":"ppr.district.value"}'
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"mumbai-north","label":"Mumbai North Block","country":"in","province":"mh","district":"mumbai"},
+                {"value":"mumbai-south","label":"Mumbai South Block","country":"in","province":"mh","district":"mumbai"},
+                {"value":"pune-east","label":"Pune East Block","country":"in","province":"mh","district":"pune"},
+                {"value":"ahmedabad-west","label":"Ahmedabad West Block","country":"in","province":"gj","district":"ahmedabad"},
+                {"value":"bengaluru-central","label":"Bengaluru Central Block","country":"in","province":"ka","district":"bengaluru"},
+                {"value":"la-downtown","label":"Los Angeles Downtown Block","country":"us","province":"ca","district":"los-angeles"},
+                {"value":"san-diego-bay","label":"San Diego Bay Block","country":"us","province":"ca","district":"san-diego"},
+                {"value":"albany-north","label":"Albany North Block","country":"us","province":"ny","district":"albany"},
+                {"value":"austin-lake","label":"Austin Lake Block","country":"us","province":"tx","district":"austin"}
+            ]'>
+        </section>
+
+        <section
+            id="town"
+            component="dropdown"
+            data-ppr-listen="country province district block"
+            data-local-filter-map='{"country":"ppr.country.value","province":"ppr.province.value","district":"ppr.district.value","block":"ppr.block.value"}'
+            data-auto-suggest="false"
+            data-items='[
+                {"value":"dadar","label":"Dadar","country":"in","province":"mh","district":"mumbai","block":"mumbai-north"},
+                {"value":"colaba","label":"Colaba","country":"in","province":"mh","district":"mumbai","block":"mumbai-south"},
+                {"value":"wakad","label":"Wakad","country":"in","province":"mh","district":"pune","block":"pune-east"},
+                {"value":"navrangpura","label":"Navrangpura","country":"in","province":"gj","district":"ahmedabad","block":"ahmedabad-west"},
+                {"value":"malleshwaram","label":"Malleshwaram","country":"in","province":"ka","district":"bengaluru","block":"bengaluru-central"},
+                {"value":"hollywood","label":"Hollywood","country":"us","province":"ca","district":"los-angeles","block":"la-downtown"},
+                {"value":"gaslamp","label":"Gaslamp Quarter","country":"us","province":"ca","district":"san-diego","block":"san-diego-bay"},
+                {"value":"center-square","label":"Center Square","country":"us","province":"ny","district":"albany","block":"albany-north"},
+                {"value":"zilker","label":"Zilker","country":"us","province":"tx","district":"austin","block":"austin-lake"}
+            ]'>
+        </section>
     </body>
 </html>

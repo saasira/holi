@@ -1,4 +1,5 @@
 import { Component } from './component.js';
+import { buildChoiceProjection, copyAttributes } from '../utils/native_host.js';
 
 class RadioGroupComponent extends Component {
     static get selector() {
@@ -14,6 +15,37 @@ class RadioGroupComponent extends Component {
     }
 
     static templateId = 'radio-group-template';
+
+    static getNativeSelectors() {
+        return [
+            'input[type="radio"][component="radio"]',
+            'input[type="radio"][role="radio"]'
+        ];
+    }
+
+    static prepareHost(element) {
+        if (!(element instanceof HTMLInputElement) || element.type !== 'radio') {
+            return element;
+        }
+
+        const host = document.createElement('section');
+        copyAttributes(element, host, {
+            exclude: ['component', 'role', 'type', 'checked', 'value']
+        });
+        host.setAttribute('component', 'radio-group');
+
+        const originalId = element.getAttribute('id');
+        if (originalId) {
+            host.setAttribute('id', originalId);
+            element.removeAttribute('id');
+        }
+
+        const projectedOption = buildChoiceProjection(element);
+        const replaceTarget = projectedOption === element.parentElement ? projectedOption : element;
+        replaceTarget.replaceWith(host);
+        if (projectedOption) host.appendChild(projectedOption);
+        return host;
+    }
 
     constructor(container, options = {}) {
         super(container, options);

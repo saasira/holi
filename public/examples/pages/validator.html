@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Validator Examples</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="../styles/validator.css">
+        <script src="/dist/holi.js"></script>
+        <script src="../scripts/validator.js" defer></script>
+    </head>
+    <body>
+        <main class="validator-page">
+            <header>
+                <h1>Validator Utility Examples</h1>
+                <p>Built-in rules, custom rules, EL-backed params, and model-path comparisons.</p>
+            </header>
+
+            <section class="card">
+                <h2>Built-In Validators</h2>
+                <p>Rules: <code>required</code>, <code>email</code>, <code>minlength</code>, <code>maxlength</code>, <code>pattern</code></p>
+                <label>
+                    Work Email
+                    <input id="builtin-email" data-validator="required email" placeholder="name@company.com">
+                </label>
+                <label>
+                    Employee Code
+                    <input id="builtin-code" data-validator="required pattern:^[A-Z]{3}-[0-9]{4}$" placeholder="ABC-1234">
+                </label>
+            </section>
+
+            <section class="card">
+                <h2>EL Parameter Resolution</h2>
+                <p>Rule uses app state expression: <code>minlength:@{policy.minlen}</code></p>
+                <label>
+                    Username
+                    <input id="el-minlength" data-validator="required minlength:@{policy.minlen}" placeholder="min length from policy">
+                </label>
+                <small class="hint">Current <code>policy.minlen</code>: <span id="policy-len"></span></small>
+            </section>
+
+            <section class="card">
+                <h2>Model Path Comparison</h2>
+                <p>Confirm value uses path lookup: <code>eq:user.password required</code></p>
+                <label>
+                    Password
+                    <input type="password" data-model="user.password" data-validator="required minlength:8" placeholder="Enter password">
+                </label>
+                <label>
+                    Confirm Password
+                    <input type="password" data-model="user.confirmPassword" data-validator="eq:user.password required" placeholder="Re-enter password">
+                </label>
+            </section>
+
+            <section class="card">
+                <h2>Custom Team Validators</h2>
+                <p>Registered via <code>Component.registerValidator(...)</code></p>
+                <label>
+                    India Phone
+                    <input data-validator="required india-phone" placeholder="+91 9876543210">
+                </label>
+                <label>
+                    GST
+                    <input data-validator="gst" placeholder="27ABCDE1234F1Z5">
+                </label>
+            </section>
+
+            <section class="card">
+                <h2>Live Result</h2>
+                <div class="actions">
+                    <button type="button" id="btn-validate-all">Validate All Inputs</button>
+                </div>
+                <ul id="validation-log" class="validation-log"></ul>
+            </section>
+        </main>
+    </body>
+</html>

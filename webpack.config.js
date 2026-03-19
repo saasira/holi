@@ -250,7 +250,7 @@ const upsertSalesRow = (payload = {}) => {
     return nextRow;
 };
 
-module.exports = {
+const appConfig = {
     mode: 'production',
     cache: false,
     entry: './src/scripts/index.js', // Single entry bundles ALL JS
@@ -431,3 +431,30 @@ module.exports = {
         }
     }
 };
+
+const swConfig = {
+    cache: false,
+    entry: './src/scripts/utils/sw.js',
+    target: 'webworker',
+    output: {
+        path: path.resolve(__dirname, 'public'),
+        filename: 'sw.js',
+        clean: false
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            }
+        ]
+    }
+};
+
+module.exports = [appConfig, swConfig];

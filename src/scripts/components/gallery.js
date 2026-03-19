@@ -67,12 +67,15 @@ class GalleryComponent extends Component {
         this.dialogTitle = container.getAttribute('dialog-title') || container.getAttribute('title') || 'Image Viewer';
         this.footerMessage = container.getAttribute('footer-message') || 'Use arrows or swipe to navigate.';
         this.remoteSource = container.getAttribute('source') || container.getAttribute('data-source') || '';
+        this.remoteSourceTemplate = this.remoteSource;
+        this.requestParams = this.parseObjectAttr('data-request-params');
         this.pageSize = this.parsePositive(container.getAttribute('page-size'), 12);
         this.maxThumbHeight = this.parsePositive(container.getAttribute('thumb-height'), 72);
         this.defaultMode = this.resolveDisplayMode(container.getAttribute('display-mode') || '');
         this.displayMode = this.defaultMode;
         this.cache = new LRUImageCache(this.parsePositive(container.getAttribute('cache-size'), 80));
         this.sourceNodes = [];
+        this.initialInlineItems = [];
         this.allItems = [];
         this.viewItems = [];
         this.visibleItems = [];
@@ -97,6 +100,17 @@ class GalleryComponent extends Component {
     parsePositive(value, fallback) {
         const next = Number(value);
         return Number.isFinite(next) && next > 0 ? next : fallback;
+    }
+
+    parseObjectAttr(attrName) {
+        const raw = String(this.container?.getAttribute(attrName) || '').trim();
+        if (!raw) return {};
+        try {
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+        } catch (_error) {
+            return {};
+        }
     }
 
     resolveDisplayMode(value) {
@@ -200,21 +214,25 @@ class GalleryComponent extends Component {
     async resolveItems() {
         const inlineNodes = this.captureSourceItems();
         const inlineItems = inlineNodes.map((node, index) => this.parseItem(node, index)).filter(Boolean);
+        if (inlineItems.length) {
+            this.initialInlineItems = inlineItems;
+        }
 
-        if (!this.remoteSource) return inlineItems;
+        const source = this.resolveRemoteSource();
+        if (!source) return inlineItems.length ? inlineItems : this.initialInlineItems;
 
         this.setLoadingState(true, 'Loading images...');
         try {
-            const response = await fetch(this.remoteSource, { credentials: 'same-origin' });
+            const response = await fetch(source, { credentials: 'same-origin' });
             if (!response.ok) throw new Error(`Gallery source request failed: ${response.status}`);
             const payload = await response.json();
             const list = Array.isArray(payload) ? payload : (Array.isArray(payload?.items) ? payload.items : (Array.isArray(payload?.rows) ? payload.rows : []));
             const remoteItems = list.map((item, index) => this.parseApiItem(item, index)).filter(Boolean);
-            return remoteItems.length ? remoteItems : inlineItems;
+            return remoteItems.length ? remoteItems : (inlineItems.length ? inlineItems : this.initialInlineItems);
         } catch (error) {
             this.setLoadingState(false);
             this.setStateMessage(`Failed to load remote gallery source. ${String(error.message || error)}`);
-            return inlineItems;
+            return inlineItems.length ? inlineItems : this.initialInlineItems;
         } finally {
             this.setLoadingState(false);
         }
@@ -304,6 +322,58 @@ class GalleryComponent extends Component {
         }
         this.stateNode.hidden = false;
         this.stateNode.textContent = message;
+    }
+
+    resolveRemoteSource() {
+        const raw = String(this.remoteSourceTemplate || this.remoteSource || '').trim();
+        if (!raw) {
+            this.remoteSource = '';
+            return '';
+        }
+        const resolved = raw.includes('@{')
+            ? this.resolveTemplateString(raw, this.getBindingContext())
+            : raw;
+        const source = String(resolved || '').trim();
+        if (!source) {
+            this.remoteSource = '';
+            return '';
+        }
+        const url = new URL(source, window.location.href);
+        const extraParams = this.resolveRequestParams();
+        Object.entries(extraParams).forEach(([key, value]) => {
+            if (value == null || value === '') return;
+            url.searchParams.set(key, String(value));
+        });
+        this.remoteSource = url.toString();
+        return this.remoteSource;
+    }
+
+    resolveRequestParams() {
+        const entries = Object.entries(this.requestParams || {});
+        if (!entries.length) return {};
+        const resolved = {};
+        entries.forEach(([paramName, expression]) => {
+            if (!paramName) return;
+            const rawExpr = String(expression || '').trim();
+            if (!rawExpr) return;
+            const expr = this.extractExpression(rawExpr);
+            const value = this.evaluateExpression(expr, this.getBindingContext());
+            if (typeof value !== 'undefined' && value !== null && value !== '') {
+                resolved[paramName] = value;
+            }
+        });
+        return resolved;
+    }
+
+    async refreshPpr() {
+        if (this.resolveRemoteSource()) {
+            this.allItems = await this.resolveItems();
+            this.hasItems = this.allItems.length > 0;
+            this.renderSortOptions();
+            this.applyView(true);
+            return;
+        }
+        this.applyView(true);
     }
 
     normalizeText(value) {

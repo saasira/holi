@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Native Form Upgrades</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .stack { display: grid; gap: 16px; max-width: 860px; }
+            .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+            .demo-card { padding: 16px; border: 1px solid #d6dce5; border-radius: 12px; }
+            .demo-card h2 { margin: 0 0 12px; font-size: 1rem; }
+            .demo-card p { margin: 0 0 12px; color: #566273; }
+        </style>
+    </head>
+    <body>
+        <main class="stack">
+            <h1>Native Form Upgrades</h1>
+            <p>These examples use valid native HTML hosts that Holi upgrades automatically.</p>
+
+            <section class="grid">
+                <section class="demo-card">
+                    <h2>Native Input</h2>
+                    <p>An <code>input</code> upgraded into <code>input-field</code>.</p>
+                    <input component="input" name="fullName" label="Full name" placeholder="Enter your name" value="Asha">
+                </section>
+
+                <section class="demo-card">
+                    <h2>Native Textarea</h2>
+                    <p>A <code>textarea</code> upgraded into the shared input component in textarea mode.</p>
+                    <textarea role="textarea" name="bio" label="Bio" rows="5" placeholder="Tell us about yourself">Front-end engineer</textarea>
+                </section>
+
+                <section class="demo-card">
+                    <h2>Select to Dropdown</h2>
+                    <p>A native <code>select</code> upgraded into <code>DropdownComponent</code>.</p>
+                    <select role="dropdown" name="country">
+                        <option value="">Choose a country</option>
+                        <option value="in">India</option>
+                        <option value="us" selected>United States</option>
+                        <option value="jp">Japan</option>
+                    </select>
+                </section>
+
+                <section class="demo-card">
+                    <h2>Select to Select Field</h2>
+                    <p>A native <code>select</code> upgraded into <code>SelectComponent</code>.</p>
+                    <select component="select-field" name="priority" label="Priority">
+                        <option value="">Choose priority</option>
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </section>
+
+                <section class="demo-card">
+                    <h2>Single Checkbox</h2>
+                    <p>A native checkbox upgraded into the checkbox group component.</p>
+                    <label><input type="checkbox" component="checkbox" name="terms" checked> Accept terms</label>
+                </section>
+
+                <section class="demo-card">
+                    <h2>Single Radio</h2>
+                    <p>A native radio upgraded into the radio group component.</p>
+                    <label><input type="radio" component="radio" name="delivery" value="express" checked> Express delivery</label>
+                </section>
+            </section>
+        </main>
+    </body>
+</html>

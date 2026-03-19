@@ -23,6 +23,7 @@ import '../styles/components/input.css';
 import '../styles/components/layout.css';
 import '../styles/components/loader.css';
 import '../styles/components/menubar.css';
+import '../styles/components/panel.css';
 import '../styles/components/checkbox.css';
 import '../styles/components/progress.css';
 import '../styles/components/search.css';
@@ -37,11 +38,12 @@ import '../styles/components/wizard.css';
 
 // Register library
 import { HoliApp } from './utils/app.js';
+import { ServiceWorkerManager } from './utils/sw.js';
 import './utils/content_provider.js';
 import './utils/state.js';
 
 // Export for global use
-window.HoliApp = { HoliApp };
+window.HoliApp = { HoliApp, ServiceWorkerManager };
 window.Holi = window.HoliApp;
 
 const hasCoreTemplates = () => {

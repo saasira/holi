@@ -133,6 +133,14 @@ class ComponentRegistry {
             }
         }
 
+        if (typeof ComponentClass.getNativeSelectors === 'function') {
+            const nativeSelectors = ComponentClass.getNativeSelectors(options);
+            (nativeSelectors || []).forEach((nativeSelector) => {
+                const value = String(nativeSelector || '').trim();
+                if (value) selectors.add(value);
+            });
+        }
+
         return Array.from(selectors);
     }
 
@@ -155,13 +163,17 @@ class ComponentRegistry {
         });
 
         elements.forEach((el) => {
-            if (!ComponentClass.matchesLibrary(el, libraryName)) return;
-            if (this.shouldDeferInit(el)) return;
-            const owner = el.closest?.(`[data-holi-component-class="${ComponentClass.name}"]`);
-            if (owner && owner !== el) return;
+            const host = typeof ComponentClass.prepareHost === 'function'
+                ? (ComponentClass.prepareHost(el) || el)
+                : el;
+            if (!(host instanceof Element)) return;
+            if (!ComponentClass.matchesLibrary(host, libraryName)) return;
+            if (this.shouldDeferInit(host)) return;
+            const owner = host.closest?.(`[data-holi-component-class="${ComponentClass.name}"]`);
+            if (owner && owner !== host) return;
 
-            if (!el[ComponentClass.name.toLowerCase()]) {
-                new ComponentClass(el);
+            if (!host[ComponentClass.name.toLowerCase()]) {
+                new ComponentClass(host);
             }
         });
     }
