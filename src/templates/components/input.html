@@ -1,0 +1,30 @@
+<template id="input-field-template">
+    <div class="holi-input" role="group">
+        <label data-role="label" data-if="@{label}">
+            <slot name="label">@{label}</slot>
+            <span data-if="@{required}" class="required">*</span>
+        </label>
+        <input data-if="@{isInputMode}"
+               type="@{type}"
+               data-role="control-input"
+               name="@{name}"
+               value="@{value}"
+               data-validation="@{validators}"
+               data-invalid="@{invalid}"
+               placeholder="@{placeholder}"
+               required="@{required}"
+               disabled="@{disabled}">
+        <textarea data-if="@{isAreaMode}"
+                  data-role="control-area"
+                  name="@{name}"
+                  data-validation="@{validators}"
+                  data-invalid="@{invalid}"
+                  placeholder="@{placeholder}"
+                  rows="@{rows}"
+                  cols="@{cols}"
+                  required="@{required}"
+                  disabled="@{disabled}">@{value}</textarea>
+        <slot name="helper"></slot>
+        <div class="error" data-role="error" data-show="@{invalid}">@{errorMessage}</div>
+    </div>
+</template>

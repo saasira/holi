@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>StateHub Integration Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script>window.HoliAutoInit = false;</script>
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .layout { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+            .card { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px; background: #f8fafc; }
+            .row { display: grid; gap: 8px; margin-bottom: 10px; }
+            .row input { padding: 8px 10px; border: 1px solid #cfd6df; border-radius: 6px; }
+            .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 7px 10px; cursor: pointer; }
+            .cart-items { margin: 10px 0 0; padding-left: 18px; }
+            .state-log { margin-top: 10px; background: #0f172a; color: #e2e8f0; padding: 10px; border-radius: 8px; font-family: Consolas, monospace; font-size: 12px; max-height: 170px; overflow: auto; }
+            .summary { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+            .examples { margin-top: 18px; display: grid; gap: 14px; }
+            .examples h2 { margin: 0 0 10px; }
+            .note { color: #475569; font-size: 13px; margin: 0 0 8px; }
+        </style>
+    </head>
+    <body>
+        <h1>StateHub Integration</h1>
+        <p>Declarative state binding with <code>data-state</code> and pluggable component sync via <code>data-state-store</code>/<code>data-state-path</code>.</p>
+
+        <section class="layout">
+            <section class="card">
+                <h2>User Store</h2>
+                <div class="row">
+                    <label>
+                        Name
+                        <input data-state="userStore" data-state-path="name" placeholder="Name">
+                    </label>
+                    <label>
+                        Email
+                        <input data-state="userStore" data-state-path="email" placeholder="Email">
+                    </label>
+                </div>
+                <p>Preview: <strong data-state="userStore" data-state-path="name">Guest</strong> (<span data-state="userStore" data-state-path="email"></span>)</p>
+                <div class="controls">
+                    <button type="button" id="btn-user-guest">Set Guest</button>
+                    <button type="button" id="btn-user-jane">Set Jane</button>
+                    <button type="button" id="btn-user-batch">Batch Update</button>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Cart Store + StatsCard</h2>
+                <div class="controls">
+                    <button type="button" id="btn-add-item">Add Random Item</button>
+                    <button type="button" id="btn-remove-item">Remove Last</button>
+                    <button type="button" id="btn-clear-cart">Clear Cart</button>
+                </div>
+                <div class="summary">
+                    <span>Count: <strong data-state="cartStore" data-state-path="count">0</strong></span>
+                    <span>Total: <strong data-state="cartStore" data-state-path="total">0</strong></span>
+                </div>
+                <ul id="cart-items" class="cart-items"></ul>
+                <section
+                    component="statscard"
+                    id="cart-total-card"
+                    data-label="Cart Total"
+                    data-unit="$"
+                    data-value="0"
+                    data-change="0"
+                    data-trend="neutral"
+                    data-state-store="cartStore"
+                    data-state-path="widgets.totalCard"
+                    data-state-sync="out">
+                </section>
+            </section>
+        </section>
+
+        <section class="examples">
+            <section class="card">
+                <h2>Component Sync: DataTable</h2>
+                <p class="note">State path <code>uiStore.examples.ordersTable</code> restores search/sort/page/visible columns on load.</p>
+                <section
+                    component="datatable"
+                    data-endpoint="/examples/api/sales"
+                    data-column-metadata="salesColumnMetadata"
+                    server-side
+                    data-mode="pagination"
+                    data-page-size="12"
+                    data-priority-fields="orderNo,customer,total,status"
+                    data-mandatory-fields="orderNo,total"
+                    data-state-store="uiStore"
+                    data-state-path="examples.ordersTable"
+                    data-state-sync="both">
+                </section>
+            </section>
+
+            <section class="card">
+                <h2>Component Sync: Tabs</h2>
+                <p class="note">State path <code>uiStore.examples.mainTabs</code> restores active tab on load.</p>
+                <section
+                    component="tabs"
+                    provider="stateDemo"
+                    data-source="@{stateDemo.tabs}"
+                    data-state-store="uiStore"
+                    data-state-path="examples.mainTabs"
+                    data-state-sync="both">
+                </section>
+            </section>
+        </section>
+
+        <section class="card" style="margin-top: 14px;">
+            <h2>State Change Log</h2>
+            <div id="state-log" class="state-log">ready</div>
+        </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!window.StateHub || !window.StateConnector || !window.HoliApp?.HoliApp) {
+                    document.getElementById('state-log').textContent = 'Required runtime APIs are not available.';
+                    return;
+                }
+
+                const ensureTemplateLibrary = async () => {
+                    const hasTemplates = () => !!document.getElementById('datatable-template') && !!document.getElementById('tabs');
+                    if (hasTemplates()) return;
+                    const response = await fetch('/dist/holi.html', { credentials: 'same-origin' });
+                    if (!response.ok) throw new Error('Failed to load /dist/holi.html');
+                    const html = await response.text();
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = html;
+                    wrapper.querySelectorAll('template[id]').forEach((tpl) => {
+                        if (!document.getElementById(tpl.id)) {
+                            document.body.appendChild(tpl);
+                        }
+                    });
+                    if (!hasTemplates()) {
+                        throw new Error('Required templates were not found in holi.html');
+                    }
+                };
+
+                window.salesColumnMetadata = {
+                    orderNo: { required: true, readonly: true, label: 'Order Number' },
+                    customer: { required: true, minLength: 3, label: 'Customer' },
+                    status: { required: true, formFieldType: 'select', lov: ['Active', 'Pending', 'Shipped', 'Closed', 'Refunded'] },
+                    total: { required: true, formFieldType: 'number', constraints: { min: 0 } },
+                    quantity: { formFieldType: 'number', constraints: { min: 1 } }
+                };
+
+                const tabData = {
+                    tabs: [
+                        { label: 'Overview', content: 'Order KPIs and summary metrics.' },
+                        { label: 'Customers', content: 'Customer cohorts and retention data.' },
+                        { label: 'Fulfillment', content: 'Shipment queues and delivery status.' }
+                    ]
+                };
+
+                window.contentProviders = window.contentProviders || {};
+                window.contentProviders.stateDemo = class StateDemoTabsProvider {
+                    resolve(expr) {
+                        if (expr === '@{stateDemo.tabs}') return tabData.tabs;
+                        return [];
+                    }
+
+                    async getContent(item) {
+                        return item?.content || '';
+                    }
+                };
+
+                const userStore = StateHub.create({ name: 'Guest', email: 'guest@example.com' }, { id: 'userStore' });
+                const cartStore = StateHub.create({ items: [], count: 0, total: 0 }, { id: 'cartStore' });
+                const uiStore = StateHub.create({
+                    examples: {
+                        ordersTable: {
+                            searchTerm: 'a',
+                            sortField: 'total',
+                            sortDir: 'desc',
+                            page: 1,
+                            visibleColumns: ['orderNo', 'customer', 'status', 'total']
+                        },
+                        mainTabs: {
+                            activeIndex: 1
+                        }
+                    }
+                }, { id: 'uiStore' });
+
+                ensureTemplateLibrary()
+                    .then(() => {
+                        window.HoliApp.HoliApp.init(document);
+                        StateConnector.connect(document);
+                    })
+                    .catch((error) => {
+                        document.getElementById('state-log').textContent = `Init failed: ${String(error?.message || error)}`;
+                    });
+
+                const logEl = document.getElementById('state-log');
+                const cartItemsEl = document.getElementById('cart-items');
+                const totalCard = document.getElementById('cart-total-card');
+                let previousTotal = 0;
+
+                const log = (message) => {
+                    const timestamp = new Date().toLocaleTimeString();
+                    logEl.textContent = `[${timestamp}] ${message}\n${logEl.textContent}`.slice(0, 3500);
+                };
+
+                const renderCartItems = () => {
+                    const items = Array.isArray(cartStore.proxy.items) ? cartStore.proxy.items : [];
+                    cartItemsEl.replaceChildren();
+                    items.forEach((item) => {
+                        const li = document.createElement('li');
+                        li.textContent = `${item.name} - $${Number(item.price).toFixed(2)}`;
+                        cartItemsEl.appendChild(li);
+                    });
+                };
+
+                const syncCartSummary = () => {
+                    const items = Array.isArray(cartStore.proxy.items) ? cartStore.proxy.items : [];
+                    const count = items.length;
+                    const total = items.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+                    cartStore.proxy.count = count;
+                    cartStore.proxy.total = Number(total.toFixed(2));
+                };
+
+                const updateTotalCard = () => {
+                    const total = Number(cartStore.proxy.total || 0);
+                    const delta = total - previousTotal;
+                    totalCard?.statscard?.update({
+                        value: total,
+                        change: previousTotal === 0 ? 0 : (delta / Math.max(previousTotal, 1)) * 100,
+                        trend: delta > 0 ? 'up' : delta < 0 ? 'down' : 'neutral'
+                    });
+                    previousTotal = total;
+                };
+
+                userStore.subscribe((_state, change) => {
+                    log(`userStore changed: ${change.path}`);
+                });
+
+                cartStore.subscribe((_state, change) => {
+                    if (change.path === 'items' || change.path.startsWith('items.')) {
+                        syncCartSummary();
+                        renderCartItems();
+                        updateTotalCard();
+                    }
+                    log(`cartStore changed: ${change.path}`);
+                });
+
+                uiStore.subscribe((_state, change) => {
+                    if (change.path.startsWith('examples.')) {
+                        log(`uiStore changed: ${change.path}`);
+                    }
+                });
+
+                document.getElementById('btn-user-guest')?.addEventListener('click', () => {
+                    userStore.proxy.name = 'Guest';
+                    userStore.proxy.email = 'guest@example.com';
+                });
+
+                document.getElementById('btn-user-jane')?.addEventListener('click', () => {
+                    userStore.proxy.name = 'Jane';
+                    userStore.proxy.email = 'jane@example.com';
+                });
+
+                document.getElementById('btn-user-batch')?.addEventListener('click', () => {
+                    userStore.batch({
+                        name: 'Batch User',
+                        email: 'batch.user@example.com'
+                    });
+                });
+
+                document.getElementById('btn-add-item')?.addEventListener('click', () => {
+                    const catalog = [
+                        { name: 'Keyboard', price: 49.99 },
+                        { name: 'Mouse', price: 29.99 },
+                        { name: 'Monitor', price: 219.0 },
+                        { name: 'Headset', price: 79.5 }
+                    ];
+                    const next = catalog[Math.floor(Math.random() * catalog.length)];
+                    const items = Array.isArray(cartStore.proxy.items) ? [...cartStore.proxy.items] : [];
+                    items.push(next);
+                    cartStore.proxy.items = items;
+                });
+
+                document.getElementById('btn-remove-item')?.addEventListener('click', () => {
+                    const items = Array.isArray(cartStore.proxy.items) ? [...cartStore.proxy.items] : [];
+                    items.pop();
+                    cartStore.proxy.items = items;
+                });
+
+                document.getElementById('btn-clear-cart')?.addEventListener('click', () => {
+                    cartStore.proxy.items = [];
+                });
+
+                syncCartSummary();
+                renderCartItems();
+                updateTotalCard();
+                log('StateHub initialized with preloaded uiStore state for DataTable and Tabs');
+            });
+        </script>
+    </body>
+</html>

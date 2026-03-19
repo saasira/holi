@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Layout Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <layout>
+            <header>
+                <block>
+                    <region width="3"><div>Header A</div></region>
+                    <region width="3"><div>Header B</div></region>
+                    <region width="3"><div>Header C</div></region>
+                    <region width="3"><div>Header D</div></region>
+                </block>
+            </header>
+
+            <main>
+                <block>
+                    <region width="4"><div>Main 4</div></region>
+                    <region width="8"><div>Main 8</div></region>
+                </block>
+
+                <block>
+                    <region width="8"><div>Main 8</div></region>
+                    <region width="4"><div>Main 4</div></region>
+                </block>
+
+                <block>
+                    <region width="6"><div>Main 6</div></region>
+                    <region width="6"><div>Main 6</div></region>
+                </block>
+
+                <block>
+                    <region width="12"><div>Main 12</div></region>
+                </block>
+            </main>
+
+            <footer>
+                <block>
+                    <region width="3"><div>Footer A</div></region>
+                    <region width="3"><div>Footer B</div></region>
+                    <region width="3"><div>Footer C</div></region>
+                    <region width="3"><div>Footer D</div></region>
+                </block>
+            </footer>
+        </layout>
+    </body>
+</html>

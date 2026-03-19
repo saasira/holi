@@ -1,0 +1,10 @@
+<template id="panel-template">
+    <section class="holi-panel" data-role="panel-root">
+        <header class="holi-panel-header" data-role="panel-header">
+            <h2 class="holi-panel-title" data-role="panel-title" data-if="@{hasTitle}">@{title}</h2>
+            <p class="holi-panel-subtitle" data-role="panel-subtitle" data-if="@{hasSubtitle}">@{subtitle}</p>
+        </header>
+        <section class="holi-panel-content" data-role="panel-content"></section>
+        <footer class="holi-panel-footer" data-role="panel-footer" hidden></footer>
+    </section>
+</template>

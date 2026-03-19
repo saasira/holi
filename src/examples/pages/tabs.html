@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tabs Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 20px; }
+        </style>
+    </head>
+    <body>
+        <h1>Tabs Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="tabs"</h2>
+            <section component="tabs" provider="demo" data-source="@{demo.primary}"></section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="tabs" with lazy loading</h2>
+            <section role="tabs" provider="demo" data-source="@{demo.lazy}" lazy></section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: tag style</h2>
+            <tabs provider="demo" data-source="@{demo.simple}"></tabs>
+        </section>
+
+        <script>
+            const tabData = {
+                primary: [
+                    { label: 'Overview', content: 'Overview content for dashboard.' },
+                    { label: 'Reports', content: 'Reports and trend summaries.' },
+                    { label: 'Alerts', content: 'Latest alerts and notifications.' }
+                ],
+                lazy: [
+                    { label: 'Patients', content: 'Patient registry and quick actions.' },
+                    { label: 'Appointments', content: 'Upcoming appointments and calendar.' },
+                    { label: 'Billing', content: 'Invoices, dues, and payment logs.' }
+                ],
+                simple: [
+                    { label: 'Profile', content: 'Profile settings and preferences.' },
+                    { label: 'Security', content: 'Passwords, sessions, and 2FA options.' },
+                    { label: 'Integrations', content: 'Connected apps and API tokens.' }
+                ]
+            };
+
+            window.contentProviders = window.contentProviders || {};
+            window.contentProviders.demo = class DemoTabsProvider {
+                resolve(expr) {
+                    if (expr === '@{demo.primary}') return tabData.primary;
+                    if (expr === '@{demo.lazy}') return tabData.lazy;
+                    if (expr === '@{demo.simple}') return tabData.simple;
+                    return [];
+                }
+
+                async getContent(item) {
+                    return item?.content || '';
+                }
+            };
+        </script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BackToTop Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 0; line-height: 1.5; }
+            .hero { padding: 24px; background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
+            .content { padding: 20px 24px 140px; max-width: 800px; }
+            .block { margin-bottom: 28px; }
+            h2 { margin: 0 0 8px; }
+            p { margin: 0; color: #334155; }
+        </style>
+    </head>
+    <body>
+        <header id="page-top" class="hero">
+            <h1>BackToTop Component</h1>
+            <p>Scroll down to reveal the floating action buttons.</p>
+        </header>
+
+        <main class="content">
+            <section class="block"><h2>Section 1</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 2</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 3</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 4</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 5</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 6</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 7</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 8</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 9</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 10</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 11</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 12</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 13</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 14</h2><p>Scrollable demo content.</p></section>
+            <section class="block"><h2>Section 15</h2><p>Scrollable demo content.</p></section>
+        </main>
+
+        <section component="backtotop" anchor="#page-top" label="Top (component)" vertical="middle"></section>
+        <section role="backtotop" show-after="400" vertical="70%">
+            <span slot="label">Top (role)</span>
+        </section>
+        <backtotop show-after="560">
+            <span slot="prefix">↑</span>
+            <span slot="label">Top (tag)</span>
+        </backtotop>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+<template id="backtotop-template">
+    <div class="holi-backtotop" hidden>
+        <button class="holi-backtotop-button" data-role="button" type="button" aria-label="@{ariaLabel}">
+            <span class="holi-backtotop-prefix">
+                <slot name="prefix"></slot>
+            </span>
+            <span class="holi-backtotop-label">
+                <slot name="label">@{label}</slot>
+            </span>
+            <span class="holi-backtotop-suffix">
+                <slot name="suffix"></slot>
+            </span>
+        </button>
+    </div>
+</template>

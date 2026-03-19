@@ -1,0 +1,183 @@
+.holi-carousel,
+.carousel {
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+    border: 1px solid #d6dde8;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.holi-carousel-viewport {
+    position: relative;
+    overflow: hidden;
+}
+
+.holi-carousel .slides,
+.carousel .slides {
+    display: flex;
+    transition: transform 320ms ease;
+    will-change: transform;
+}
+
+.holi-carousel .slide,
+.carousel .slide {
+    flex-shrink: 0;
+    min-width: 100%;
+    position: relative;
+}
+
+.holi-carousel .slide img,
+.carousel .slide img {
+    width: 100%;
+    display: block;
+}
+
+.holi-carousel.fade .slide,
+.carousel.fade .slide {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    inset: 0;
+    transition: opacity 280ms ease, visibility 280ms ease;
+}
+
+.holi-carousel.fade .slide.active,
+.carousel.fade .slide.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+}
+
+.holi-carousel .anchors,
+.carousel .anchors {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    pointer-events: none;
+}
+
+.holi-carousel .anchors button,
+.carousel .anchors button {
+    pointer-events: auto;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(15, 23, 42, 0.48);
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.holi-carousel .anchors button:hover,
+.holi-carousel .anchors button:focus-visible,
+.carousel .anchors button:hover,
+.carousel .anchors button:focus-visible {
+    background: rgba(15, 23, 42, 0.72);
+}
+
+.holi-carousel-footer {
+    border-top: 1px solid #edf1f7;
+    background: #f8fafc;
+    padding: 10px 12px 12px;
+}
+
+.holi-carousel .dots,
+.carousel .dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+}
+
+.holi-carousel .dot,
+.carousel .dot {
+    width: 10px;
+    height: 10px;
+    border: 0;
+    border-radius: 50%;
+    background: #c5ceda;
+    cursor: pointer;
+}
+
+.holi-carousel .dot.selected,
+.carousel .dot.selected {
+    background: #2563eb;
+}
+
+.holi-carousel .controls,
+.carousel .controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.holi-carousel .controls button,
+.carousel .controls button {
+    border: 1px solid #c9d3e3;
+    background: #fff;
+    color: #0f172a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.holi-carousel .controls button:hover,
+.holi-carousel .controls button:focus-visible,
+.carousel .controls button:hover,
+.carousel .controls button:focus-visible {
+    background: #f1f5f9;
+}
+
+.holi-carousel .progress-wrapper,
+.carousel .progress-wrapper {
+    margin-top: 10px;
+    height: 4px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.holi-carousel .progress-bar,
+.carousel .progress-bar {
+    width: 0%;
+    height: 100%;
+    background: #2563eb;
+}
+
+.holi-carousel .skip-link,
+.carousel .skip-link {
+    position: absolute;
+    top: -48px;
+    left: 10px;
+    z-index: 20;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-decoration: none;
+}
+
+.holi-carousel .skip-link:focus,
+.carousel .skip-link:focus {
+    top: 10px;
+}
+
+.holi-carousel .sr-only,
+.carousel .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

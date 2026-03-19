@@ -1,0 +1,168 @@
+.holi-treepanel {
+    display: grid;
+    grid-template-columns: minmax(220px, 340px) 1fr;
+    gap: 12px;
+}
+
+.treepanel-left,
+.treepanel-right {
+    border: 1px solid #d6dde8;
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px;
+}
+
+.treepanel-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.treepanel-header-default {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.treepanel-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.treepanel-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.treepanel-header button {
+    border: 1px solid #cfd6df;
+    background: #f8fafc;
+    color: #0f172a;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.treepanel-status {
+    margin: 10px 0;
+    font-size: 13px;
+    color: #334155;
+}
+
+.treepanel-status[data-state="loading"] {
+    color: #1d4ed8;
+}
+
+.treepanel-content {
+    display: grid;
+    gap: 10px;
+}
+
+.treepanel-content-default {
+    display: grid;
+    gap: 10px;
+}
+
+.treepanel-panel-body {
+    display: grid;
+    gap: 8px;
+}
+
+.treepanel-field {
+    display: grid;
+    grid-template-columns: minmax(120px, 180px) 1fr;
+    gap: 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 7px 9px;
+    background: #f8fafc;
+}
+
+.treepanel-field-key {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.treepanel-field-value {
+    color: #334155;
+}
+
+.treepanel-input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 7px;
+    background: #fff;
+    color: #0f172a;
+    font-size: 13px;
+}
+
+.treepanel-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d6dde8;
+}
+
+.treepanel-table th,
+.treepanel-table td {
+    border: 1px solid #e2e8f0;
+    padding: 6px 8px;
+    text-align: left;
+}
+
+.treepanel-table th {
+    background: #f1f5f9;
+}
+
+.treepanel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px;
+}
+
+.treepanel-grid-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+    padding: 9px;
+    display: grid;
+    gap: 8px;
+}
+
+.treepanel-grid-field {
+    display: grid;
+    gap: 3px;
+}
+
+.treepanel-grid-key {
+    font-size: 12px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.treepanel-grid-value {
+    font-size: 13px;
+    color: #0f172a;
+}
+
+.treepanel-footer {
+    margin-top: 10px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 8px;
+}
+
+.treepanel-footer-summary {
+    margin: 0;
+    color: #475569;
+    font-size: 12px;
+}
+
+@media (max-width: 920px) {
+    .holi-treepanel {
+        grid-template-columns: 1fr;
+    }
+}

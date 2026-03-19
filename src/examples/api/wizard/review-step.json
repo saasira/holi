@@ -1,0 +1,22 @@
+{
+    "title": "Review Step (JSON)",
+    "description": "Final confirmation loaded from JSON.",
+    "fields": [
+        {
+            "name": "agree",
+            "label": "Agreement",
+            "type": "select",
+            "options": [
+                { "value": "yes", "label": "I confirm details are correct" },
+                { "value": "no", "label": "I need to edit details" }
+            ],
+            "required": true
+        },
+        {
+            "name": "comments",
+            "label": "Comments",
+            "type": "textarea",
+            "placeholder": "Optional review comments"
+        }
+    ]
+}

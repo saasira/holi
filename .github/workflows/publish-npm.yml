@@ -1,0 +1,43 @@
+name: Publish npm Package
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git init .
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth 1 origin "${GITHUB_REF}"
+          git checkout --detach FETCH_HEAD
+
+      - name: Install Node 22.14.0
+        run: |
+          curl -fsSLO https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
+          tar -xJf node-v22.14.0-linux-x64.tar.xz
+          echo "${GITHUB_WORKSPACE}/node-v22.14.0-linux-x64/bin" >> "${GITHUB_PATH}"
+
+      - name: Show Node environment
+        run: |
+          node --version
+          npm --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate release
+        run: npm run ci:smoke
+
+      - name: Publish package
+        run: npm publish --access public --provenance

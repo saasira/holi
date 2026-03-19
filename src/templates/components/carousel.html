@@ -1,0 +1,47 @@
+<template id="carousel-template">
+    <section class="holi-carousel" data-mode="fade" aria-roledescription="carousel" tabindex="0">
+        <slot name="skip-link">
+            <a class="skip-link" href="#main-content" aria-label="Skip carousel and go to main content">Skip carousel</a>
+        </slot>
+
+        <section class="holi-carousel-viewport" data-role="viewport">
+            <section class="slides" data-role="track" aria-live="off">
+                <slot name="slides">
+                    <article class="slide"><img src="images/slide1.jpg" alt="Slide 1"></article>
+                    <article class="slide"><img src="images/slide2.jpg" alt="Slide 2"></article>
+                    <article class="slide"><img src="images/slide3.jpg" alt="Slide 3"></article>
+                </slot>
+            </section>
+
+            <slot name="anchors">
+                <nav class="anchors" aria-label="Carousel navigation">
+                    <button type="button" class="left" data-action="previous" aria-label="Previous slide">&#10094;</button>
+                    <button type="button" class="right" data-action="next" aria-label="Next slide">&#10095;</button>
+                </nav>
+            </slot>
+        </section>
+
+        <section class="holi-carousel-footer">
+            <slot name="dots">
+                <div class="dots" data-role="dots" aria-label="Slide selectors"></div>
+            </slot>
+
+            <slot name="controls">
+                <div class="controls">
+                    <button type="button" data-action="play-pause" aria-label="Pause auto sliding">Pause</button>
+                    <button type="button" data-action="toggle-loop" aria-label="Toggle loop mode" aria-pressed="true">Disable Loop</button>
+                </div>
+            </slot>
+
+            <slot name="progress">
+                <div class="progress-wrapper">
+                    <div class="progress-bar" data-role="progress-bar"></div>
+                </div>
+            </slot>
+        </section>
+
+        <slot name="live-region">
+            <div class="sr-only" data-role="live-region" aria-live="polite" aria-atomic="true"></div>
+        </slot>
+    </section>
+</template>

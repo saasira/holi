@@ -1,0 +1,45 @@
+.holi-breadcrumbs {
+    --holi-breadcrumb-separator: "/";
+}
+
+.holi-breadcrumbs-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.holi-breadcrumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #334155;
+}
+
+.holi-breadcrumb-item + .holi-breadcrumb-item::before {
+    content: var(--holi-breadcrumb-separator);
+    color: #94a3b8;
+    margin-right: 2px;
+}
+
+.holi-breadcrumb-link {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.holi-breadcrumb-link:hover,
+.holi-breadcrumb-link:focus-visible {
+    text-decoration: underline;
+}
+
+.holi-breadcrumb-current {
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.holi-breadcrumb-ellipsis {
+    color: #64748b;
+}

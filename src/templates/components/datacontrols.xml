@@ -1,0 +1,14 @@
+
+<!-- Shared Slots (User provides) -->
+<template id="search-template">
+    <input type="search" data-action="search" placeholder="@{searchPlaceholder}">
+</template>
+
+<!-- Pagination Template -->
+<template id="pagination-template">
+    <div class="pagination">
+        <button data-action="prev" disabled="@{page === 1}">Prev</button>
+        <span>Page @{page} of @{totalPages}</span>
+        <button data-action="next" disabled="@{page === totalPages}">Next</button>
+    </div>
+</template>

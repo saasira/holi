@@ -1,0 +1,13 @@
+<template id="button-template">
+    <button class="holi-button" data-role="button" type="@{type}" disabled="@{disabled}">
+        <span class="holi-button-prefix">
+            <slot name="prefix"></slot>
+        </span>
+        <span class="holi-button-label">
+            <slot name="label">@{label}</slot>
+        </span>
+        <span class="holi-button-suffix">
+            <slot name="suffix"></slot>
+        </span>
+    </button>
+</template>

@@ -1,0 +1,18 @@
+<template id="checkbox-group-template">
+    <fieldset class="holi-checkbox-group">
+        <legend data-if="@{legend}">
+            <slot name="legend">@{legend}</slot>
+        </legend>
+        <div class="holi-checkbox-options" data-role="options">
+            <label class="holi-checkbox-option" data-repeat="@{options}" data-for="option">
+                <input type="@{type}"
+                       name="@{name}"
+                       value="@{option.value}"
+                       checked="@{option.checked}">
+                <span>@{option.label}</span>
+            </label>
+            <slot name="options"></slot>
+        </div>
+        <slot name="actions"></slot>
+    </fieldset>
+</template>

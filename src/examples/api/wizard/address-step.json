@@ -1,0 +1,35 @@
+{
+    "title": "Address Step (JSON)",
+    "description": "This step is rendered from JSON fields fetched remotely.",
+    "fields": [
+        {
+            "name": "street",
+            "label": "Street",
+            "type": "text",
+            "placeholder": "123 Main St",
+            "required": true
+        },
+        {
+            "name": "city",
+            "label": "City",
+            "type": "text",
+            "placeholder": "Springfield"
+        },
+        {
+            "name": "state",
+            "label": "State",
+            "type": "select",
+            "options": [
+                { "value": "CA", "label": "California" },
+                { "value": "NY", "label": "New York" },
+                { "value": "TX", "label": "Texas" }
+            ]
+        },
+        {
+            "name": "zip",
+            "label": "ZIP",
+            "type": "text",
+            "placeholder": "90210"
+        }
+    ]
+}

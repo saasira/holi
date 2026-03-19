@@ -1,0 +1,28 @@
+<template id="tabs">
+    <section class="tabs" role="tablist">
+        <ul class="tabbar">
+            <slot name="tablink">
+                <li class="link">
+                    <a href="#" data-tab="@{index}">
+                        <span class="tab-label">@{address.label}</span>
+                        <q-loader slot="tab_loader" class="tab-loader" 
+                                 visible="@{loadingStates['tab-'+index]}" 
+                                 size="small"></q-loader>
+                        <span slot="tab_controls" class="tab-controls">
+                            <button class="tab-refresh" title="Refresh">↻</button>
+                            <button class="tab-close" title="Close">×</button>
+                        </span>
+                    </a>
+                </li>
+            </slot>
+        </ul>
+        <div class="tab_content_panels">
+            <slot name="tab_panel">
+                <div class="tab_content_panel" id="tab-@{index}">
+                    <q-loader visible="@{loadingStates['tab-'+index]}" size="large"></q-loader>
+                    <div class="tab_content">@{address.toString()}</div>
+                </div>
+            </slot>
+        </div>
+    </section>
+</template>

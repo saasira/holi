@@ -1,0 +1,16 @@
+<template id="textarea-field-template">
+    <div class="holi-textarea" role="group">
+        <label data-role="label" data-if="@{label}">
+            <slot name="label">@{label}</slot>
+            <span data-if="@{required}" class="required">*</span>
+        </label>
+        <textarea data-role="control"
+                  name="@{name}"
+                  placeholder="@{placeholder}"
+                  rows="@{rows}"
+                  required="@{required}"
+                  disabled="@{disabled}">@{value}</textarea>
+        <slot name="helper"></slot>
+        <div class="error" data-role="error" data-show="@{invalid}">@{errorMessage}</div>
+    </div>
+</template>

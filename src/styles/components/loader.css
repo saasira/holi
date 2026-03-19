@@ -1,0 +1,59 @@
+.holi-loader {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: 1100;
+    pointer-events: none;
+}
+
+.holi-loader[hidden] {
+    display: none;
+}
+
+.holi-loader[data-scope="inline"] {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    min-height: 42px;
+}
+
+.holi-loader[data-scope="page"] {
+    position: fixed;
+}
+
+.holi-loader-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(248, 250, 252, 0.78);
+    border-radius: inherit;
+}
+
+.holi-loader-body {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #d9e2ef;
+    border-radius: 999px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.14);
+    color: #334155;
+    font-size: 13px;
+    line-height: 1;
+}
+
+.holi-loader-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    border-top-color: #2563eb;
+    animation: holi-loader-spin 0.8s linear infinite;
+}
+
+@keyframes holi-loader-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

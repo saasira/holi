@@ -1,0 +1,45 @@
+.holi-backtotop {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 900;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 180ms ease, transform 180ms ease;
+    pointer-events: none;
+}
+
+.holi-backtotop.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.holi-backtotop-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 8px 14px;
+    font: inherit;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.holi-backtotop-button:hover,
+.holi-backtotop-button:focus-visible {
+    background: #1e293b;
+}
+
+.holi-backtotop-button:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+.holi-backtotop-prefix:empty,
+.holi-backtotop-suffix:empty {
+    display: none;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<body>
+<!-- Routes via data-route attributes -->
+<nav>
+    <a href="/dashboard" data-route="dashboard">Dashboard</a>
+    <a href="/profile/:id" data-route="profile">Profile</a>
+    <a href="/settings">Settings</a>
+</nav>
+
+<!-- Route content areas -->
+<main data-route-outlet>
+    <div data-route="/" class="route-content">
+        <h1>Home</h1>
+    </div>
+    <div data-route="/dashboard" class="route-content hidden">
+        <h1>Dashboard</h1>
+        <grid-widget data-state="dashboardStore"></grid-widget>
+    </div>
+    <div data-route="/profile/:id" class="route-content hidden">
+        <h1>Profile <span data-state="userStore" data-state-path="id"></span></h1>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Create stores
+        window.userStore = new StateHub({});
+        window.dashboardStore = new StateHub({});
+
+        // Initialize router
+        window.navigation = new Navigation({ base: '/' });
+
+        // Auto-init ALL
+        Tabs.apply(); Grid.apply(); StateConnector.connect();
+
+        // Route definitions (HTML-driven)
+        navigation.route('/', () => updateOutlet('/'));
+        navigation.route('/dashboard', () => updateOutlet('/dashboard'));
+        navigation.route('/profile/:id', ({ params }) => {
+            updateOutlet('/profile/' + params.id);
+            userStore.proxy.id = params.id;
+        });
+
+        // Route outlet handler
+        function updateOutlet(activeRoute) {
+            document.querySelectorAll('[data-route]').forEach(el => {
+                el.classList.toggle('hidden', el.dataset.route !== activeRoute);
+            });
+        }
+    });
+</script>
+</body>
+</html>

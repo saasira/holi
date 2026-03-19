@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    padding: 2rem;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+}
+
+h1 {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: stretch;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 1rem;
+    }
+}

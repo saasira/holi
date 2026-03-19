@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wizard Workflow - Payment</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <script src="/examples/scripts/wizard-workflow.js"></script>
+    </head>
+    <body>
+        <h1>Checkout Workflow: Payment</h1>
+        <p>Workflow ID: <code id="workflow-id"></code></p>
+
+        <wizard
+            id="checkout-wizard"
+            library="holi"
+            provider="workflowPages"
+            data-source="@{wizard.checkout}"
+            data-step-navigation="page"
+            data-initial-step-id="payment"
+            autosync>
+        </wizard>
+
+        <h2>Debug Log</h2>
+        <pre id="workflow-log">waiting...</pre>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                window.WizardWorkflowExample.init({
+                    wizardId: 'checkout-wizard',
+                    stepId: 'payment',
+                    workflowIdElId: 'workflow-id',
+                    logId: 'workflow-log'
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+[
+    {
+        "title": "Accordion Component",
+        "description": "Expandable sections for progressive disclosure of content.",
+        "url": "/examples/pages/accordion.html"
+    },
+    {
+        "title": "Calendar Component",
+        "description": "Date-time picker with validators, i18n direction support, and event-driven selection.",
+        "url": "/examples/pages/calendar.html"
+    },
+    {
+        "title": "Chart Component",
+        "description": "Line, area, bar, pie, and doughnut charts with declarative data and programmatic updates.",
+        "url": "/examples/pages/chart.html"
+    },
+    {
+        "title": "Data Table Component",
+        "description": "Tabular data rendering with sorting and filtering behavior.",
+        "url": "/examples/pages/datatable.html"
+    },
+    {
+        "title": "Data Grid Component",
+        "description": "Grid-driven data layout with row and cell-level interactions.",
+        "url": "/examples/pages/datagrid.html"
+    },
+    {
+        "title": "Dialog Component",
+        "description": "Accessible modal dialog and confirm workflows.",
+        "url": "/examples/pages/dialog.html"
+    },
+    {
+        "title": "Drawer Component",
+        "description": "Slide-in panel for secondary actions and contextual tools.",
+        "url": "/examples/pages/drawer.html"
+    },
+    {
+        "title": "Dropdown Component",
+        "description": "Selectable list with local and remote options.",
+        "url": "/examples/pages/dropdown.html"
+    },
+    {
+        "title": "Menubar Component",
+        "description": "Hierarchical navigation menu with keyboard support.",
+        "url": "/examples/pages/menubar.html"
+    },
+    {
+        "title": "Search Component",
+        "description": "Typeahead suggestions plus result list rendering.",
+        "url": "/examples/pages/search.html"
+    },
+    {
+        "title": "Stats Card Component",
+        "description": "KPI card with trend indicator, animated value updates, and compact sparkline.",
+        "url": "/examples/pages/statscard.html"
+    },
+    {
+        "title": "Tabs Component",
+        "description": "Content switching with optional lazy loading.",
+        "url": "/examples/pages/tabs.html"
+    },
+    {
+        "title": "Toast Component",
+        "description": "Transient notifications with severity and timeout.",
+        "url": "/examples/pages/toast.html"
+    },
+    {
+        "title": "Tree Component",
+        "description": "Nested node explorer with lazy branch expansion.",
+        "url": "/examples/pages/tree.html"
+    },
+    {
+        "title": "Wizard Component",
+        "description": "Step-driven workflows with inline and page navigation modes.",
+        "url": "/examples/pages/wizard.html"
+    }
+]

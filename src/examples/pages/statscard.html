@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Stats Card Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="../styles/statscard.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>Stats Card Example</h1>
+        <section class="stats-grid" data-skeleton>
+            <section component="statscard" class="stats-card" data-value="12500" data-label="Revenue" data-trend="up" data-change="23.4" data-unit="$"></section>
+            <section component="statscard" class="stats-card" data-value="2345" data-label="Users" data-trend="up" data-change="12.8"></section>
+            <section component="statscard" class="stats-card" data-value="4.2" data-label="Conversion" data-trend="down" data-change="-1.2" data-unit="%"></section>
+            <section component="statscard" class="stats-card" data-value="245" data-label="Orders" data-trend="neutral" data-change="0"></section>
+        </section>
+
+        <script>
+            setInterval(() => {
+                document.querySelectorAll('[component="statscard"], [role="statscard"], statscard, [data-stats]').forEach((card) => {
+                    const instance = card.statscard || card.statsCard;
+                    instance?.update({
+                        value: Math.random() * 15000,
+                        change: (Math.random() - 0.5) * 50,
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
+                    });
+                });
+            }, 5000);
+        </script>
+    </body>
+</html>

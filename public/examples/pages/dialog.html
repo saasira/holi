@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dialog Modes Example</title>
+        <script src="/dist/holi.js"></script>
+        <style>
+            body {
+                font-family: Segoe UI, sans-serif;
+                margin: 20px;
+            }
+            .demo-actions {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin-bottom: 16px;
+            }
+            .demo-actions button {
+                padding: 8px 12px;
+                border: 1px solid #cfd6df;
+                border-radius: 6px;
+                background: #fff;
+                cursor: pointer;
+            }
+            .dialog-image {
+                max-width: 100%;
+                height: auto;
+                display: block;
+            }
+            .dialog-overlay-art {
+                width: 100%;
+                height: min(72vh, 700px);
+                display: grid;
+                place-items: center;
+                background: linear-gradient(135deg, #c7d2fe, #d1fae5, #fef3c7);
+                color: #1f2937;
+                font-size: 28px;
+                font-weight: 700;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Dialog Modes</h1>
+
+        <div class="demo-actions">
+            <button data-dialog-open="dlg-mini">Open Mini</button>
+            <button data-dialog-open="dlg-small">Open Small</button>
+            <button data-dialog-open="dlg-medium">Open Medium</button>
+            <button data-dialog-open="dlg-large">Open Large</button>
+            <button data-dialog-open="dlg-mega">Open Mega</button>
+        </div>
+
+        <section component="dialog" id="dlg-mini" size="mini" title="Mini Dialog" footer-message="Mini footer text">
+            <p slot="content">Compact confirmation style dialog.</p>
+            <button slot="content" data-action="close" data-value="mini-ok">OK</button>
+        </section>
+
+        <section component="dialog" id="dlg-small" size="small" title="Small Dialog" footer-message="Small footer text">
+            <p slot="content">Short informational content for small mode.</p>
+            <button slot="content" data-action="close" data-value="small-close">Close</button>
+        </section>
+
+        <section component="dialog" id="dlg-medium" size="medium">
+            <header slot="header">
+                <h3>Custom Header Slot</h3>
+            </header>
+            <div slot="content">
+                <p>Medium mode with custom header and footer slots.</p>
+                <p>Useful for forms and multi-step actions.</p>
+            </div>
+            <footer slot="footer">
+                <button data-action="close" data-value="cancel">Cancel</button>
+                <button data-action="close" data-value="save">Save</button>
+            </footer>
+        </section>
+
+        <section component="dialog" id="dlg-large" size="large" title="Large Dialog" footer-message="Scrollable large content">
+            <div slot="content">
+                <p>Large mode supports richer layouts.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                <p>Donec vitae odio cursus, suscipit massa a, mattis mi.</p>
+                <p>Vivamus tempus erat sit amet nibh vehicula blandit.</p>
+                <p>Sed efficitur lorem a purus mattis finibus.</p>
+                <p>Quisque eget urna a turpis porttitor ultricies.</p>
+            </div>
+        </section>
+
+        <section component="dialog" id="dlg-mega" size="mega" no-backdrop-close>
+            <div slot="content" class="dialog-overlay-art">Image Overlay Style Content</div>
+            <button slot="content" data-action="close" data-value="mega-close">Close Overlay</button>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Search Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <h1>Search Component</h1>
+        <p>Suggestions render in a dropdown while typing, and results render in a dedicated panel below.</p>
+
+        <h2>Variant 1: Local data via attributes (`data-search`)</h2>
+        <section
+            id="search-local"
+            data-search
+            data-placeholder="Search local docs..."
+            data-min-length="1"
+            data-suggestion-limit="6"
+            data-limit="8"
+            data-suggestions='["accordion","datatable","datagrid","dialog","drawer","dropdown","layout","menubar","search","tabs","toast","tree","wizard"]'
+            data-search-data='[
+                {"title":"Accordion","description":"Expandable sections","url":"/examples/pages/accordion.html"},
+                {"title":"DataTable","description":"Table rendering and interactions","url":"/examples/pages/datatable.html"},
+                {"title":"Dropdown","description":"Selectable list with local and remote data","url":"/examples/pages/dropdown.html"},
+                {"title":"Search","description":"Typeahead suggestions and results panel","url":"/examples/pages/search.html"},
+                {"title":"Wizard","description":"Step-based flow with lazy/page modes","url":"/examples/pages/wizard.html"}
+            ]'>
+        </section>
+
+        <h2>Variant 2: Remote API (step metadata from API)</h2>
+        <section
+            component="search"
+            data-placeholder="Search remote examples..."
+            data-min-length="1"
+            data-suggestion-limit="8"
+            data-limit="10"
+            data-suggestions-endpoint="/examples/api/search-suggestions.json"
+            data-endpoint="/examples/api/search-results.json">
+        </section>
+
+        <h2>Variant 3: Tag style (`&lt;search&gt;`)</h2>
+        <search
+            data-search
+            data-placeholder="Search by component name..."
+            data-min-length="1"
+            data-suggestion-limit="5"
+            data-limit="5"
+            data-suggestions='["tabs","toast","tree","treepanel","wizard"]'
+            data-search-data='[
+                {"title":"Tabs","description":"Tab switching component","url":"/examples/pages/tabs.html"},
+                {"title":"Toast","description":"Notification component","url":"/examples/pages/toast.html"},
+                {"title":"Tree","description":"Tree explorer component","url":"/examples/pages/tree.html"},
+                {"title":"TreePanel","description":"Tree plus details pane","url":"/examples/pages/treepanel.html"},
+                {"title":"Wizard","description":"Workflow component","url":"/examples/pages/wizard.html"}
+            ]'>
+        </search>
+    </body>
+</html>

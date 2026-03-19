@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tree Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 18px; }
+            .demo h2 { margin: 0 0 8px; font-size: 18px; }
+            .note { margin: 0 0 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Tree Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="tree"</h2>
+            <p class="note">Vertical tree, children collapsed by default, click to expand.</p>
+            <section component="tree">
+                <ul slot="tree">
+                    <li data-node-id="docs">
+                        <button type="button">Documents</button>
+                        <ul>
+                            <li data-node-id="reports"><button type="button">Reports</button></li>
+                            <li data-node-id="invoices"><button type="button">Invoices</button></li>
+                        </ul>
+                    </li>
+                    <li data-node-id="media">
+                        <button type="button">Media</button>
+                        <ul>
+                            <li data-node-id="images"><button type="button">Images</button></li>
+                            <li data-node-id="videos"><button type="button">Videos</button></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="tree" with single-expand</h2>
+            <p class="note">Only one sibling branch can stay open at each level.</p>
+            <section role="tree" single-expand>
+                <ul slot="tree">
+                    <li><button type="button">Accounts</button><ul><li><button type="button">Current</button></li><li><button type="button">Archived</button></li></ul></li>
+                    <li><button type="button">Projects</button><ul><li><button type="button">Internal</button></li><li><button type="button">Client</button></li></ul></li>
+                    <li><button type="button">Support</button><ul><li><button type="button">Open</button></li><li><button type="button">Closed</button></li></ul></li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: &lt;tree&gt; with lazy children loading</h2>
+            <p class="note">Large datasets can load children on first expand using <code>children-loader</code> + remote endpoint <code>/examples/api/tree?parent=&lt;id&gt;</code>. Uses cache with <code>cache-ttl</code>.</p>
+            <tree children-loader="loadTreeChildren" cache-ttl="90000">
+                <ul slot="tree">
+                    <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                    <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                </ul>
+            </tree>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 4: drag-drop hooks</h2>
+            <p class="note">Enable <code>draggable-nodes</code> and optional <code>reorder-handler</code> callback.</p>
+            <tree draggable-nodes reorder-handler="onTreeReorder">
+                <ul slot="tree">
+                    <li data-node-id="roadmap">
+                        <button type="button">Roadmap</button>
+                        <ul>
+                            <li data-node-id="q1">
+                                <button type="button">Q1</button>
+                                <ul>
+                                    <li data-node-id="q1-design"><button type="button">Design</button></li>
+                                    <li data-node-id="q1-build"><button type="button">Build</button></li>
+                                </ul>
+                            </li>
+                            <li data-node-id="q2"><button type="button">Q2</button></li>
+                        </ul>
+                    </li>
+                    <li data-node-id="backlog">
+                        <button type="button">Backlog</button>
+                        <ul>
+                            <li data-node-id="ideas"><button type="button">Ideas</button></li>
+                            <li data-node-id="research"><button type="button">Research</button></li>
+                        </ul>
+                    </li>
+                    <li data-node-id="released"><button type="button">Released</button></li>
+                </ul>
+            </tree>
+        </section>
+
+        <script>
+            window.loadTreeChildren = async ({ id }) => {
+                const parent = encodeURIComponent(String(id || ''));
+                const response = await fetch(`/examples/api/tree?parent=${parent}`, { credentials: 'same-origin' });
+                if (!response.ok) {
+                    throw new Error(`Tree API failed with ${response.status}`);
+                }
+                const payload = await response.json();
+                if (Array.isArray(payload?.nodes)) return payload.nodes;
+                const grouped = payload && typeof payload.nodesByParent === 'object' ? payload.nodesByParent : {};
+                const key = String(id || '');
+                return Array.isArray(grouped[key]) ? grouped[key] : [];
+            };
+
+            window.onTreeReorder = ({ fromId, toId, position }) => {
+                console.log('Tree reorder hook:', { fromId, toId, position });
+            };
+        </script>
+    </body>
+</html>

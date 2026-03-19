@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Carousel Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { max-width: 860px; margin: 0 auto; }
+            .demo h1 { margin: 0 0 8px; }
+            .demo p { color: #334155; margin: 0 0 16px; }
+            .slide-media { aspect-ratio: 16 / 8; display: grid; place-items: center; color: #fff; font-size: 30px; font-weight: 700; }
+            .s1 { background: linear-gradient(140deg, #0369a1, #0ea5e9); }
+            .s2 { background: linear-gradient(140deg, #b45309, #f59e0b); }
+            .s3 { background: linear-gradient(140deg, #047857, #10b981); }
+            .s4 { background: linear-gradient(140deg, #4338ca, #6366f1); }
+        </style>
+    </head>
+    <body>
+        <section class="demo">
+            <h1>Carousel</h1>
+            <p>Template-driven carousel using slot content for slides and built-in controls. Resize window to test responsive slide count.</p>
+
+            <section
+                component="carousel"
+                mode="slide"
+                active-slides="2"
+                move-slides="1"
+                interval="4200"
+                responsive='{"900":{"active":1,"move":1}}'>
+                <div slot="slides" class="slides">
+                    <article class="slide"><div class="slide-media s1">Slide 1</div></article>
+                    <article class="slide"><div class="slide-media s2">Slide 2</div></article>
+                    <article class="slide"><div class="slide-media s3">Slide 3</div></article>
+                    <article class="slide"><div class="slide-media s4">Slide 4</div></article>
+                </div>
+            </section>
+        </section>
+    </body>
+</html>

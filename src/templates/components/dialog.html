@@ -1,0 +1,24 @@
+<template id="dialog-template">
+    <section class="holi-dialog-root" data-size="medium" data-state="closed">
+        <dialog class="holi-dialog-native" aria-modal="true">
+            <header class="holi-dialog-header" data-role="header">
+                <h2 class="holi-dialog-title" data-role="title"></h2>
+                <button type="button" class="holi-dialog-close" data-action="close" aria-label="Close">x</button>
+            </header>
+            <div class="holi-dialog-body" data-role="body"></div>
+            <footer class="holi-dialog-footer" data-role="footer"></footer>
+        </dialog>
+
+        <div class="holi-dialog-fallback" data-role="fallback" hidden>
+            <div class="holi-dialog-overlay" data-action="backdrop"></div>
+            <section class="holi-dialog-panel" role="dialog" aria-modal="true">
+                <header class="holi-dialog-header" data-role="fallback-header">
+                    <h2 class="holi-dialog-title" data-role="fallback-title"></h2>
+                    <button type="button" class="holi-dialog-close" data-action="close" aria-label="Close">x</button>
+                </header>
+                <div class="holi-dialog-body" data-role="fallback-body"></div>
+                <footer class="holi-dialog-footer" data-role="fallback-footer"></footer>
+            </section>
+        </div>
+    </section>
+</template>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lifecycle Regression</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="./lifecycle-regression.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <main class="regression-page">
+            <h1>Lifecycle Regression Harness</h1>
+            <p>Smoke checks for dynamic mount/unmount, gallery dialog+carousel, and tree/treepanel wiring.</p>
+
+            <section class="regression-card">
+                <h2>Dynamic Mount/Unmount</h2>
+                <p>Add and remove component hosts and verify instance creation and teardown.</p>
+                <div class="actions">
+                    <button type="button" id="btn-add-input">Add Input Host</button>
+                    <button type="button" id="btn-remove-input">Remove Input Host</button>
+                    <button type="button" id="btn-run-all">Run All Checks</button>
+                </div>
+                <section id="dynamic-host"></section>
+            </section>
+
+            <section class="regression-card">
+                <h2>Gallery Check</h2>
+                <section id="gallery-regression" component="gallery" title="Regression Gallery" page-size="3" display-mode="paginate">
+                    <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80"
+                         data-full-src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80"
+                         alt="Mountain sunrise">
+                    <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80"
+                         data-full-src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1800&q=80"
+                         alt="Lake and trees">
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80"
+                         data-full-src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=80"
+                         alt="Forest path">
+                </section>
+            </section>
+
+            <section class="regression-card split">
+                <section>
+                    <h2>Tree Check</h2>
+                    <section id="tree-regression" component="tree">
+                        <ul slot="tree">
+                            <li data-node-id="a">
+                                <button type="button">A</button>
+                                <ul>
+                                    <li data-node-id="a1"><button type="button">A1</button></li>
+                                </ul>
+                            </li>
+                            <li data-node-id="b"><button type="button">B</button></li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <h2>TreePanel Check</h2>
+                    <section id="treepanel-regression" component="treepanel" detail-view="datapanel" data-details-source="/examples/api/tree-details?node=@{id}">
+                        <ul slot="tree">
+                            <li data-node-id="engineering" data-lazy="true"><button type="button">Engineering</button></li>
+                            <li data-node-id="sales" data-lazy="true"><button type="button">Sales</button></li>
+                        </ul>
+                    </section>
+                </section>
+            </section>
+
+            <section class="regression-card">
+                <h2>Assertion Log</h2>
+                <ul id="assert-log" class="assert-log"></ul>
+            </section>
+        </main>
+        <script src="./lifecycle-regression.js"></script>
+    </body>
+</html>

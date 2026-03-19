@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BreadCrumbs Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 20px; }
+            .demo h2 { margin: 0 0 8px; font-size: 18px; }
+            .panel { border: 1px solid #d6dde8; border-radius: 10px; padding: 12px; background: #f8fafc; }
+            .note { margin: 0 0 10px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>BreadCrumbs Variants</h1>
+
+        <section class="demo">
+            <h2>Variant 1: component="breadcrumbs" with list markup</h2>
+            <div class="panel">
+                <section component="breadcrumbs" separator=">">
+                    <ol slot="items">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#catalog">Catalog</a></li>
+                        <li aria-current="page">Shoes</li>
+                    </ol>
+                </section>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="breadcrumbs" from data-items</h2>
+            <div class="panel">
+                <section role="breadcrumbs"
+                         data-items='[
+                            {"label":"Home","href":"#home"},
+                            {"label":"Products","href":"#products"},
+                            {"label":"Laptops","href":"#laptops"},
+                            {"label":"Ultrabooks","current":true}
+                         ]'>
+                </section>
+            </div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: &lt;breadcrumbs&gt; collapsed trail</h2>
+            <div class="panel">
+                <breadcrumbs max-items="4" separator="/">
+                    <ol slot="items">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#dept">Department</a></li>
+                        <li><a href="#electronics">Electronics</a></li>
+                        <li><a href="#computers">Computers</a></li>
+                        <li><a href="#laptops">Laptops</a></li>
+                        <li aria-current="page">Gaming</li>
+                    </ol>
+                    <span slot="prefix">You are here:</span>
+                </breadcrumbs>
+            </div>
+        </section>
+    </body>
+</html>

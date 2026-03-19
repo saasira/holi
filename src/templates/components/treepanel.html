@@ -1,0 +1,43 @@
+<template id="treepanel-template">
+    <section class="holi-treepanel">
+        <section class="treepanel-left">
+            <div class="treepanel-tree-host" data-role="tree-host"></div>
+        </section>
+        <aside class="treepanel-right">
+            <header class="treepanel-header" data-role="header-host">
+                <section class="treepanel-header-default" data-role="header-default">
+                    <h3 data-role="detail-title">Node Details</h3>
+                    <section class="treepanel-header-actions">
+                        <button type="button" data-action="reload-selected">Reload</button>
+                        <button type="button" data-action="edit-details" data-role="edit-button" hidden>Edit</button>
+                        <button type="button" data-action="save-details" data-role="save-button" hidden>Save</button>
+                        <button type="button" data-action="cancel-edit" data-role="cancel-button" hidden>Cancel</button>
+                    </section>
+                </section>
+                <slot name="header"></slot>
+            </header>
+            <p class="treepanel-status" data-role="detail-status" data-state="ready">Select a node to view details.</p>
+            <section class="treepanel-content" data-role="content-host">
+                <section class="treepanel-content-default" data-role="content-default">
+                    <section class="treepanel-view treepanel-view-panel" data-view="datapanel">
+                        <section class="treepanel-panel-body" data-role="panel-body"></section>
+                    </section>
+                    <section class="treepanel-view treepanel-view-table" data-view="datatable" hidden>
+                        <table class="treepanel-table" data-role="detail-table">
+                            <thead data-role="table-head"></thead>
+                            <tbody data-role="table-body"></tbody>
+                        </table>
+                    </section>
+                    <section class="treepanel-view treepanel-view-grid" data-view="datagrid" hidden>
+                        <section class="treepanel-grid" data-role="detail-grid"></section>
+                    </section>
+                </section>
+                <slot name="content"></slot>
+            </section>
+            <footer class="treepanel-footer" data-role="footer-host">
+                <section class="treepanel-footer-default" data-role="footer-default"></section>
+                <slot name="footer"></slot>
+            </footer>
+        </aside>
+    </section>
+</template>

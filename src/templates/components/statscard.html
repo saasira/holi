@@ -1,0 +1,15 @@
+<template id="statscard">
+    <article class="stats-card-view trend-neutral" role="group" aria-label="Statistic card">
+        <header class="stats-header">
+            <div class="stats-icon" aria-hidden="true">@{icon}</div>
+            <div class="stats-change">
+                <span class="change-value">@{change}</span>
+                <span class="change-trend">@{trend}</span>
+            </div>
+        </header>
+        <div class="stats-value">@{value}</div>
+        <div class="stats-label">@{label}</div>
+        <div class="stats-sparkline" aria-hidden="true"></div>
+        <slot name="footer"></slot>
+    </article>
+</template>

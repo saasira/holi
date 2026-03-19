@@ -1,0 +1,10 @@
+<template id="progress">
+    <section class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-track">
+            <div class="progress-buffer"></div>
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-label">@{value}%</div>
+        <slot name="label"></slot>
+    </section>
+</template>

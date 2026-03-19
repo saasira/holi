@@ -1,0 +1,44 @@
+<template id="datagrid-template">
+    <section class="holi-datagrid holi datagrid">
+        <header class="datagrid-toolbar">
+            <slot name="search">
+                <input type="search" placeholder="Search..." data-action="search">
+            </slot>
+            <slot name="filters">
+                <select data-filter="status">
+                    <option value="">All Status</option>
+                </select>
+            </slot>
+            <select data-action="sort-field">
+                <option value="">Sort by</option>
+            </select>
+            <button type="button" data-action="sort-direction">Asc</button>
+            <button type="button" data-action="add-row">Add</button>
+            <button type="button" data-action="toggle-fields">Fields</button>
+        </header>
+
+        <aside class="datagrid-field-chooser" data-role="field-chooser" hidden>
+            <strong>Choose Fields</strong>
+            <div data-role="field-chooser-list"></div>
+        </aside>
+
+        <div class="datagrid-content">
+            <div class="datagrid-cards" data-role="cards"></div>
+        </div>
+
+        <footer class="datagrid-footer">
+            <span data-role="result-count"></span>
+            <div data-role="request-status" data-state="idle" aria-live="polite">
+                <span data-role="request-status-text"></span>
+                <button type="button" data-action="retry-load" hidden>Retry</button>
+            </div>
+            <slot name="pagination">
+                <div data-role="pagination-controls" hidden>
+                    <button type="button" data-action="prev-page">Previous</button>
+                    <span data-role="page-info"></span>
+                    <button type="button" data-action="next-page">Next</button>
+                </div>
+            </slot>
+        </footer>
+    </section>
+</template>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chart Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 18px; }
+            .demo-card { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px; background: #f8fafc; }
+            .controls { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 7px 11px; cursor: pointer; }
+            .chart-host { min-height: 240px; }
+            .event-log { margin-top: 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Chart Usages</h1>
+        <p>Template-driven chart component with declarative data and programmatic updates.</p>
+
+        <section class="demo">
+            <h2>Variant 1: component="chart" (line)</h2>
+            <section class="demo-card chart-host">
+                <section
+                    component="chart"
+                    id="chart-line"
+                    type="line"
+                    title="Monthly Revenue"
+                    height="240"
+                    show-legend="true"
+                    data='[
+                        {"label":"Jan","value":28},
+                        {"label":"Feb","value":39},
+                        {"label":"Mar","value":33},
+                        {"label":"Apr","value":52},
+                        {"label":"May","value":49},
+                        {"label":"Jun","value":61}
+                    ]'>
+                </section>
+                <div class="controls">
+                    <button id="btn-line-randomize">Randomize</button>
+                    <button id="btn-line-area">Switch To Area</button>
+                    <button id="btn-line-line">Switch To Line</button>
+                </div>
+                <div class="event-log" id="line-log">Event log: none</div>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: role="chart" (bar)</h2>
+            <section class="demo-card chart-host">
+                <section
+                    role="chart"
+                    id="chart-bar"
+                    type="bar"
+                    title="Team Velocity"
+                    height="230"
+                    colors="#0ea5e9,#f97316,#22c55e,#ef4444,#8b5cf6"
+                    data='[
+                        {"label":"Team A","value":42},
+                        {"label":"Team B","value":35},
+                        {"label":"Team C","value":57},
+                        {"label":"Team D","value":29},
+                        {"label":"Team E","value":48}
+                    ]'>
+                </section>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: tag style (&lt;chart&gt;) pie and doughnut</h2>
+            <section class="demo-card chart-host">
+                <chart
+                    id="chart-pie"
+                    type="pie"
+                    title="Traffic Sources"
+                    height="240"
+                    data='[
+                        {"label":"Organic","value":44},
+                        {"label":"Paid","value":22},
+                        {"label":"Referral","value":18},
+                        {"label":"Social","value":16}
+                    ]'>
+                </chart>
+                <div class="controls">
+                    <button id="btn-pie-pie">Pie</button>
+                    <button id="btn-pie-doughnut">Doughnut</button>
+                </div>
+            </section>
+        </section>
+
+        <script>
+            const lineChart = document.getElementById('chart-line');
+            const pieChart = document.getElementById('chart-pie');
+            const lineLog = document.getElementById('line-log');
+
+            const nextSeries = () => [
+                { label: 'Jan', value: 20 + Math.floor(Math.random() * 50) },
+                { label: 'Feb', value: 20 + Math.floor(Math.random() * 50) },
+                { label: 'Mar', value: 20 + Math.floor(Math.random() * 50) },
+                { label: 'Apr', value: 20 + Math.floor(Math.random() * 50) },
+                { label: 'May', value: 20 + Math.floor(Math.random() * 50) },
+                { label: 'Jun', value: 20 + Math.floor(Math.random() * 50) }
+            ];
+
+            document.getElementById('btn-line-randomize')?.addEventListener('click', () => {
+                lineChart?.chartcomponent?.update(nextSeries(), { title: 'Monthly Revenue (Updated)' });
+            });
+
+            document.getElementById('btn-line-area')?.addEventListener('click', () => {
+                lineChart?.chartcomponent?.setType('area');
+            });
+
+            document.getElementById('btn-line-line')?.addEventListener('click', () => {
+                lineChart?.chartcomponent?.setType('line');
+            });
+
+            document.getElementById('btn-pie-pie')?.addEventListener('click', () => {
+                pieChart?.chartcomponent?.setType('pie');
+            });
+
+            document.getElementById('btn-pie-doughnut')?.addEventListener('click', () => {
+                pieChart?.chartcomponent?.setType('doughnut');
+            });
+
+            lineChart?.chartcomponent?.on('chartpointselect', (event) => {
+                const item = event?.detail?.item || {};
+                lineLog.textContent = `Event log: selected ${item.label || 'n/a'} = ${item.value ?? 'n/a'}`;
+            });
+        </script>
+    </body>
+</html>

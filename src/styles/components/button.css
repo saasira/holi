@@ -1,0 +1,26 @@
+.holi-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid #1d2939;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #1d2939;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.holi-button[data-variant="secondary"] {
+    background: #ffffff;
+    color: #1d2939;
+}
+
+.holi-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.holi-button-prefix:empty,
+.holi-button-suffix:empty {
+    display: none;
+}

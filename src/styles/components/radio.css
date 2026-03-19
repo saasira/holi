@@ -1,0 +1,23 @@
+.holi-radio-group {
+    border: 1px solid #d0d5dd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.holi-radio-options {
+    display: grid;
+    gap: 8px;
+}
+
+.holi-radio-option {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.holi-radio-group .error {
+    color: #b42318;
+    font-size: 0.88rem;
+}

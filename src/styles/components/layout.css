@@ -1,0 +1,58 @@
+.holi-layout {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.holi-layout-content {
+    display: grid;
+    gap: 16px;
+}
+
+.holi-layout-content > header,
+.holi-layout-content > main,
+.holi-layout-content > footer,
+.holi-layout-content > section {
+    display: grid;
+    gap: 12px;
+}
+
+.holi-block {
+    --holi-block-columns: 12;
+    --holi-block-gap: 12px;
+}
+
+.holi-block-content {
+    display: grid;
+    grid-template-columns: repeat(var(--holi-block-columns), minmax(0, 1fr));
+    gap: var(--holi-block-gap);
+    align-items: stretch;
+}
+
+.holi-block-content > region,
+.holi-block-content > [component="region"],
+.holi-block-content > [role="region"] {
+    display: block;
+    align-self: stretch;
+}
+
+.holi-region {
+    --holi-region-span: 12;
+    grid-column: span var(--holi-region-span);
+    height: 100%;
+    min-width: 0;
+}
+
+.holi-region-content {
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid #dce3ea;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 10px 12px;
+}
+
+@media (max-width: 900px) {
+    .holi-region {
+        grid-column: 1 / -1;
+    }
+}
