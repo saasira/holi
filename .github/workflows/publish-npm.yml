@@ -22,6 +22,12 @@ jobs:
           git fetch --depth 1 origin "${GITHUB_REF}"
           git checkout --detach FETCH_HEAD
 
+      - name: Install Node 22.14.0
+        run: |
+          curl -fsSLO https://nodejs.org/dist/v22.14.0/node-v22.14.0-linux-x64.tar.xz
+          tar -xJf node-v22.14.0-linux-x64.tar.xz
+          echo "${GITHUB_WORKSPACE}/node-v22.14.0-linux-x64/bin" >> "${GITHUB_PATH}"
+
       - name: Show Node environment
         run: |
           node --version
