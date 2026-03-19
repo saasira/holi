@@ -12,8 +12,9 @@ The repository includes a publish workflow at `.github/workflows/publish-npm.yml
 
 ## Required Repository Setup
 
-- Add an `NPM_TOKEN` repository secret with publish access to the target npm package.
+- Add an `NPM_TOKEN` repository secret with publish access to the target npm package or scope.
 - Ensure the npm package name in `package.json` is available to your account or organization.
+- For this repository, the package name is `@saasira/holi`, so the npm token should be allowed to publish within the `@saasira` scope.
 - Push semantic version tags in the form `vX.Y.Z`.
 
 ## Recommended CDN
@@ -29,9 +30,9 @@ https://cdn.jsdelivr.net/npm/<package-name>@<version>/<file>
 For Holi `v0.1.2`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
 ```
 
 ## Fallback CDN
@@ -39,9 +40,9 @@ For Holi `v0.1.2`:
 unpkg can be used with the same package versioning model:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/holi@0.1.2/dist/holi.css" />
-<script src="https://unpkg.com/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.css" />
+<script src="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
 ```
 
 ## Versioning Guidance

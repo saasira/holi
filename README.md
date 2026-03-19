@@ -83,17 +83,17 @@ Holi can be shipped directly from a free CDN after publishing the package to npm
 Recommended jsDelivr links for `v0.1.2`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
 ```
 
 Fallback unpkg links:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/holi@0.1.2/dist/holi.css" />
-<script src="https://unpkg.com/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.css" />
+<script src="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
 ```
 
 Repository setup details for automated npm publishing are documented in `docs/CDN.md`.

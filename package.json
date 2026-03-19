@@ -1,5 +1,5 @@
 {
-  "name": "holi",
+  "name": "@saasira/holi",
   "version": "0.1.2",
   "description": "Modern UI Components Library with i18n, themes, PWA, SW",
   "main": "dist/holi.js",
