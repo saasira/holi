@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.3] - 2026-03-19
+
+### Changed
+
+- Recut the release from the scoped npm package setup so publishing can proceed with `@saasira/holi`.
+- Carried forward the npm CDN workflow, changelog, and scoped CDN documentation into the new release line.
+
+### Validation
+
+- Verified packaging metadata with `npm pack --dry-run`.
+
 ## [0.1.2] - 2026-03-19
 
 ### Added
@@ -20,4 +31,3 @@ All notable changes to this project are documented in this file.
 ### Validation
 
 - Verified with `npm run ci:smoke`.
-

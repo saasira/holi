@@ -4,7 +4,7 @@ Holi release artifacts can be consumed directly from a free CDN by publishing th
 
 ## Recommended Flow
 
-1. Create and push a release tag such as `v0.1.2`.
+1. Create and push a release tag such as `v0.1.3`.
 2. Let GitHub Actions publish the package to npm.
 3. Reference the versioned `dist` assets from jsDelivr in application pages.
 
@@ -27,12 +27,12 @@ Pattern:
 https://cdn.jsdelivr.net/npm/<package-name>@<version>/<file>
 ```
 
-For Holi `v0.1.2`:
+For Holi `v0.1.3`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.3/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.3/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.3/dist/holi.html" crossorigin="anonymous" />
 ```
 
 ## Fallback CDN
@@ -40,14 +40,14 @@ For Holi `v0.1.2`:
 unpkg can be used with the same package versioning model:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.css" />
-<script src="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.2/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.3/dist/holi.css" />
+<script src="https://unpkg.com/@saasira/holi@0.1.3/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.3/dist/holi.html" crossorigin="anonymous" />
 ```
 
 ## Versioning Guidance
 
-- Pin exact versions such as `0.1.2` for production applications.
+- Pin exact versions such as `0.1.3` for production applications.
 - Avoid `latest` for application pages because it makes releases non-repeatable.
 - Keep the git tag, `package.json` version, and published npm version aligned.
 
