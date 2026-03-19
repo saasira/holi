@@ -9,11 +9,13 @@ const srcPages = path.join(srcBase, 'pages');
 const srcStyles = path.join(srcBase, 'styles');
 const srcScripts = path.join(srcBase, 'scripts');
 const srcApi = path.join(srcBase, 'api');
+const srcLayouts = path.join(srcBase, 'layouts');
 
 const outPages = path.join(outBase, 'pages');
 const outStyles = path.join(outBase, 'styles');
 const outScripts = path.join(outBase, 'scripts');
 const outApi = path.join(outBase, 'api');
+const outLayouts = path.join(outBase, 'layouts');
 
 function ensureDir(dir) {
     fs.mkdirSync(dir, { recursive: true });
@@ -86,10 +88,12 @@ function buildExamples() {
     ensureDir(outStyles);
     ensureDir(outScripts);
     ensureDir(outApi);
+    ensureDir(outLayouts);
 
     copyDirIfExists(srcStyles, outStyles);
     copyDirIfExists(srcScripts, outScripts);
     copyDirIfExists(srcApi, outApi);
+    copyDirIfExists(srcLayouts, outLayouts);
 
     if (fs.existsSync(srcPages)) {
         const pages = collectHtmlFiles(srcPages);

@@ -6,6 +6,18 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const bundleTemplates = (patterns, label) => {
+    let bundledHtml = `<!-- ${label} v1.0.0 -->\n`;
+    patterns.forEach((templatePath) => {
+        const templateName = path.basename(templatePath);
+        const templateContent = fs.readFileSync(templatePath, 'utf8');
+        bundledHtml += `\n<!-- Template: ${templateName} ${templatePath} -->\n`;
+        bundledHtml += templateContent.trim() + '\n\n';
+    });
+    bundledHtml += `<!-- End ${label} -->`;
+    return bundledHtml;
+};
+
 let salesCache = null;
 let treeCache = null;
 let treeDetailsCache = null;
@@ -398,24 +410,32 @@ const appConfig = {
         new CopyWebpackPlugin({
             patterns: [
                 {
+                    from: 'src/templates/components',
+                    to: 'components.html',
+                    transform() {
+                        return bundleTemplates(glob.sync('src/templates/components/**/*.html'), 'Holi Component Templates');
+                    },
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/templates/layouts',
+                    to: 'layouts.html',
+                    transform() {
+                        return bundleTemplates(glob.sync('src/templates/layouts/**/*.html'), 'Holi Layout Templates');
+                    },
+                    noErrorOnMissing: true
+                },
+                {
                     from: 'src/templates',
                     to: 'holi.html',
-                    transform(content, absoluteFrom) {
-                        // Concatenate ALL templates into one file
-                        const allTemplates = glob.sync('src/templates/**/*.html');
-                        
-                        let bundledHtml = '<!-- Holi Template Library v1.0.0 -->\n';
-                        allTemplates.forEach(templatePath => {
-                            const templateName = path.basename(templatePath);
-                            const templateContent = fs.readFileSync(templatePath, 'utf8');
-                            
-                            bundledHtml += `\n<!-- Template: ${templateName} ${templatePath} -->\n`;
-                            bundledHtml += templateContent.trim() + '\n\n';
-                        });
-                        
-                        bundledHtml += '<!-- End Holi Templates -->';
-                        return bundledHtml;
+                    transform() {
+                        return bundleTemplates(glob.sync('src/templates/**/*.html'), 'Holi Template Library');
                     },
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/templates/layouts',
+                    to: 'layouts/[path][name][ext]',
                     noErrorOnMissing: true
                 }
             ]

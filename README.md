@@ -26,7 +26,7 @@ Canonical reference: `docs/holi-principles.md`.
   - Tag: `<tabs></tabs>`
   - Attribute: `<section component="tabs"></section>`
   - Role: `<section role="tabs"></section>`
-- Template library bundling (`dist/holi.html`) and runtime template injection.
+- Component-template bundling (`dist/components.html`) and runtime in-memory template registration.
 - Template bindings:
   - `@{expression}` interpolation
   - `data-if`, `data-show`, `data-open`, `visible`
@@ -73,7 +73,10 @@ Main artifacts:
 
 - `dist/holi.js`
 - `dist/holi.css`
-- `dist/holi.html` (templates)
+- `dist/components.html` (component templates)
+- `dist/layouts.html` (layout templates)
+- `dist/holi.html` (legacy compatibility bundle)
+- `dist/layouts/**` (optional runtime-resolved layouts)
 - Example site output: `public/examples/**`
 
 ## CDN Quick Start
@@ -81,16 +84,16 @@ Main artifacts:
 For application pages that consume Holi directly from a CDN, use the published npm package via jsDelivr:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
 
 Direct file URLs:
 
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.js`
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.css`
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.html`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html`
 
 Pin an exact version in production so releases remain repeatable.
 
@@ -98,20 +101,20 @@ Pin an exact version in production so releases remain repeatable.
 
 Holi can be shipped directly from a free CDN after publishing the package to npm.
 
-Recommended jsDelivr links for `v0.1.4`:
+Recommended jsDelivr links for `v0.1.5`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.4/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
 
 Fallback unpkg links:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.4/dist/holi.css" />
-<script src="https://unpkg.com/@saasira/holi@0.1.4/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.4/dist/holi.html" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.css" />
+<script src="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.js"></script>
+<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
 
 Repository setup details for automated npm publishing are documented in `docs/CDN.md`.
@@ -152,11 +155,80 @@ Repository setup details for automated npm publishing are documented in `docs/CD
 - Component styles: `src/styles/components/<componentname>.css`
 - Component templates: `src/templates/components/<componentname>.html`
 - Shared utilities: `src/scripts/utils/<utilityname>.js`
+- Optional layout templates:
+  - library layouts: `src/templates/layouts/*.html`
+  - example/app layouts in examples: `src/examples/layouts/*.html`
 - Example sources:
   - `src/examples/pages/*.html`
   - `src/examples/styles/*.css`
   - `src/examples/scripts/*.js`
 - Built examples: `public/examples/**` (referencing `dist/holi.js` and `dist/holi.css`)
+
+## Page Layout Composition
+
+Holi supports runtime page composition with a layout template plus named placeholders.
+
+Supported structure:
+
+```html
+<page layout="3x9" layouts-base="/examples/layouts/">
+  <block name="head">
+    <region name="meta">
+      <meta name="page-layout-demo" content="true" />
+    </region>
+    <region name="styles">
+      <style>.page-title { letter-spacing: 0.02em; }</style>
+    </region>
+    <region name="scripts">
+      <script>window.pageLayoutExampleLoaded = true;</script>
+    </region>
+  </block>
+
+  <block name="header">
+    <h1 class="page-title">Project Dashboard</h1>
+  </block>
+
+  <block name="main">
+    <region name="lhs"><div>Navigation</div></region>
+    <region name="middle"><div>Primary content</div></region>
+    <region name="rhs"><div>Context tools</div></region>
+  </block>
+</page>
+```
+
+Layout template example:
+
+```html
+<template id="page-layout-3x9" data-layout="3x9">
+  <layout-head data-layout-head="true">
+    <meta name="example-layout" content="3x9" />
+    <slot name="meta"></slot>
+    <slot name="styles"></slot>
+    <slot name="scripts"></slot>
+  </layout-head>
+
+  <header><slot name="header"></slot></header>
+  <slot name="main">
+    <main>
+      <aside><slot name="lhs"></slot></aside>
+      <section><slot name="middle"></slot></section>
+      <aside><slot name="rhs"></slot></aside>
+    </main>
+  </slot>
+</template>
+```
+
+Rules:
+
+- Top-level `block[name]` fills a matching layout slot.
+- Direct `region[name]` inside a block fills matching nested slots inside that block's assigned subtree.
+- Missing slots are empty by default.
+- Set `inherit-missing="true"` on `page` to keep fallback slot content.
+- Use `layout-src` for an explicit layout file or `layouts-base` for a layout folder.
+- Use `<layout-head data-layout-head="true">` for shared head assets in layouts.
+- Use `<tail data-layout-tail="true">` for deferred body-end assets in layouts.
+- Non-script nodes from `layout-head` go to the real HTML `<head>`.
+- Nodes from `tail` are appended near the end of `<body>`.
 
 ## Holi vs React / Angular / Vue
 
@@ -188,4 +260,5 @@ Practical summary:
 
 - Holi exports `window.HoliApp` / `window.Holi`.
 - Auto init can be disabled with `window.HoliAutoInit = false` before loading `dist/holi.js`.
-- Templates are loaded from `dist/holi.html` (with runtime fallback paths).
+- Component templates are loaded from `dist/components.html` (with runtime fallback paths).
+- Layout templates are loaded from `dist/layouts.html` (with runtime fallback paths).

@@ -1,0 +1,29 @@
+<template id="page-layout-3x9" data-layout="3x9">
+    <header class="holi-page-band holi-page-band-header">
+        <slot name="header"></slot>
+    </header>
+    <slot name="main">
+        <main class="holi-page-band holi-page-band-main">
+            <header class="holi-page-band holi-page-band-subheader">
+                <slot name="menubar"></slot>
+            </header>
+            <section class="holi-page-band holi-page-band-columns">
+                <aside class="holi-page-band holi-page-band-column holi-page-band-column-lhs">
+                    <slot name="lhs"></slot>
+                </aside>
+                <section class="holi-page-band holi-page-band-column holi-page-band-column-middle">
+                    <slot name="middle"></slot>
+                </section>
+                <aside class="holi-page-band holi-page-band-column holi-page-band-column-rhs">
+                    <slot name="rhs"></slot>
+                </aside>
+            </section>
+        </main>
+    </slot>
+    <section class="holi-page-band holi-page-band-prefooter">
+        <slot name="prefooter"></slot>
+    </section>
+    <footer class="holi-page-band holi-page-band-footer">
+        <slot name="footer"></slot>
+    </footer>
+</template>

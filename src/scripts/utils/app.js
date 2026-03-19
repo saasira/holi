@@ -12,6 +12,7 @@ import { RadioGroupComponent } from '../components/radio.js';
 import { ButtonComponent } from '../components/button.js';
 import { LayoutComponent } from '../components/layout.js';
 import { LoaderComponent } from '../components/loader.js';
+import { PageComponent } from '../components/page.js';
 import { BlockComponent } from '../components/block.js';
 import { PanelComponent } from '../components/panel.js';
 import { RegionComponent } from '../components/region.js';
@@ -48,7 +49,7 @@ class HoliApp {
     
     static ensureLibraries() {
         if (this.librariesRegistered) return;
-        const builtIns = [LayoutComponent, LoaderComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, WizardComponent, StatsCard].filter(Boolean);
+        const builtIns = [PageComponent, LayoutComponent, LoaderComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, WizardComponent, StatsCard].filter(Boolean);
         ComponentRegistry.registerLibrary('holi', builtIns);
         this.librariesRegistered = true;
     }

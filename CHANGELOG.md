@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.5] - 2026-03-19
+
+### Added
+
+- Added runtime page-layout composition with configurable layout resolution, named `block` and `region` slot mapping, and optional inherited slot fallbacks.
+- Added layout-owned asset placement through `layout-head` for real head nodes and `tail` for deferred body-end assets.
+- Added in-memory template and layout registries backed by bundled `dist/components.html` and `dist/layouts.html`.
+
+### Changed
+
+- Stopped injecting bundled component templates into the live page body; templates now stay in an internal registry.
+- Renamed the primary bundled component-template artifact from `holi.html` to `components.html` while keeping `holi.html` as a compatibility bundle.
+- Extended the example/build pipeline and smoke checks to cover runtime layout composition and layout asset containers.
+
+### Validation
+
+- Verified with `npm run build`, `npm run smoke:examples`, and `npm pack --dry-run`.
+
 ## [0.1.4] - 2026-03-19
 
 ### Changed

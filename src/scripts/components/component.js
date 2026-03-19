@@ -3,6 +3,7 @@ import { ComponentRegistry } from '../utils/component_registry.js';
 import { Validator } from '../utils/validator.js';
 import { ComponentStateBridge } from '../utils/component_state_bridge.js';
 import { ComponentPPR } from '../utils/ppr.js';
+import { TemplateRegistry } from '../utils/template_registry.js';
 
 class Component {
     static nextComponentId = 1;
@@ -155,7 +156,7 @@ class Component {
 
     // Pure component lifecycle
     async render() {
-        const template = document.getElementById(this.templateId);
+        const template = TemplateRegistry.getTemplate(this.templateId);
         if (!template || !template.content) {
             throw new Error(`Template "${this.templateId}" not found`);
         }

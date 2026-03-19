@@ -168,6 +168,11 @@ class ComponentRegistry {
                 : el;
             if (!(host instanceof Element)) return;
             if (!ComponentClass.matchesLibrary(host, libraryName)) return;
+            if (typeof ComponentClass.canInitElement === 'function' && !ComponentClass.canInitElement(host, {
+                libraryName,
+                container,
+                options
+            })) return;
             if (this.shouldDeferInit(host)) return;
             const owner = host.closest?.(`[data-holi-component-class="${ComponentClass.name}"]`);
             if (owner && owner !== host) return;

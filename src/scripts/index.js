@@ -39,6 +39,7 @@ import '../styles/components/wizard.css';
 // Register library
 import { HoliApp } from './utils/app.js';
 import { ServiceWorkerManager } from './utils/sw.js';
+import { TemplateRegistry } from './utils/template_registry.js';
 import './utils/content_provider.js';
 import './utils/state.js';
 
@@ -46,52 +47,14 @@ import './utils/state.js';
 window.HoliApp = { HoliApp, ServiceWorkerManager };
 window.Holi = window.HoliApp;
 
-const hasCoreTemplates = () => {
-    return !!document.getElementById('tabs');
-};
-
-const resolveTemplateUrls = () => {
-    const urls = new Set(['/dist/holi.html', '/holi.html']);
-    const currentScript = document.currentScript;
-    const src = currentScript?.getAttribute('src') || '';
-    if (src) {
-        const base = src.replace(/holi\.js(\?.*)?$/i, '');
-        if (base) urls.add(`${base}holi.html`);
-    }
-    return Array.from(urls);
-};
-
-const injectTemplates = (htmlText) => {
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = htmlText;
-    const templates = wrapper.querySelectorAll('template[id]');
-    templates.forEach((tpl) => {
-        if (!document.getElementById(tpl.id)) {
-            document.body.appendChild(tpl);
-        }
-    });
-};
-
 const ensureTemplateLibrary = async () => {
-    if (hasCoreTemplates()) return;
     if (window.__holiTemplatesLoading) {
         await window.__holiTemplatesLoading;
         return;
     }
 
     window.__holiTemplatesLoading = (async () => {
-        const urls = resolveTemplateUrls();
-        for (let i = 0; i < urls.length; i += 1) {
-            const url = urls[i];
-            try {
-                const response = await fetch(url, { credentials: 'same-origin' });
-                if (!response.ok) continue;
-                const html = await response.text();
-                injectTemplates(html);
-                if (hasCoreTemplates()) return;
-            } catch (_error) {}
-        }
-        throw new Error('Holi template library not found (holi.html)');
+        await TemplateRegistry.ensureCoreTemplates();
     })();
 
     await window.__holiTemplatesLoading;

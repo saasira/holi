@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Page Layout Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body {
+                margin: 0;
+                font-family: "Segoe UI", sans-serif;
+                background: #efe7db;
+                color: #2e241d;
+            }
+
+            page {
+                display: block;
+                padding: 24px;
+            }
+
+            .example-page-shell {
+                padding: 16px 18px;
+                border: 1px solid #d6d0c4;
+                background: #f7f1e8;
+                box-shadow: 0 1px 0 rgba(46, 36, 29, 0.06);
+            }
+
+            .example-page-shell-header {
+                padding: 22px 24px;
+            }
+
+            .example-page-shell-header h1 {
+                margin: 0;
+                font-size: 2.4rem;
+                font-weight: 700;
+            }
+
+            .example-page-shell-main {
+                display: grid;
+                grid-template-columns: 220px minmax(0, 1fr) 220px;
+                gap: 16px;
+                margin: 16px 0;
+                align-items: start;
+            }
+
+            .example-page-shell-sidebar,
+            .example-page-shell-content,
+            .example-page-shell-sidebar-alt,
+            .example-page-shell-menubar,
+            .example-page-shell-prefooter,
+            .example-page-shell-footer {
+                min-width: 0;
+                border-radius: 10px;
+            }
+
+            .example-page-shell-menubar {
+                grid-column: 1 / -1;
+                background: #e5d8c7;
+                font-weight: 600;
+            }
+
+            .example-page-shell-sidebar,
+            .example-page-shell-sidebar-alt {
+                background: #efe4d5;
+            }
+
+            .example-page-shell-content {
+                background: #fffdf8;
+            }
+
+            .example-page-shell-content .holi-block + .holi-block {
+                margin-top: 12px;
+            }
+
+            .example-page-shell-footer,
+            .example-page-shell-prefooter {
+                background: #f1e7da;
+            }
+
+            .example-page-shell-content .holi-region,
+            .example-page-shell-sidebar .holi-region,
+            .example-page-shell-sidebar-alt .holi-region {
+                background: #ffffff;
+                border: 1px solid #e1d7ca;
+                border-radius: 8px;
+                padding: 12px;
+            }
+
+            .example-page-shell-sidebar > div,
+            .example-page-shell-sidebar-alt > div,
+            .example-page-shell-menubar > div {
+                padding: 4px 0;
+            }
+
+            @media (max-width: 900px) {
+                page {
+                    padding: 12px;
+                }
+
+                .example-page-shell-main {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <page layout="3x9" layouts-base="/examples/layouts/">
+            <block name="head">
+                <region name="meta">
+                    <meta name="page-layout-demo" content="true">
+                </region>
+                <region name="styles">
+                    <style>
+                        .example-page-shell-header h1 {
+                            letter-spacing: 0.02em;
+                        }
+                    </style>
+                </region>
+            </block>
+
+            <block name="tail">
+                <region name="scripts">
+                    <script>
+                        window.pageLayoutExampleLoaded = true;
+                    </script>
+                </region>
+            </block>
+
+            <block name="header">
+                <h1>Project Dashboard</h1>
+            </block>
+
+            <block name="main">
+                <region name="menubar">
+                    <div>Menubar placeholder</div>
+                </region>
+                <region name="lhs">
+                    <div>Navigation</div>
+                    <div>Filters</div>
+                </region>
+                <region name="middle">
+                    <block>
+                        <region width="4"><div>Summary</div></region>
+                        <region width="8"><div>Primary content</div></region>
+                    </block>
+                    <block>
+                        <region width="12"><div>Secondary content</div></region>
+                    </block>
+                </region>
+                <region name="rhs">
+                    <div>Context tools</div>
+                </region>
+            </block>
+
+            <block name="prefooter">
+                <div>Status and secondary actions</div>
+            </block>
+
+            <block name="footer">
+                <small>Example layout supplied by the application, not the library bundle.</small>
+            </block>
+        </page>
+    </body>
+</html>

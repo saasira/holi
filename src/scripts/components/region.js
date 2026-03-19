@@ -13,6 +13,15 @@ class RegionComponent extends Component {
         return 'region';
     }
 
+    static canInitElement(host) {
+        if (!(host instanceof Element)) return true;
+        const parentBlock = host.closest('block, [component="block"], [role="block"]');
+        if (!(parentBlock instanceof Element)) return true;
+        const parent = parentBlock.parentElement;
+        if (!(parent instanceof Element)) return true;
+        return !parent.matches('page[layout], [component="page"][layout], [role="page"][layout]');
+    }
+
     static templateId = 'region-template';
 
     constructor(container, options = {}) {
