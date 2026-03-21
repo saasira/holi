@@ -13,6 +13,7 @@ import { RatingComponent } from '../components/rating.js';
 import { ButtonComponent } from '../components/button.js';
 import { LayoutComponent } from '../components/layout.js';
 import { LoaderComponent } from '../components/loader.js';
+import { IncludeComponent } from '../components/include.js';
 import { OfflineIndicator } from '../components/offline.js';
 import { RefreshComponent } from '../components/refresh.js';
 import { PageComponent } from '../components/page.js';
@@ -70,7 +71,7 @@ class HoliApp {
     
     static ensureLibraries() {
         if (this.librariesRegistered) return;
-        const builtIns = [PageComponent, LayoutComponent, LoaderComponent, OfflineIndicator, RefreshComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, RatingComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, LocaleSwitcherComponent, ThemeSwitcherComponent, WizardComponent, StatsCard].filter(Boolean);
+        const builtIns = [PageComponent, LayoutComponent, LoaderComponent, IncludeComponent, OfflineIndicator, RefreshComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, RatingComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, LocaleSwitcherComponent, ThemeSwitcherComponent, WizardComponent, StatsCard].filter(Boolean);
         ComponentRegistry.registerLibrary('holi', builtIns);
         this.librariesRegistered = true;
     }

@@ -2,6 +2,20 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.8] - 2026-03-21
+
+### Added
+
+- Added a template-driven `include` component that fetches HTML fragments from relative or absolute sources and injects them in place.
+
+### Changed
+
+- Updated the `page-layout.html` example to load its header and footer content through reusable included fragments.
+
+### Validation
+
+- Verified with `npm run build` and `npm run build:examples`.
+
 ## [0.1.7] - 2026-03-21
 
 ### Added
