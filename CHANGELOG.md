@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.9] - 2026-03-21
+
+### Changed
+
+- Updated example smoke assertions to match the current declarative theme and locale example sources so CI release validation passes again.
+
+### Validation
+
+- Verified with `npm run ci:smoke`.
+
 ## [0.1.8] - 2026-03-21
 
 ### Added
