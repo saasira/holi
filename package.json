@@ -1,6 +1,6 @@
 {
   "name": "@saasira/holi",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Modern UI Components Library with i18n, themes, PWA, SW",
   "repository": {
     "type": "git",

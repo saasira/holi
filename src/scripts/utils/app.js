@@ -38,6 +38,9 @@ import { ThemeSwitcherComponent } from '../components/themeswitcher.js';
 import { WizardComponent } from '../components/wizard.js';
 import { StatsCard } from '../components/statscard.js';
 import { ServiceWorkerManager } from './sw.js';
+import { ThemeRegistry } from './theme_registry.js';
+import { LocaleRegistry } from './locale_registry.js';
+import { ReleaseAssetRegistry } from './release_asset_registry.js';
 
 class HoliApp {
     
@@ -74,8 +77,89 @@ class HoliApp {
 
     static init(container = document) {
         this.ensureLibraries();
+        ReleaseAssetRegistry.prepareDocument(container);
+        LocaleRegistry.discover(container);
+        LocaleRegistry.ensureActiveLocale(container);
+        ThemeRegistry.discover(container);
+        ThemeRegistry.ensureActiveTheme(container);
         ComponentRegistry.initAll(container);
         ComponentRegistry.observeLifecycle(container);
+    }
+
+    static registerLocale(locale = {}, options = {}) {
+        return LocaleRegistry.registerLocale(locale, options);
+    }
+
+    static registerLocales(locales = [], options = {}) {
+        return LocaleRegistry.registerLocales(locales, options);
+    }
+
+    static discoverLocales(container = document) {
+        return LocaleRegistry.discover(container);
+    }
+
+    static getLocale(code) {
+        return LocaleRegistry.getLocale(code);
+    }
+
+    static getLocales(options = {}) {
+        return LocaleRegistry.getLocales(options);
+    }
+
+    static setDefaultLocale(code) {
+        return LocaleRegistry.setDefaultLocale(code);
+    }
+
+    static getDefaultLocale() {
+        return LocaleRegistry.getDefaultLocale();
+    }
+
+    static getActiveLocale() {
+        return LocaleRegistry.getActiveLocale();
+    }
+
+    static applyLocale(code, options = {}) {
+        return LocaleRegistry.applyLocale(code, options);
+    }
+
+    static registerTheme(theme = {}, options = {}) {
+        return ThemeRegistry.registerTheme(theme, options);
+    }
+
+    static prepareDocumentAssets(container = document) {
+        return ReleaseAssetRegistry.prepareDocument(container);
+    }
+
+    static registerThemes(themes = [], options = {}) {
+        return ThemeRegistry.registerThemes(themes, options);
+    }
+
+    static discoverThemes(container = document) {
+        return ThemeRegistry.discover(container);
+    }
+
+    static getTheme(name) {
+        return ThemeRegistry.getTheme(name);
+    }
+
+    static getThemes(options = {}) {
+        return ThemeRegistry.getThemes(options);
+    }
+
+    static setDefaultTheme(name) {
+        return ThemeRegistry.setDefaultTheme(name);
+    }
+
+    static getDefaultTheme() {
+        return ThemeRegistry.getDefaultTheme();
+    }
+
+    static getActiveTheme() {
+        return ThemeRegistry.getActiveTheme();
+    }
+
+    static applyTheme(name, options = {}) {
+        return ThemeRegistry.applyTheme(name, options);
     }
 
     static getServiceWorkerManager(options = {}) {

@@ -1,15 +1,15 @@
-.holi-themeswitcher {
+:where(body[theme="default"], body:not([theme])) .holi-themeswitcher {
     display: inline-grid;
     gap: 8px;
     min-width: 180px;
 }
 
-.holi-themeswitcher label {
+:where(body[theme="default"], body:not([theme])) .holi-themeswitcher label {
     font-size: 0.9rem;
     font-weight: 600;
 }
 
-.holi-themeswitcher select {
+:where(body[theme="default"], body:not([theme])) .holi-themeswitcher select {
     min-width: 180px;
     padding: 8px 10px;
     border: 1px solid #cfc4b5;

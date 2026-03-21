@@ -1,4 +1,4 @@
-.tabs {
+:where(body[theme="default"], body:not([theme])) .tabs {
     border: 1px solid #d4dbe5;
     border-radius: 12px;
     background: #ffffff;
@@ -6,7 +6,7 @@
     overflow: hidden;
 }
 
-.tabs .tabbar {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar {
     list-style: none;
     margin: 0;
     padding: 10px;
@@ -19,11 +19,11 @@
     scrollbar-width: thin;
 }
 
-.tabs .tabbar .link {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar .link {
     margin: 0;
 }
 
-.tabs .tabbar .link > a {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar .link > a {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -40,32 +40,32 @@
     transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
 }
 
-.tabs .tabbar .link > a:hover {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar .link > a:hover {
     border-color: #c4cfdd;
     background: #f8fbff;
     color: #1e293b;
 }
 
-.tabs .tabbar .link > a:focus-visible {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar .link > a:focus-visible {
     outline: none;
     border-color: #88a6c9;
     box-shadow: 0 0 0 2px rgba(136, 166, 201, 0.35);
 }
 
-.tabs .tabbar .link.active > a {
+:where(body[theme="default"], body:not([theme])) .tabs .tabbar .link.active > a {
     border-color: #9db5d3;
     background: #eaf2fb;
     color: #0f172a;
 }
 
-.tabs .tab-controls {
+:where(body[theme="default"], body:not([theme])) .tabs .tab-controls {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     margin-left: 2px;
 }
 
-.tabs .tab-controls button {
+:where(body[theme="default"], body:not([theme])) .tabs .tab-controls button {
     border: 1px solid #ccd5e1;
     border-radius: 6px;
     background: #ffffff;
@@ -79,24 +79,24 @@
     transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-.tabs .tab-controls button:hover {
+:where(body[theme="default"], body:not([theme])) .tabs .tab-controls button:hover {
     border-color: #b8c5d6;
     background: #f1f5f9;
     color: #1e293b;
 }
 
-.tabs .tab-controls button:focus-visible {
+:where(body[theme="default"], body:not([theme])) .tabs .tab-controls button:focus-visible {
     outline: none;
     border-color: #88a6c9;
     box-shadow: 0 0 0 2px rgba(136, 166, 201, 0.3);
 }
 
-.tabs .tab_content_panels {
+:where(body[theme="default"], body:not([theme])) .tabs .tab_content_panels {
     padding: 14px;
     background: #ffffff;
 }
 
-.tabs .tab_content_panel {
+:where(body[theme="default"], body:not([theme])) .tabs .tab_content_panel {
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     background: #f8fafc;
@@ -104,29 +104,29 @@
     padding: 12px;
 }
 
-.tabs .tab_content {
+:where(body[theme="default"], body:not([theme])) .tabs .tab_content {
     color: #0f172a;
     font-size: 14px;
     line-height: 1.5;
 }
 
-.tabs .tab_content .error {
+:where(body[theme="default"], body:not([theme])) .tabs .tab_content .error {
     color: #b91c1c;
     font-weight: 600;
 }
 
 @media (max-width: 640px) {
-    .tabs .tabbar {
+    :where(body[theme="default"], body:not([theme])) .tabs .tabbar {
         padding: 8px;
         gap: 6px;
     }
 
-    .tabs .tabbar .link > a {
+    :where(body[theme="default"], body:not([theme])) .tabs .tabbar .link > a {
         font-size: 13px;
         padding: 7px 9px;
     }
 
-    .tabs .tab_content_panels {
+    :where(body[theme="default"], body:not([theme])) .tabs .tab_content_panels {
         padding: 10px;
     }
 }

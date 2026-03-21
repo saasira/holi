@@ -1,4 +1,4 @@
-.holi-object-details-overlay {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay {
     position: fixed;
     inset: 0;
     z-index: 9999;
@@ -8,7 +8,7 @@
     padding: 12px;
 }
 
-.holi-object-details-overlay .dialog-content {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dialog-content {
     width: min(760px, 96vw);
     max-height: 88vh;
     border: 1px solid #d9dee8;
@@ -19,8 +19,8 @@
     overflow: hidden;
 }
 
-.holi-object-details-overlay .dialog-header,
-.holi-object-details-overlay .dialog-footer {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dialog-header,
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dialog-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -30,25 +30,25 @@
     border-bottom: 1px solid #e6eaf0;
 }
 
-.holi-object-details-overlay .dialog-footer {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dialog-footer {
     border-bottom: 0;
     border-top: 1px solid #e6eaf0;
     justify-content: flex-end;
 }
 
-.holi-object-details-overlay .dialog-body {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dialog-body {
     overflow: auto;
     padding: 12px;
     display: grid;
     gap: 8px;
 }
 
-.holi-object-details-header-actions {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-header-actions {
     display: flex;
     gap: 6px;
 }
 
-.holi-object-details-btn {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-btn {
     border: 1px solid #cfd6df;
     background: #fff;
     color: #0f172a;
@@ -57,11 +57,11 @@
     cursor: pointer;
 }
 
-.holi-object-details-btn-secondary {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-btn-secondary {
     background: #f8fafc;
 }
 
-.holi-object-details-row {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-row {
     display: grid;
     grid-template-columns: minmax(160px, 220px) 1fr;
     gap: 8px;
@@ -71,48 +71,48 @@
     padding: 7px 9px;
 }
 
-.holi-object-details-field {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field {
     display: grid;
     gap: 6px;
 }
 
-.holi-object-details-field input[type="text"],
-.holi-object-details-field input[type="number"],
-.holi-object-details-field input[type="date"],
-.holi-object-details-field input[type="email"],
-.holi-object-details-field input[type="url"],
-.holi-object-details-field select,
-.holi-object-details-field textarea {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field input[type="text"],
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field input[type="number"],
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field input[type="date"],
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field input[type="email"],
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field input[type="url"],
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field select,
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field textarea {
     border: 1px solid #ced6e0;
     border-radius: 6px;
     padding: 6px 8px;
     background: #fff;
 }
 
-.holi-object-details-field textarea {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field textarea {
     min-height: 80px;
     resize: vertical;
 }
 
-.holi-object-details-status {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-status {
     margin: 0;
     color: #b91c1c;
     font-size: 12px;
 }
 
-.holi-object-details-field-error {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-field-error {
     margin: 0;
     color: #b91c1c;
     font-size: 12px;
     min-height: 16px;
 }
 
-.holi-object-details-overlay .dg-skeleton {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .dg-skeleton {
     display: grid;
     gap: 0.75rem;
 }
 
-.holi-object-details-overlay .sk-line {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .sk-line {
     height: 12px;
     background: linear-gradient(
         90deg,
@@ -125,7 +125,7 @@
     border-radius: 4px;
 }
 
-.holi-object-details-overlay .sk-title {
+:where(body[theme="default"], body:not([theme])) .holi-object-details-overlay .sk-title {
     height: 18px;
     width: 60%;
 }

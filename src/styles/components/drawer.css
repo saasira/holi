@@ -1,13 +1,13 @@
-body.holi-drawer-lock {
+:where(body[theme="default"], body:not([theme])) body.holi-drawer-lock {
     overflow: hidden;
 }
 
-.holi-drawer-root {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root {
     --drawer-max-size: 380px;
     --drawer-duration: 220ms;
 }
 
-.holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-edge-trigger {
     position: fixed;
     z-index: 1110;
     border: 1px solid #d2d9e5;
@@ -21,31 +21,31 @@ body.holi-drawer-lock {
     box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
 }
 
-.holi-drawer-root[data-direction="left"] .holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="left"] .holi-drawer-edge-trigger {
     left: 8px;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.holi-drawer-root[data-direction="right"] .holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="right"] .holi-drawer-edge-trigger {
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.holi-drawer-root[data-direction="top"] .holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="top"] .holi-drawer-edge-trigger {
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-drawer-root[data-direction="bottom"] .holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="bottom"] .holi-drawer-edge-trigger {
     bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-drawer-root[data-direction="center"] .holi-drawer-edge-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="center"] .holi-drawer-edge-trigger {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -57,7 +57,7 @@ body.holi-drawer-lock {
     color: transparent;
 }
 
-.holi-drawer-edge-trigger[data-in-rail="true"] {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-edge-trigger[data-in-rail="true"] {
     position: static;
     transform: none;
     width: auto;
@@ -66,7 +66,7 @@ body.holi-drawer-lock {
     border-radius: 6px;
 }
 
-.holi-drawer-rail {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-rail {
     position: fixed;
     z-index: 1110;
     display: flex;
@@ -77,7 +77,7 @@ body.holi-drawer-lock {
     box-shadow: 0 6px 14px rgba(15, 23, 42, 0.1);
 }
 
-.holi-drawer-rail[data-direction="left"] {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-rail[data-direction="left"] {
     left: 0;
     top: 50%;
     transform: translateY(-50%);
@@ -86,7 +86,7 @@ body.holi-drawer-lock {
     flex-direction: column;
 }
 
-.holi-drawer-rail[data-direction="right"] {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-rail[data-direction="right"] {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
@@ -95,7 +95,7 @@ body.holi-drawer-lock {
     flex-direction: column;
 }
 
-.holi-drawer-rail[data-direction="top"] {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-rail[data-direction="top"] {
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -104,7 +104,7 @@ body.holi-drawer-lock {
     flex-direction: row;
 }
 
-.holi-drawer-rail[data-direction="bottom"] {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-rail[data-direction="bottom"] {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -113,14 +113,14 @@ body.holi-drawer-lock {
     flex-direction: row;
 }
 
-.holi-drawer-overlay {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-overlay {
     position: fixed;
     inset: 0;
     background: rgba(15, 23, 42, 0.45);
     z-index: 1090;
 }
 
-.holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-panel {
     position: fixed;
     z-index: 1100;
     background: #fff;
@@ -132,24 +132,24 @@ body.holi-drawer-lock {
     overflow: hidden;
 }
 
-.holi-drawer-header,
-.holi-drawer-footer {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-header,
+:where(body[theme="default"], body:not([theme])) .holi-drawer-footer {
     padding: 10px 12px;
     background: #f5f7fa;
     border-bottom: 1px solid #e6eaf0;
 }
 
-.holi-drawer-footer {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-footer {
     border-bottom: 0;
     border-top: 1px solid #e6eaf0;
 }
 
-.holi-drawer-body {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-body {
     padding: 12px;
     overflow: auto;
 }
 
-.holi-drawer-root[data-direction="left"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="left"] .holi-drawer-panel {
     top: 0;
     left: 0;
     height: 100dvh;
@@ -157,7 +157,7 @@ body.holi-drawer-lock {
     transform: translateX(-100%);
 }
 
-.holi-drawer-root[data-direction="right"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="right"] .holi-drawer-panel {
     top: 0;
     right: 0;
     height: 100dvh;
@@ -165,7 +165,7 @@ body.holi-drawer-lock {
     transform: translateX(100%);
 }
 
-.holi-drawer-root[data-direction="top"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="top"] .holi-drawer-panel {
     top: 0;
     left: 0;
     width: 100vw;
@@ -173,7 +173,7 @@ body.holi-drawer-lock {
     transform: translateY(-100%);
 }
 
-.holi-drawer-root[data-direction="bottom"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="bottom"] .holi-drawer-panel {
     bottom: 0;
     left: 0;
     width: 100vw;
@@ -181,7 +181,7 @@ body.holi-drawer-lock {
     transform: translateY(100%);
 }
 
-.holi-drawer-root[data-direction="center"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-direction="center"] .holi-drawer-panel {
     top: 50%;
     left: 50%;
     width: fit-content;
@@ -194,20 +194,20 @@ body.holi-drawer-lock {
     opacity: 0.25;
 }
 
-.holi-drawer-root[data-state="open"][data-direction="left"] .holi-drawer-panel,
-.holi-drawer-root[data-state="open"][data-direction="right"] .holi-drawer-panel,
-.holi-drawer-root[data-state="open"][data-direction="top"] .holi-drawer-panel,
-.holi-drawer-root[data-state="open"][data-direction="bottom"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-state="open"][data-direction="left"] .holi-drawer-panel,
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-state="open"][data-direction="right"] .holi-drawer-panel,
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-state="open"][data-direction="top"] .holi-drawer-panel,
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-state="open"][data-direction="bottom"] .holi-drawer-panel {
     transform: translate(0, 0);
 }
 
-.holi-drawer-root[data-state="open"][data-direction="center"] .holi-drawer-panel {
+:where(body[theme="default"], body:not([theme])) .holi-drawer-root[data-state="open"][data-direction="center"] .holi-drawer-panel {
     transform: translate(-50%, -50%) scale(1);
     border-radius: 12px;
     opacity: 1;
 }
 
-/* Desktop: behave as collapsible panel with no overlay */
+:where(body[theme="default"], body:not([theme])) /* Desktop: behave as collapsible panel with no overlay */
 .holi-drawer-root[data-desktop="true"]:not([data-direction="center"]) .holi-drawer-overlay {
     display: none;
 }

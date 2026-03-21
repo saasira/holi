@@ -1,44 +1,44 @@
-.holi-treepanel {
+:where(body[theme="default"], body:not([theme])) .holi-treepanel {
     display: grid;
     grid-template-columns: minmax(220px, 340px) 1fr;
     gap: 12px;
 }
 
-.treepanel-left,
-.treepanel-right {
+:where(body[theme="default"], body:not([theme])) .treepanel-left,
+:where(body[theme="default"], body:not([theme])) .treepanel-right {
     border: 1px solid #d6dde8;
     border-radius: 10px;
     background: #fff;
     padding: 10px;
 }
 
-.treepanel-header {
+:where(body[theme="default"], body:not([theme])) .treepanel-header {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
 }
 
-.treepanel-header-default {
+:where(body[theme="default"], body:not([theme])) .treepanel-header-default {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
 }
 
-.treepanel-header-actions {
+:where(body[theme="default"], body:not([theme])) .treepanel-header-actions {
     display: flex;
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
 }
 
-.treepanel-header h3 {
+:where(body[theme="default"], body:not([theme])) .treepanel-header h3 {
     margin: 0;
     font-size: 16px;
 }
 
-.treepanel-header button {
+:where(body[theme="default"], body:not([theme])) .treepanel-header button {
     border: 1px solid #cfd6df;
     background: #f8fafc;
     color: #0f172a;
@@ -47,32 +47,32 @@
     cursor: pointer;
 }
 
-.treepanel-status {
+:where(body[theme="default"], body:not([theme])) .treepanel-status {
     margin: 10px 0;
     font-size: 13px;
     color: #334155;
 }
 
-.treepanel-status[data-state="loading"] {
+:where(body[theme="default"], body:not([theme])) .treepanel-status[data-state="loading"] {
     color: #1d4ed8;
 }
 
-.treepanel-content {
+:where(body[theme="default"], body:not([theme])) .treepanel-content {
     display: grid;
     gap: 10px;
 }
 
-.treepanel-content-default {
+:where(body[theme="default"], body:not([theme])) .treepanel-content-default {
     display: grid;
     gap: 10px;
 }
 
-.treepanel-panel-body {
+:where(body[theme="default"], body:not([theme])) .treepanel-panel-body {
     display: grid;
     gap: 8px;
 }
 
-.treepanel-field {
+:where(body[theme="default"], body:not([theme])) .treepanel-field {
     display: grid;
     grid-template-columns: minmax(120px, 180px) 1fr;
     gap: 8px;
@@ -82,16 +82,16 @@
     background: #f8fafc;
 }
 
-.treepanel-field-key {
+:where(body[theme="default"], body:not([theme])) .treepanel-field-key {
     font-weight: 600;
     color: #0f172a;
 }
 
-.treepanel-field-value {
+:where(body[theme="default"], body:not([theme])) .treepanel-field-value {
     color: #334155;
 }
 
-.treepanel-input {
+:where(body[theme="default"], body:not([theme])) .treepanel-input {
     width: 100%;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
@@ -101,30 +101,30 @@
     font-size: 13px;
 }
 
-.treepanel-table {
+:where(body[theme="default"], body:not([theme])) .treepanel-table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #d6dde8;
 }
 
-.treepanel-table th,
-.treepanel-table td {
+:where(body[theme="default"], body:not([theme])) .treepanel-table th,
+:where(body[theme="default"], body:not([theme])) .treepanel-table td {
     border: 1px solid #e2e8f0;
     padding: 6px 8px;
     text-align: left;
 }
 
-.treepanel-table th {
+:where(body[theme="default"], body:not([theme])) .treepanel-table th {
     background: #f1f5f9;
 }
 
-.treepanel-grid {
+:where(body[theme="default"], body:not([theme])) .treepanel-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 10px;
 }
 
-.treepanel-grid-card {
+:where(body[theme="default"], body:not([theme])) .treepanel-grid-card {
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     background: #f8fafc;
@@ -133,36 +133,36 @@
     gap: 8px;
 }
 
-.treepanel-grid-field {
+:where(body[theme="default"], body:not([theme])) .treepanel-grid-field {
     display: grid;
     gap: 3px;
 }
 
-.treepanel-grid-key {
+:where(body[theme="default"], body:not([theme])) .treepanel-grid-key {
     font-size: 12px;
     color: #475569;
     font-weight: 600;
 }
 
-.treepanel-grid-value {
+:where(body[theme="default"], body:not([theme])) .treepanel-grid-value {
     font-size: 13px;
     color: #0f172a;
 }
 
-.treepanel-footer {
+:where(body[theme="default"], body:not([theme])) .treepanel-footer {
     margin-top: 10px;
     border-top: 1px solid #e2e8f0;
     padding-top: 8px;
 }
 
-.treepanel-footer-summary {
+:where(body[theme="default"], body:not([theme])) .treepanel-footer-summary {
     margin: 0;
     color: #475569;
     font-size: 12px;
 }
 
 @media (max-width: 920px) {
-    .holi-treepanel {
+    :where(body[theme="default"], body:not([theme])) .holi-treepanel {
         grid-template-columns: 1fr;
     }
 }

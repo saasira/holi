@@ -1,4 +1,4 @@
-.holi-loader {
+:where(body[theme="default"], body:not([theme])) .holi-loader {
     position: absolute;
     inset: 0;
     display: grid;
@@ -7,29 +7,29 @@
     pointer-events: none;
 }
 
-.holi-loader[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-loader[hidden] {
     display: none;
 }
 
-.holi-loader[data-scope="inline"] {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-scope="inline"] {
     position: relative;
     inset: auto;
     width: 100%;
     min-height: 42px;
 }
 
-.holi-loader[data-scope="page"] {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-scope="page"] {
     position: fixed;
 }
 
-.holi-loader-backdrop {
+:where(body[theme="default"], body:not([theme])) .holi-loader-backdrop {
     position: absolute;
     inset: 0;
     background: rgba(248, 250, 252, 0.78);
     border-radius: inherit;
 }
 
-.holi-loader-body {
+:where(body[theme="default"], body:not([theme])) .holi-loader-body {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -44,7 +44,7 @@
     line-height: 1;
 }
 
-.holi-loader-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-loader-spinner {
     width: 14px;
     height: 14px;
     display: inline-grid;
@@ -52,7 +52,7 @@
     flex: 0 0 auto;
 }
 
-.holi-loader-spinner-ring {
+:where(body[theme="default"], body:not([theme])) .holi-loader-spinner-ring {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -61,13 +61,13 @@
     animation: holi-loader-spin 0.8s linear infinite;
 }
 
-.holi-loader-dots {
+:where(body[theme="default"], body:not([theme])) .holi-loader-dots {
     display: none;
     align-items: center;
     gap: 3px;
 }
 
-.holi-loader-dot {
+:where(body[theme="default"], body:not([theme])) .holi-loader-dot {
     width: 4px;
     height: 4px;
     border-radius: 50%;
@@ -75,58 +75,58 @@
     animation: holi-loader-bounce 0.9s ease-in-out infinite;
 }
 
-.holi-loader-dot:nth-child(2) {
+:where(body[theme="default"], body:not([theme])) .holi-loader-dot:nth-child(2) {
     animation-delay: 0.15s;
 }
 
-.holi-loader-dot:nth-child(3) {
+:where(body[theme="default"], body:not([theme])) .holi-loader-dot:nth-child(3) {
     animation-delay: 0.3s;
 }
 
-.holi-loader[data-type="dots"] .holi-loader-spinner-ring {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-type="dots"] .holi-loader-spinner-ring {
     display: none;
 }
 
-.holi-loader[data-type="dots"] .holi-loader-dots {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-type="dots"] .holi-loader-dots {
     display: inline-flex;
 }
 
-.holi-loader[data-size="sm"] .holi-loader-body {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="sm"] .holi-loader-body {
     gap: 6px;
     padding: 6px 10px;
     font-size: 12px;
 }
 
-.holi-loader[data-size="sm"] .holi-loader-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="sm"] .holi-loader-spinner {
     width: 12px;
     height: 12px;
 }
 
-.holi-loader[data-size="sm"] .holi-loader-spinner-ring {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="sm"] .holi-loader-spinner-ring {
     border-width: 2px;
 }
 
-.holi-loader[data-size="sm"] .holi-loader-dot {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="sm"] .holi-loader-dot {
     width: 3px;
     height: 3px;
 }
 
-.holi-loader[data-size="lg"] .holi-loader-body {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="lg"] .holi-loader-body {
     gap: 10px;
     padding: 10px 14px;
     font-size: 14px;
 }
 
-.holi-loader[data-size="lg"] .holi-loader-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="lg"] .holi-loader-spinner {
     width: 18px;
     height: 18px;
 }
 
-.holi-loader[data-size="lg"] .holi-loader-spinner-ring {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="lg"] .holi-loader-spinner-ring {
     border-width: 3px;
 }
 
-.holi-loader[data-size="lg"] .holi-loader-dot {
+:where(body[theme="default"], body:not([theme])) .holi-loader[data-size="lg"] .holi-loader-dot {
     width: 5px;
     height: 5px;
 }

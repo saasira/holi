@@ -1,4 +1,4 @@
-.holi-tree {
+:where(body[theme="default"], body:not([theme])) .holi-tree {
     border: 1px solid #d6dde8;
     border-radius: 10px;
     background: #fff;
@@ -7,34 +7,34 @@
     overflow: auto;
 }
 
-.holi-tree-level {
+:where(body[theme="default"], body:not([theme])) .holi-tree-level {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.holi-tree-root > .holi-tree-item + .holi-tree-item {
+:where(body[theme="default"], body:not([theme])) .holi-tree-root > .holi-tree-item + .holi-tree-item {
     margin-top: 2px;
 }
 
-.holi-tree-item {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item {
     position: relative;
 }
 
-.holi-tree-item[data-loading="true"] {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item[data-loading="true"] {
     opacity: 0.82;
 }
 
-.holi-tree-item[aria-expanded="true"] > .holi-tree-children {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item[aria-expanded="true"] > .holi-tree-children {
     display: block;
 }
 
-.holi-tree-item > .holi-tree-children {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item > .holi-tree-children {
     margin-left: 22px;
     margin-top: 2px;
 }
 
-.holi-tree-expander {
+:where(body[theme="default"], body:not([theme])) .holi-tree-expander {
     width: 18px;
     height: 18px;
     margin-right: 4px;
@@ -47,13 +47,13 @@
     cursor: pointer;
 }
 
-.holi-tree-expander:disabled,
-.holi-tree-trigger:disabled {
+:where(body[theme="default"], body:not([theme])) .holi-tree-expander:disabled,
+:where(body[theme="default"], body:not([theme])) .holi-tree-trigger:disabled {
     cursor: progress;
     opacity: 0.75;
 }
 
-.holi-tree-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-tree-trigger {
     border: 1px solid transparent;
     border-radius: 6px;
     background: transparent;
@@ -63,25 +63,25 @@
     cursor: pointer;
 }
 
-.holi-tree-trigger:hover {
+:where(body[theme="default"], body:not([theme])) .holi-tree-trigger:hover {
     background: #f1f5f9;
 }
 
-.holi-tree-trigger:focus {
+:where(body[theme="default"], body:not([theme])) .holi-tree-trigger:focus {
     outline: none;
     border-color: #93c5fd;
     background: #eff6ff;
 }
 
-.holi-tree-item.is-draggable > .holi-tree-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item.is-draggable > .holi-tree-trigger {
     cursor: grab;
 }
 
-.holi-tree-item.dragging {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item.dragging {
     opacity: 0.45;
 }
 
-.holi-tree-item.drop-target > .holi-tree-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-tree-item.drop-target > .holi-tree-trigger {
     border-color: #60a5fa;
     background: #dbeafe;
 }

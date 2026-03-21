@@ -1,11 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>LocaleSwitcher Example</title>
         <link rel="stylesheet" href="/dist/holi.css">
         <script src="/dist/holi.js"></script>
+        <script type="application/json" data-holi-locales>
+            {
+                "defaultLocale": "en",
+                "locales": [
+                    { "code": "en", "label": "English" },
+                    { "code": "fr", "label": "Francais" },
+                    { "code": "hi", "label": "Hindi" }
+                ]
+            }
+        </script>
         <style>
             body {
                 margin: 0;
@@ -47,8 +57,8 @@
         <main class="locale-demo">
             <div class="locale-demo-card">
                 <h1>LocaleSwitcher</h1>
-                <p>Switches the real <code>html[lang]</code> attribute and dispatches locale change events.</p>
-                <localeswitcher locales="en:English,fr:Francais,hi:Hindi"></localeswitcher>
+                <p>Switches the real <code>html[lang]</code> attribute and defaults to English when no language is declared.</p>
+                <localeswitcher></localeswitcher>
                 <p class="locale-copy-en">Current language is English.</p>
                 <p class="locale-copy-fr">La langue active est le francais.</p>
                 <p class="locale-copy-hi">Sakriya bhasha Hindi hai.</p>

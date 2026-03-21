@@ -47,6 +47,44 @@ body {
     margin: 0 0 8px;
 }
 
+.offline-demo__queue-card {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    border-radius: 18px;
+    background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.9)),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.28), transparent 30%);
+    color: #f8fafc;
+}
+
+.offline-demo__queue-copy h3 {
+    margin: 0 0 8px;
+}
+
+.offline-demo__queue-copy p {
+    margin: 0 0 16px;
+    color: #cbd5e1;
+}
+
+.offline-demo__field {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.offline-demo__field input {
+    border: 1px solid rgba(203, 213, 225, 0.28);
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f8fafc;
+}
+
+.offline-demo__field input::placeholder {
+    color: #94a3b8;
+}
+
 .offline-demo__actions {
     display: flex;
     flex-wrap: wrap;
@@ -80,4 +118,13 @@ body {
     margin-bottom: 6px;
     font-family: Consolas, "Courier New", monospace;
     font-size: 0.9rem;
+}
+
+.offline-demo__api {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.offline-demo__api li {
+    margin-bottom: 8px;
 }

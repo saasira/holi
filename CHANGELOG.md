@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.1.7] - 2026-03-21
+
+### Added
+
+- Added declarative theme registration with a shared theme registry and release-aware page asset automation for `page[release]`.
+- Added declarative locale registration with a shared locale registry and default-English document language fallback.
+
+### Changed
+
+- Scoped bundled component styles to the default theme so custom themes can provide their own component styling cleanly.
+- Updated theme and locale switching flows to resolve through centralized registries instead of directly mutating document attributes ad hoc.
+
+### Validation
+
+- Verified with `npm run build`.
+
 ## [0.1.5] - 2026-03-19
 
 ### Added

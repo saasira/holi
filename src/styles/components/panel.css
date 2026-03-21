@@ -1,4 +1,4 @@
-.holi-panel {
+:where(body[theme="default"], body:not([theme])) .holi-panel {
     --holi-panel-border: #dce3ea;
     --holi-panel-bg: #ffffff;
     --holi-panel-muted: #5f6b7a;
@@ -13,32 +13,32 @@
     box-sizing: border-box;
 }
 
-.holi-panel-header[hidden],
-.holi-panel-footer[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-panel-header[hidden],
+:where(body[theme="default"], body:not([theme])) .holi-panel-footer[hidden] {
     display: none;
 }
 
-.holi-panel-header,
-.holi-panel-footer {
+:where(body[theme="default"], body:not([theme])) .holi-panel-header,
+:where(body[theme="default"], body:not([theme])) .holi-panel-footer {
     display: grid;
     gap: 6px;
 }
 
-.holi-panel-title,
-.holi-panel-subtitle {
+:where(body[theme="default"], body:not([theme])) .holi-panel-title,
+:where(body[theme="default"], body:not([theme])) .holi-panel-subtitle {
     margin: 0;
 }
 
-.holi-panel-title {
+:where(body[theme="default"], body:not([theme])) .holi-panel-title {
     font-size: 1.125rem;
     line-height: 1.2;
 }
 
-.holi-panel-subtitle {
+:where(body[theme="default"], body:not([theme])) .holi-panel-subtitle {
     color: var(--holi-panel-muted);
     font-size: 0.95rem;
 }
 
-.holi-panel-content {
+:where(body[theme="default"], body:not([theme])) .holi-panel-content {
     min-width: 0;
 }

@@ -2,6 +2,7 @@ class TemplateRegistry {
     static templates = new Map();
     static layouts = new Map();
     static loading = new Map();
+    static bundleBases = new Set();
 
     static getCurrentScriptBase() {
         const currentScript = document.currentScript;
@@ -12,7 +13,18 @@ class TemplateRegistry {
 
     static resolveCoreUrls() {
         const base = this.getCurrentScriptBase();
-        const urls = new Set(['/dist/components.html', '/components.html', '/dist/templates.html', '/templates.html', '/dist/holi.html', '/holi.html']);
+        const urls = new Set();
+        this.getBundleBases().forEach((bundleBase) => {
+            urls.add(`${bundleBase}components.html`);
+            urls.add(`${bundleBase}templates.html`);
+            urls.add(`${bundleBase}holi.html`);
+        });
+        urls.add('/dist/components.html');
+        urls.add('/components.html');
+        urls.add('/dist/templates.html');
+        urls.add('/templates.html');
+        urls.add('/dist/holi.html');
+        urls.add('/holi.html');
         if (base) {
             urls.add(`${base}components.html`);
             urls.add(`${base}templates.html`);
@@ -23,11 +35,31 @@ class TemplateRegistry {
 
     static resolveLayoutUrls() {
         const base = this.getCurrentScriptBase();
-        const urls = new Set(['/dist/layouts.html', '/layouts.html']);
+        const urls = new Set();
+        this.getBundleBases().forEach((bundleBase) => {
+            urls.add(`${bundleBase}layouts.html`);
+        });
+        urls.add('/dist/layouts.html');
+        urls.add('/layouts.html');
         if (base) {
             urls.add(`${base}layouts.html`);
         }
         return Array.from(urls);
+    }
+
+    static registerBundleBase(baseUrl) {
+        const normalized = String(baseUrl || '').trim();
+        if (!normalized) return;
+        const base = normalized.endsWith('/') ? normalized : `${normalized}/`;
+        this.bundleBases.add(base);
+    }
+
+    static getBundleBases() {
+        if (typeof document !== 'undefined') {
+            const attrBase = String(document.documentElement?.getAttribute?.('data-holi-bundle-base') || '').trim();
+            if (attrBase) this.registerBundleBase(attrBase);
+        }
+        return Array.from(this.bundleBases);
     }
 
     static hasTemplate(id) {

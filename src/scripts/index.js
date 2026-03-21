@@ -44,13 +44,16 @@ import '../styles/components/wizard.css';
 
 // Register library
 import { HoliApp } from './utils/app.js';
+import { LocaleRegistry } from './utils/locale_registry.js';
+import { ReleaseAssetRegistry } from './utils/release_asset_registry.js';
 import { ServiceWorkerManager } from './utils/sw.js';
 import { TemplateRegistry } from './utils/template_registry.js';
+import { ThemeRegistry } from './utils/theme_registry.js';
 import './utils/content_provider.js';
 import './utils/state.js';
 
 // Export for global use
-window.HoliApp = { instance: HoliApp, HoliApp, ServiceWorkerManager };
+window.HoliApp = { instance: HoliApp, HoliApp, ServiceWorkerManager, ThemeRegistry, LocaleRegistry, ReleaseAssetRegistry };
 window.Holi = window.HoliApp;
 
 const ensureTemplateLibrary = async () => {
@@ -68,6 +71,7 @@ const ensureTemplateLibrary = async () => {
 
 const autoInit = async () => {
     if (window.HoliAutoInit === false) return;
+    HoliApp.prepareDocumentAssets(document);
     await ensureTemplateLibrary();
     HoliApp.init(document);
 };

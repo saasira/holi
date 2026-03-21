@@ -6,11 +6,28 @@
         <title>ThemeSwitcher Example</title>
         <link rel="stylesheet" href="/dist/holi.css">
         <script src="/dist/holi.js"></script>
+        <script type="application/json" data-holi-themes>
+            {
+                "defaultTheme": "default",
+                "themes": [
+                    { "name": "default", "label": "Default" },
+                    { "name": "presto", "label": "Presto" },
+                    { "name": "aurora", "label": "Aurora" },
+                    { "name": "atlas", "label": "Atlas" }
+                ],
+                "activeTheme": "presto"
+            }
+        </script>
         <style>
             body {
                 margin: 0;
                 font-family: "Segoe UI", sans-serif;
                 transition: background 180ms ease, color 180ms ease;
+            }
+
+            body[theme="default"] {
+                background: #f7f7f4;
+                color: #1d2939;
             }
 
             body[theme="presto"] {
@@ -41,14 +58,53 @@
                 background: rgba(255, 255, 255, 0.64);
                 backdrop-filter: blur(6px);
             }
+
+            body[theme="presto"] .holi-themeswitcher,
+            body[theme="aurora"] .holi-themeswitcher,
+            body[theme="atlas"] .holi-themeswitcher {
+                display: inline-grid;
+                gap: 8px;
+                min-width: 180px;
+            }
+
+            body[theme="presto"] .holi-themeswitcher label,
+            body[theme="aurora"] .holi-themeswitcher label,
+            body[theme="atlas"] .holi-themeswitcher label {
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            body[theme="presto"] .holi-themeswitcher select,
+            body[theme="aurora"] .holi-themeswitcher select,
+            body[theme="atlas"] .holi-themeswitcher select {
+                min-width: 180px;
+                padding: 8px 10px;
+                border-radius: 8px;
+                color: inherit;
+            }
+
+            body[theme="presto"] .holi-themeswitcher select {
+                border: 1px solid #cfc4b5;
+                background: #fffdfa;
+            }
+
+            body[theme="aurora"] .holi-themeswitcher select {
+                border: 1px solid #b5cdc8;
+                background: #f7fffd;
+            }
+
+            body[theme="atlas"] .holi-themeswitcher select {
+                border: 1px solid #bec6dc;
+                background: #f8faff;
+            }
         </style>
     </head>
-    <body theme="presto">
+    <body>
         <main class="theme-demo">
             <div class="theme-demo-card">
                 <h1>ThemeSwitcher</h1>
-                <p>Switches the real <code>body[theme]</code> attribute and dispatches theme change events.</p>
-                <themeswitcher themes="presto:Presto,aurora:Aurora,atlas:Atlas"></themeswitcher>
+                <p>Switches the real <code>body[theme]</code> attribute, using declarative theme registration from the page.</p>
+                <themeswitcher></themeswitcher>
             </div>
         </main>
     </body>

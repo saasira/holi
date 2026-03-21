@@ -1,4 +1,4 @@
-.holi-chart {
+:where(body[theme="default"], body:not([theme])) .holi-chart {
     --chart-height: 220px;
     --chart-border: #d9e2ef;
     --chart-grid: #e8edf5;
@@ -11,31 +11,31 @@
     padding: 12px;
 }
 
-.holi-chart-title {
+:where(body[theme="default"], body:not([theme])) .holi-chart-title {
     margin: 0 0 10px;
     font-size: 14px;
     font-weight: 600;
     color: #0f172a;
 }
 
-.holi-chart-svg {
+:where(body[theme="default"], body:not([theme])) .holi-chart-svg {
     display: block;
     width: 100%;
     height: var(--chart-height);
 }
 
-.holi-chart-empty {
+:where(body[theme="default"], body:not([theme])) .holi-chart-empty {
     margin: 0;
     font-size: 13px;
     color: #64748b;
 }
 
-.holi-chart-grid line {
+:where(body[theme="default"], body:not([theme])) .holi-chart-grid line {
     stroke: var(--chart-grid);
     stroke-width: 0.6;
 }
 
-.holi-chart-line {
+:where(body[theme="default"], body:not([theme])) .holi-chart-line {
     fill: none;
     stroke: var(--chart-line);
     stroke-width: 2;
@@ -43,28 +43,28 @@
     stroke-linejoin: round;
 }
 
-.holi-chart-area {
+:where(body[theme="default"], body:not([theme])) .holi-chart-area {
     fill: var(--chart-area);
 }
 
-.holi-chart-dot,
-.holi-chart-bar,
-.holi-chart-slice {
+:where(body[theme="default"], body:not([theme])) .holi-chart-dot,
+:where(body[theme="default"], body:not([theme])) .holi-chart-bar,
+:where(body[theme="default"], body:not([theme])) .holi-chart-slice {
     cursor: pointer;
     transition: opacity 0.15s ease;
 }
 
-.holi-chart-dot:hover,
-.holi-chart-bar:hover,
-.holi-chart-slice:hover {
+:where(body[theme="default"], body:not([theme])) .holi-chart-dot:hover,
+:where(body[theme="default"], body:not([theme])) .holi-chart-bar:hover,
+:where(body[theme="default"], body:not([theme])) .holi-chart-slice:hover {
     opacity: 0.85;
 }
 
-.holi-chart-hole {
+:where(body[theme="default"], body:not([theme])) .holi-chart-hole {
     fill: var(--chart-hole);
 }
 
-.holi-chart-legend {
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend {
     margin: 10px 0 0;
     padding: 0;
     list-style: none;
@@ -73,7 +73,7 @@
     gap: 6px 12px;
 }
 
-.holi-chart-legend-item {
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend-item {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -82,14 +82,14 @@
     color: #334155;
 }
 
-.holi-chart-legend-swatch {
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend-swatch {
     width: 10px;
     height: 10px;
     border-radius: 999px;
     flex: 0 0 auto;
 }
 
-.holi-chart-legend-label {
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

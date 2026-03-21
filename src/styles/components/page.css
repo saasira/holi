@@ -1,5 +1,5 @@
-page[renderer="browser"]:not([rendered]),
-page[renderer="browser"][rendered="pending"] {
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"]:not([rendered]),
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"][rendered="pending"] {
     display: block;
     position: relative;
     min-height: 70vh;
@@ -11,13 +11,13 @@ page[renderer="browser"][rendered="pending"] {
     overflow: hidden;
 }
 
-page[renderer="browser"]:not([rendered]) > *,
-page[renderer="browser"][rendered="pending"] > * {
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"]:not([rendered]) > *,
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"][rendered="pending"] > * {
     display: none !important;
 }
 
-page[renderer="browser"]:not([rendered])::before,
-page[renderer="browser"][rendered="pending"]::before {
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"]:not([rendered])::before,
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"][rendered="pending"]::before {
     content: "";
     display: block;
     width: min(420px, 82%);
@@ -28,8 +28,8 @@ page[renderer="browser"][rendered="pending"]::before {
     animation: holi-page-placeholder 1.6s linear infinite;
 }
 
-page[renderer="browser"]:not([rendered])::after,
-page[renderer="browser"][rendered="pending"]::after {
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"]:not([rendered])::after,
+:where(body[theme="default"], body:not([theme])) page[renderer="browser"][rendered="pending"]::after {
     content: "";
     display: block;
     margin-top: 20px;

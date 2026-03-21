@@ -1,21 +1,21 @@
-.holi-form {
+:where(body[theme="default"], body:not([theme])) .holi-form {
     display: grid;
     gap: 14px;
     max-width: 560px;
 }
 
-.holi-form .form-fields {
+:where(body[theme="default"], body:not([theme])) .holi-form .form-fields {
     display: grid;
     gap: 12px;
 }
 
-.holi-form .form-actions {
+:where(body[theme="default"], body:not([theme])) .holi-form .form-actions {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.holi-form .form-errors {
+:where(body[theme="default"], body:not([theme])) .holi-form .form-errors {
     color: #b42318;
     font-size: 0.92rem;
 }

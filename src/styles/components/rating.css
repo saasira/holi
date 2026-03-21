@@ -1,14 +1,14 @@
-.rating {
+:where(body[theme="default"], body:not([theme])) .rating {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     line-height: 1;
 }
 
-.rating .fa {
+:where(body[theme="default"], body:not([theme])) .rating .fa {
     color: #f59e0b;
 }
 
-.rating .fa-star-o {
+:where(body[theme="default"], body:not([theme])) .rating .fa-star-o {
     color: #cbd5e1;
 }

@@ -1,5 +1,5 @@
 
-.holi.datatable {
+:where(body[theme="default"], body:not([theme])) .holi.datatable {
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -12,7 +12,7 @@
     overflow: hidden;
 }
 
-.holi.datatable .datatable-toolbar {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -23,15 +23,15 @@
     border-bottom: 1px solid #e6eaf0;
 }
 
-.holi.datatable .datatable-toolbar input[type="search"],
-.holi.datatable .datatable-toolbar select {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar input[type="search"],
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar select {
     min-height: 32px;
     padding: 4px 8px;
     max-width: 100%;
 }
 
-.holi.datatable .datatable-toolbar button,
-.holi.datatable .datatable-actions-cell button {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar button,
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-actions-cell button {
     border: 1px solid #cfd6df;
     background: #fff;
     border-radius: 6px;
@@ -39,7 +39,7 @@
     cursor: pointer;
 }
 
-.holi.datatable .datatable-column-chooser {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-column-chooser {
     border: 1px solid #d9dee8;
     border-radius: 6px;
     padding: 10px;
@@ -47,25 +47,25 @@
     background: #f9fafb;
 }
 
-.holi.datatable .datatable-column-option {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-column-option {
     display: flex;
     align-items: center;
     gap: 8px;
     margin: 4px 0;
 }
 
-.holi.datatable .datatable-table {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 680px;
 }
 
-.holi.datatable .datatable-content.datatable-scrollable {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-content.datatable-scrollable {
     max-height: 420px;
     overflow-y: auto;
 }
 
-.holi.datatable .datatable-content {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-content {
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -73,57 +73,57 @@
     -webkit-overflow-scrolling: touch;
 }
 
-.holi.datatable .datatable-table th,
-.holi.datatable .datatable-table td {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table th,
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table td {
     border-bottom: 1px solid #e7eaf0;
     text-align: left;
     padding: 8px;
 }
 
-.holi.datatable .datatable-actions-cell {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-actions-cell {
     white-space: nowrap;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
 }
 
-.holi.datatable .datatable-table thead th {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table thead th {
     background: #f3f5f8;
 }
 
-.holi.datatable .datatable-table .datatable-pinned-left,
-.holi.datatable .datatable-table .datatable-pinned-right {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table .datatable-pinned-left,
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table .datatable-pinned-right {
     position: sticky;
     background: #fff;
 }
 
-.holi.datatable .datatable-table .datatable-pinned-left {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table .datatable-pinned-left {
     box-shadow: 2px 0 3px rgba(0, 0, 0, 0.05);
 }
 
-.holi.datatable .datatable-table .datatable-pinned-right {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table .datatable-pinned-right {
     box-shadow: -2px 0 3px rgba(0, 0, 0, 0.05);
 }
 
-.holi.datatable .datatable-table tbody .datatable-pinned-left,
-.holi.datatable .datatable-table tbody .datatable-pinned-right {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table tbody .datatable-pinned-left,
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table tbody .datatable-pinned-right {
     z-index: 2;
 }
 
-.holi.datatable .datatable-table thead .datatable-pinned-left,
-.holi.datatable .datatable-table thead .datatable-pinned-right {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table thead .datatable-pinned-left,
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table thead .datatable-pinned-right {
     z-index: 3;
 }
 
-.holi.datatable .datatable-table tbody tr:nth-child(odd) td {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table tbody tr:nth-child(odd) td {
     background: #fbfcfd;
 }
 
-.holi.datatable .datatable-table tbody tr:nth-child(even) td {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table tbody tr:nth-child(even) td {
     background: #f7f9fb;
 }
 
-.holi.datatable .datatable-table th button {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table th button {
     border: 0;
     background: transparent;
     cursor: pointer;
@@ -131,7 +131,7 @@
     font-weight: 600;
 }
 
-.holi.datatable .datatable-footer {
+:where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-footer {
     margin-top: 0;
     padding: 8px 12px;
     color: #4b5563;
@@ -144,31 +144,31 @@
     border-top: 1px solid #e6eaf0;
 }
 
-.holi.datatable [data-role="pagination-controls"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="pagination-controls"] {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.holi.datatable [data-role="pagination-controls"][hidden] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="pagination-controls"][hidden] {
     display: none;
 }
 
-.holi.datatable [data-role="request-status"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"] {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.holi.datatable [data-role="request-status"][data-state="idle"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"][data-state="idle"] {
     display: none;
 }
 
-.holi.datatable [data-role="request-status"][data-state="loading"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"][data-state="loading"] {
     color: #1f2937;
 }
 
-.holi.datatable [data-role="request-status"][data-state="loading"]::before {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"][data-state="loading"]::before {
     content: "";
     width: 12px;
     height: 12px;
@@ -179,55 +179,55 @@
     animation: datatable-spin 0.7s linear infinite;
 }
 
-.holi.datatable [data-role="request-status"][data-state="end"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"][data-state="end"] {
     color: #374151;
 }
 
-.holi.datatable [data-role="request-status"][data-state="error"] {
+:where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="request-status"][data-state="error"] {
     color: #b91c1c;
 }
 
 @media (max-width: 900px) {
-    .holi.datatable .datatable-toolbar > * {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar > * {
         flex: 1 1 220px;
     }
 
-    .holi.datatable .datatable-toolbar button {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar button {
         flex: 0 0 auto;
     }
 
-    .holi.datatable .datatable-footer {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-footer {
         flex-wrap: wrap;
         align-items: flex-start;
     }
 }
 
 @media (max-width: 640px) {
-    .holi.datatable .datatable-toolbar {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar {
         gap: 8px;
     }
 
-    .holi.datatable .datatable-toolbar > * {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar > * {
         flex: 1 1 100%;
     }
 
-    .holi.datatable .datatable-toolbar input[type="search"],
-    .holi.datatable .datatable-toolbar select,
-    .holi.datatable .datatable-toolbar button {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar input[type="search"],
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar select,
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-toolbar button {
         width: 100%;
         min-height: 36px;
     }
 
-    .holi.datatable .datatable-footer {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-footer {
         font-size: 12px;
         gap: 6px;
     }
 
-    .holi.datatable [data-role="pagination-controls"] {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable [data-role="pagination-controls"] {
         flex-wrap: wrap;
     }
 
-    .holi.datatable .datatable-table {
+    :where(body[theme="default"], body:not([theme])) .holi.datatable .datatable-table {
         min-width: 560px;
     }
 }

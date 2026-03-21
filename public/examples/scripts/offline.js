@@ -6,8 +6,12 @@
     const btnQueue = document.getElementById('btn-queue');
     const btnClear = document.getElementById('btn-clear');
     const btnRetry = document.getElementById('btn-retry');
+    const btnSaveDraft = document.getElementById('btn-save-draft');
+    const btnSyncNow = document.getElementById('btn-sync-now');
+    const draftTitle = document.getElementById('draft-title');
+    const queueHost = document.getElementById('queue-offline');
 
-    if (!host || !log || !btnOffline || !btnOnline || !btnQueue || !btnClear || !btnRetry) return;
+    if (!host || !log || !btnOffline || !btnOnline || !btnQueue || !btnClear || !btnRetry || !btnSaveDraft || !btnSyncNow || !draftTitle || !queueHost) return;
 
     const appendLog = (message) => {
         const item = document.createElement('li');
@@ -29,16 +33,33 @@
         });
     };
 
-    waitForComponent().then((indicator) => {
+    const waitForHost = (target) => {
+        if (target.offlineIndicator) return Promise.resolve(target.offlineIndicator);
+        if (target.offlineindicator) return Promise.resolve(target.offlineindicator);
+
+        return new Promise((resolve) => {
+            const timer = window.setInterval(() => {
+                const instance = target.offlineIndicator || target.offlineindicator;
+                if (!instance) return;
+                window.clearInterval(timer);
+                resolve(instance);
+            }, 50);
+        });
+    };
+
+    Promise.all([waitForHost(host), waitForHost(queueHost)]).then(([indicator, queueIndicator]) => {
         appendLog('OfflineIndicator ready.');
+        appendLog('Block-scoped OfflineIndicator ready.');
 
         btnOffline.addEventListener('click', () => {
             indicator.simulateOffline();
+            queueIndicator.simulateOffline();
             appendLog('Forced offline state.');
         });
 
         btnOnline.addEventListener('click', () => {
             indicator.simulateOnline();
+            queueIndicator.simulateOnline();
             appendLog('Forced online state.');
         });
 
@@ -55,7 +76,27 @@
 
         btnRetry.addEventListener('click', () => {
             indicator.retryConnection();
+            queueIndicator.retryConnection();
             appendLog('Triggered retry flow.');
+        });
+
+        btnSaveDraft.addEventListener('click', () => {
+            const title = String(draftTitle.value || '').trim() || `Untitled draft ${Date.now()}`;
+            const payload = {
+                id: Date.now(),
+                title,
+                source: 'offline-demo-form'
+            };
+            window.OfflineIndicator?.queue?.(payload);
+            appendLog(`Queued draft save for "${title}".`);
+            draftTitle.value = '';
+            queueIndicator.simulateOffline();
+        });
+
+        btnSyncNow.addEventListener('click', () => {
+            indicator.simulateOnline();
+            queueIndicator.simulateOnline();
+            appendLog('Simulated reconnect and queue processing.');
         });
     });
 

@@ -1,15 +1,15 @@
-.holi-localeswitcher {
+:where(body[theme="default"], body:not([theme])) .holi-localeswitcher {
     display: inline-grid;
     gap: 8px;
     min-width: 180px;
 }
 
-.holi-localeswitcher label {
+:where(body[theme="default"], body:not([theme])) .holi-localeswitcher label {
     font-size: 0.9rem;
     font-weight: 600;
 }
 
-.holi-localeswitcher select {
+:where(body[theme="default"], body:not([theme])) .holi-localeswitcher select {
     min-width: 180px;
     padding: 8px 10px;
     border: 1px solid #cfc4b5;

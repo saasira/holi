@@ -1,4 +1,4 @@
-.holi-button {
+:where(body[theme="default"], body:not([theme])) .holi-button {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -10,17 +10,17 @@
     cursor: pointer;
 }
 
-.holi-button[data-variant="secondary"] {
+:where(body[theme="default"], body:not([theme])) .holi-button[data-variant="secondary"] {
     background: #ffffff;
     color: #1d2939;
 }
 
-.holi-button:disabled {
+:where(body[theme="default"], body:not([theme])) .holi-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.holi-button-prefix:empty,
-.holi-button-suffix:empty {
+:where(body[theme="default"], body:not([theme])) .holi-button-prefix:empty,
+:where(body[theme="default"], body:not([theme])) .holi-button-suffix:empty {
     display: none;
 }

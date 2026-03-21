@@ -1,4 +1,4 @@
-.holi-refresh {
+:where(body[theme="default"], body:not([theme])) .holi-refresh {
     --refresh-pull-distance: 0px;
     position: relative;
     display: block;
@@ -6,7 +6,7 @@
     outline: none;
 }
 
-.holi-refresh__handle {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__handle {
     position: absolute;
     top: 0;
     left: 0;
@@ -21,14 +21,14 @@
     pointer-events: none;
 }
 
-.holi-refresh[data-state="pulling"] .holi-refresh__handle,
-.holi-refresh[data-state="armed"] .holi-refresh__handle,
-.holi-refresh[data-state="refreshing"] .holi-refresh__handle,
-.holi-refresh[data-state="complete"] .holi-refresh__handle {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="pulling"] .holi-refresh__handle,
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="armed"] .holi-refresh__handle,
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="refreshing"] .holi-refresh__handle,
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="complete"] .holi-refresh__handle {
     transition: transform 120ms ease;
 }
 
-.holi-refresh__icon {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__icon {
     width: 34px;
     height: 34px;
     display: grid;
@@ -38,12 +38,12 @@
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
 }
 
-.holi-refresh__icon-arrow,
-.holi-refresh__icon-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__icon-arrow,
+:where(body[theme="default"], body:not([theme])) .holi-refresh__icon-spinner {
     grid-area: 1 / 1;
 }
 
-.holi-refresh__icon-arrow {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__icon-arrow {
     width: 12px;
     height: 12px;
     border-right: 2px solid #0f172a;
@@ -52,11 +52,11 @@
     transition: transform 140ms ease, opacity 140ms ease;
 }
 
-.holi-refresh[data-state="armed"] .holi-refresh__icon-arrow {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="armed"] .holi-refresh__icon-arrow {
     transform: rotate(-135deg);
 }
 
-.holi-refresh__icon-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__icon-spinner {
     width: 14px;
     height: 14px;
     border-radius: 50%;
@@ -65,23 +65,23 @@
     opacity: 0;
 }
 
-.holi-refresh[data-state="refreshing"] .holi-refresh__icon-arrow,
-.holi-refresh[data-state="complete"] .holi-refresh__icon-arrow {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="refreshing"] .holi-refresh__icon-arrow,
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="complete"] .holi-refresh__icon-arrow {
     opacity: 0;
 }
 
-.holi-refresh[data-state="refreshing"] .holi-refresh__icon-spinner {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="refreshing"] .holi-refresh__icon-spinner {
     opacity: 1;
     animation: holi-refresh-spin 0.8s linear infinite;
 }
 
-.holi-refresh__label {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__label {
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.01em;
 }
 
-.holi-refresh__progress {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__progress {
     width: min(160px, 44vw);
     height: 3px;
     border-radius: 999px;
@@ -89,7 +89,7 @@
     overflow: hidden;
 }
 
-.holi-refresh__progress-bar {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__progress-bar {
     display: block;
     width: 100%;
     height: 100%;
@@ -99,7 +99,7 @@
     transition: transform 120ms ease;
 }
 
-.holi-refresh__content {
+:where(body[theme="default"], body:not([theme])) .holi-refresh__content {
     position: relative;
     min-height: inherit;
     transition: transform 180ms ease;
@@ -107,19 +107,19 @@
     will-change: transform;
 }
 
-.holi-refresh[data-state="refreshing"] .holi-refresh__content {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="refreshing"] .holi-refresh__content {
     transform: translateY(34px);
 }
 
-.holi-refresh[data-state="complete"] .holi-refresh__icon {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="complete"] .holi-refresh__icon {
     background: linear-gradient(180deg, #ecfdf5, #d1fae5);
 }
 
-.holi-refresh[data-state="complete"] .holi-refresh__label {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="complete"] .holi-refresh__label {
     color: #047857;
 }
 
-.holi-refresh[data-state="disabled"] {
+:where(body[theme="default"], body:not([theme])) .holi-refresh[data-state="disabled"] {
     opacity: 0.7;
 }
 

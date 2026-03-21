@@ -1,4 +1,4 @@
-.holi-offline-indicator {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator {
     position: fixed;
     right: 16px;
     bottom: 16px;
@@ -15,62 +15,62 @@
     backdrop-filter: blur(10px);
 }
 
-.holi-offline-indicator[data-scope="inline"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-scope="inline"] {
     position: relative;
     inset: auto;
     width: 100%;
     justify-content: space-between;
 }
 
-.holi-offline-indicator[data-scope="block"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-scope="block"] {
     position: absolute;
 }
 
-.holi-offline-indicator[data-scope="inline"][data-position],
-.holi-offline-indicator[data-scope="block"][data-position] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-scope="inline"][data-position],
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-scope="block"][data-position] {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
 }
 
-.holi-offline-indicator[data-position="top-right"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="top-right"] {
     top: 16px;
     right: 16px;
 }
 
-.holi-offline-indicator[data-position="top-left"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="top-left"] {
     top: 16px;
     left: 16px;
 }
 
-.holi-offline-indicator[data-position="bottom-right"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="bottom-right"] {
     bottom: 16px;
     right: 16px;
 }
 
-.holi-offline-indicator[data-position="bottom-left"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="bottom-left"] {
     bottom: 16px;
     left: 16px;
 }
 
-.holi-offline-indicator[data-position="top-center"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="top-center"] {
     top: 16px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-offline-indicator[data-position="bottom-center"] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-position="bottom-center"] {
     bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-offline-indicator[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[hidden] {
     display: none;
 }
 
-.holi-offline-indicator__badge {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__badge {
     width: 22px;
     height: 22px;
     display: inline-grid;
@@ -79,7 +79,7 @@
     background: rgba(248, 113, 113, 0.18);
 }
 
-.holi-offline-indicator__dot {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
@@ -87,42 +87,42 @@
     box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.16);
 }
 
-.holi-offline-indicator[data-status="online"] .holi-offline-indicator__badge {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-status="online"] .holi-offline-indicator__badge {
     background: rgba(16, 185, 129, 0.18);
 }
 
-.holi-offline-indicator[data-status="online"] .holi-offline-indicator__dot {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-status="online"] .holi-offline-indicator__dot {
     background: #10b981;
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.16);
 }
 
-.holi-offline-indicator__message {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__message {
     display: grid;
     gap: 2px;
 }
 
-.holi-offline-indicator__meta {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__meta {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.holi-offline-indicator__status {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__status {
     font-weight: 700;
     letter-spacing: 0.01em;
 }
 
-.holi-offline-indicator__sync {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__sync {
     color: #cbd5e1;
     font-size: 12px;
 }
 
-.holi-offline-indicator__attempts {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__attempts {
     color: #fdba74;
     font-size: 12px;
 }
 
-.holi-offline-indicator__retry {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__retry {
     border: 0;
     border-radius: 999px;
     padding: 8px 12px;
@@ -132,24 +132,24 @@
     cursor: pointer;
 }
 
-.holi-offline-indicator__retry:hover,
-.holi-offline-indicator__retry:focus-visible {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__retry:hover,
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__retry:focus-visible {
     background: #e2e8f0;
     outline: none;
 }
 
-.holi-offline-indicator__retry:disabled {
+:where(body[theme="default"], body:not([theme])) .holi-offline-indicator__retry:disabled {
     opacity: 0.5;
     cursor: default;
 }
 
-body.app--offline {
+:where(body[theme="default"], body:not([theme])) body.app--offline {
     outline: 4px solid rgba(249, 115, 22, 0.22);
     outline-offset: -4px;
 }
 
 @media (max-width: 640px) {
-    .holi-offline-indicator[data-scope="page"] {
+    :where(body[theme="default"], body:not([theme])) .holi-offline-indicator[data-scope="page"] {
         left: 12px;
         right: 12px;
         bottom: 12px;

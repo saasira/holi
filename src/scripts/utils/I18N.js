@@ -1,3 +1,5 @@
+import { LocaleRegistry } from './locale_registry.js';
+
 /**
  * Usage:
  *   const i18n = new I18N({ lang: 'en-US', baseUrl: '/lib/dicts' });
@@ -10,31 +12,28 @@ class I18N {
         this.baseUrl = String(options.baseUrl || '/lib/dicts').trim() || '/lib/dicts';
         this.lang = String(
             options.lang
-            || (typeof document !== 'undefined' ? document.documentElement.lang : '')
-            || 'en-US'
-        ).trim() || 'en-US';
+            || LocaleRegistry.getActiveLocale()?.code
+            || 'en'
+        ).trim() || 'en';
     }
 
     getCacheKey(namespace, lang = this.lang) {
-        return `${String(lang || 'en-US')}::${String(namespace || '')}`;
+        return `${String(lang || 'en')}::${String(namespace || '')}`;
     }
 
     getCurrentLang(langOverride = '') {
         const explicit = String(langOverride || '').trim();
         if (explicit) return explicit;
-        if (typeof document !== 'undefined' && document.documentElement.lang) {
-            return document.documentElement.lang;
-        }
-        return this.lang || 'en-US';
+        const locale = LocaleRegistry.getActiveLocale();
+        if (locale?.code) return locale.code;
+        return this.lang || 'en';
     }
 
     setLang(lang) {
         const nextLang = String(lang || '').trim();
         if (!nextLang) return;
         this.lang = nextLang;
-        if (typeof document !== 'undefined') {
-            document.documentElement.lang = nextLang;
-        }
+        LocaleRegistry.applyLocale(nextLang, { dispatch: false });
     }
 
     async getText(namespace, key, params = {}, options = {}) {
@@ -66,7 +65,7 @@ class I18N {
 
     defaultLoader(namespace, lang = this.getCurrentLang()) {
         const safeNamespace = String(namespace || '').trim();
-        const safeLang = String(lang || this.getCurrentLang()).trim() || 'en-US';
+        const safeLang = String(lang || this.getCurrentLang()).trim() || 'en';
         if (!safeNamespace) return Promise.resolve({});
 
         const base = String(this.baseUrl || '/lib/dicts').replace(/\/+$/, '');

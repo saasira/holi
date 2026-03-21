@@ -1,4 +1,5 @@
 import { Component } from './component.js';
+import { LocaleRegistry } from '../utils/locale_registry.js';
 
 class LocaleSwitcherComponent extends Component {
     static get selector() {
@@ -60,23 +61,31 @@ class LocaleSwitcherComponent extends Component {
             this.container?.getAttribute('locales')
             || this.container?.getAttribute('languages')
             || this.container?.getAttribute('data-locales')
-            || 'en:English,fr:French,hi:Hindi'
+            || ''
         );
 
-        return raw
-            .split(/[\r\n,]+/)
-            .map((item) => String(item || '').trim())
-            .filter(Boolean)
-            .map((entry) => {
-                const parts = entry.split(':');
-                const value = String(parts[0] || '').trim();
-                const label = String(parts[1] || parts[0] || '').trim();
-                return {
-                    value,
-                    label: label || value
-                };
-            })
-            .filter((item) => item.value);
+        if (raw) {
+            return raw
+                .split(/[\r\n,]+/)
+                .map((item) => String(item || '').trim())
+                .filter(Boolean)
+                .map((entry) => {
+                    const parts = entry.split(':');
+                    const value = String(parts[0] || '').trim();
+                    const label = String(parts[1] || parts[0] || '').trim();
+                    const locale = LocaleRegistry.getLocale(value) || {};
+                    return {
+                        value,
+                        label: label || locale.label || value
+                    };
+                })
+                .filter((item) => item.value);
+        }
+
+        return LocaleRegistry.getLocales().map((locale) => ({
+            value: locale.code,
+            label: locale.label || locale.code
+        }));
     }
 
     renderOptions() {
@@ -95,8 +104,8 @@ class LocaleSwitcherComponent extends Component {
     getCurrentLocale() {
         const explicit = String(this.container?.getAttribute('value') || '').trim();
         if (explicit) return explicit;
-        const htmlLang = String(document.documentElement?.getAttribute('lang') || '').trim();
-        if (htmlLang) return htmlLang;
+        const activeLocale = LocaleRegistry.getActiveLocale();
+        if (activeLocale?.code) return activeLocale.code;
         return this.getLocaleOptions()[0]?.value || '';
     }
 
@@ -114,16 +123,22 @@ class LocaleSwitcherComponent extends Component {
     }
 
     applyLocale(locale, options = {}) {
-        document.documentElement?.setAttribute?.('lang', locale);
         this.container?.setAttribute?.('value', locale);
+        const appliedLocale = LocaleRegistry.applyLocale(locale, {
+            dispatch: options.dispatch,
+            source: this
+        });
 
-        if (options.dispatch === false) return;
-
-        const detail = { locale, lang: locale, language: locale, component: this };
+        if (options.dispatch === false || !appliedLocale) return;
+        const detail = {
+            locale: appliedLocale.code,
+            lang: appliedLocale.code,
+            language: appliedLocale.code,
+            definition: { ...appliedLocale },
+            component: this
+        };
         this.container?.dispatchEvent?.(new CustomEvent('localechange', { detail }));
         this.container?.dispatchEvent?.(new CustomEvent('languagechange', { detail }));
-        document.dispatchEvent(new CustomEvent('localechange', { detail }));
-        document.dispatchEvent(new CustomEvent('languagechange', { detail }));
     }
 
     destroy() {

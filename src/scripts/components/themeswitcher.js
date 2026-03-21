@@ -1,8 +1,7 @@
 import { Component } from './component.js';
+import { ThemeRegistry } from '../utils/theme_registry.js';
 
 class ThemeSwitcherComponent extends Component {
-    static themeLinkAttr = 'data-holi-theme-link';
-
     static get selector() {
         return 'themeswitcher';
     }
@@ -20,6 +19,7 @@ class ThemeSwitcherComponent extends Component {
     constructor(container, options = {}) {
         super(container, options);
         this.templateId = ThemeSwitcherComponent.templateId;
+        this.hasExplicitThemeCssBase = this.hasAttr('theme-css-base') || this.hasAttr('theme-css-ext');
         this.themeCssBase = this.readAttr('theme-css-base', '/themes/');
         this.themeCssExt = this.readAttr('theme-css-ext', '.css');
         this.loadCssOnInit = this.readBooleanAttr('load-css-on-init', false);
@@ -82,6 +82,10 @@ class ThemeSwitcherComponent extends Component {
         return fallback;
     }
 
+    hasAttr(name) {
+        return !!(this.container?.hasAttribute?.(name) || this.container?.hasAttribute?.(`data-${name}`));
+    }
+
     resolveControlId() {
         const existing = String(this.select?.id || '').trim();
         if (existing) return existing;
@@ -90,13 +94,14 @@ class ThemeSwitcherComponent extends Component {
     }
 
     getThemeOptions() {
-        const raw = String(
+        const explicit = String(
             this.container?.getAttribute('themes')
             || this.container?.getAttribute('data-themes')
-            || 'presto,aurora,atlas'
+            || ''
         );
 
-        return raw
+        if (explicit) {
+            return explicit
             .split(/[\r\n,]+/)
             .map((item) => String(item || '').trim())
             .filter(Boolean)
@@ -104,12 +109,23 @@ class ThemeSwitcherComponent extends Component {
                 const parts = entry.split(':');
                 const value = String(parts[0] || '').trim();
                 const label = String(parts[1] || parts[0] || '').trim();
+                const theme = ThemeRegistry.getTheme(value) || {};
                 return {
                     value,
-                    label: label || value
+                    label: label || theme.label || value,
+                    href: theme.href || this.resolveThemeHref(value),
+                    palette: theme.palette || value
                 };
             })
             .filter((item) => item.value);
+        }
+
+        return ThemeRegistry.getThemes().map((theme) => ({
+            value: theme.name,
+            label: theme.label || theme.name,
+            href: theme.href || this.resolveThemeHref(theme.name),
+            palette: theme.palette || theme.name
+        }));
     }
 
     renderOptions() {
@@ -128,8 +144,8 @@ class ThemeSwitcherComponent extends Component {
     getCurrentTheme() {
         const explicit = String(this.container?.getAttribute('value') || '').trim();
         if (explicit) return explicit;
-        const bodyTheme = String(document.body?.getAttribute('theme') || '').trim();
-        if (bodyTheme) return bodyTheme;
+        const activeTheme = ThemeRegistry.getActiveTheme();
+        if (activeTheme?.name) return activeTheme.name;
         return this.getThemeOptions()[0]?.value || '';
     }
 
@@ -150,23 +166,25 @@ class ThemeSwitcherComponent extends Component {
         const nextTheme = String(theme || '').trim();
         if (!nextTheme) return;
 
-        document.body?.setAttribute?.('theme', nextTheme);
-        document.documentElement?.setAttribute?.('theme-palette', nextTheme);
         this.container?.setAttribute?.('value', nextTheme);
         const shouldLoadCSS = options.loadCSS !== false;
+        const selectedTheme = this.getThemeOptions().find((item) => item.value === nextTheme);
+        const appliedTheme = ThemeRegistry.applyTheme(nextTheme, {
+            dispatch: options.dispatch,
+            loadCSS: shouldLoadCSS,
+            href: selectedTheme?.href,
+            source: this,
+            removeWhenMissing: true
+        });
 
-        if (shouldLoadCSS) {
-            void this.loadThemeCSS(nextTheme).catch((error) => {
-                console.warn(error);
-            });
-        }
-
-        if (options.dispatch === false) return;
-
-        const detail = { theme: nextTheme, palette: nextTheme, component: this };
+        if (options.dispatch === false || !appliedTheme) return;
+        const detail = {
+            theme: appliedTheme.name,
+            palette: appliedTheme.palette || appliedTheme.name,
+            definition: { ...appliedTheme },
+            component: this
+        };
         this.container?.dispatchEvent?.(new CustomEvent('themechange', { detail }));
-        document.dispatchEvent(new CustomEvent('themechange', { detail }));
-        document.dispatchEvent(new CustomEvent('theme-palette-change', { detail }));
     }
 
     destroy() {
@@ -175,43 +193,12 @@ class ThemeSwitcherComponent extends Component {
     }
 
     resolveThemeHref(themeName) {
+        if (!this.hasExplicitThemeCssBase) return '';
         const trimmedBase = String(this.themeCssBase || '/themes/').trim();
+        if (!trimmedBase) return '';
         const normalizedBase = trimmedBase.endsWith('/') ? trimmedBase : `${trimmedBase}/`;
         const ext = String(this.themeCssExt || '.css').trim() || '.css';
         return `${normalizedBase}${themeName}${ext}`;
-    }
-
-    loadThemeCSS(themeName) {
-        if (typeof document === 'undefined') return Promise.resolve(null);
-        const nextTheme = String(themeName || '').trim();
-        if (!nextTheme) return Promise.resolve(null);
-
-        const href = this.resolveThemeHref(nextTheme);
-        const existing = document.querySelector(`link[${ThemeSwitcherComponent.themeLinkAttr}="true"]`);
-        if (existing && existing.getAttribute('href') === href) {
-            existing.setAttribute('data-theme', nextTheme);
-            return Promise.resolve(existing);
-        }
-
-        if (!href) return Promise.resolve(null);
-
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.setAttribute(ThemeSwitcherComponent.themeLinkAttr, 'true');
-        link.setAttribute('data-theme', nextTheme);
-
-        return new Promise((resolve, reject) => {
-            link.addEventListener('load', () => {
-                if (existing) existing.remove();
-                resolve(link);
-            }, { once: true });
-            link.addEventListener('error', () => {
-                link.remove();
-                reject(new Error(`Failed to load theme CSS: ${href}`));
-            }, { once: true });
-            document.head.appendChild(link);
-        });
     }
 
 }

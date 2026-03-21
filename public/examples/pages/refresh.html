@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pull To Refresh Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="../styles/refresh.css">
+        <script src="/dist/holi.js"></script>
+        <script src="../scripts/refresh.js" defer></script>
+    </head>
+    <body>
+        <main class="refresh-demo">
+            <header class="refresh-demo__hero">
+                <p class="refresh-demo__eyebrow">Refresh Component</p>
+                <h1>Template-driven pull to refresh</h1>
+                <p>Pull down from the top of the card on touch or pointer devices, or press <code>Ctrl+R</code> / <code>Cmd+R</code> while the component is focused.</p>
+            </header>
+
+            <refresh id="feed-refresh" threshold="72" refresh-threshold="108" complete-delay="3000">
+                <section class="refresh-demo__feed">
+                    <div class="refresh-demo__toolbar">
+                        <button type="button" id="btn-trigger-refresh">Trigger Programmatic Refresh</button>
+                        <span id="feed-status">Last updated: never</span>
+                    </div>
+                    <ul id="feed-list" class="refresh-demo__list">
+                        <li class="refresh-demo__item">
+                            <strong>Release notes</strong>
+                            <span>Component library docs now ship bundled templates.</span>
+                        </li>
+                        <li class="refresh-demo__item">
+                            <strong>Queue sync</strong>
+                            <span>Offline queue actions process automatically when connectivity returns.</span>
+                        </li>
+                        <li class="refresh-demo__item">
+                            <strong>Pull state</strong>
+                            <span>Refresh handle labels and progress are driven by component state.</span>
+                        </li>
+                    </ul>
+                </section>
+            </refresh>
+        </main>
+    </body>
+</html>

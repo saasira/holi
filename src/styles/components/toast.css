@@ -1,11 +1,11 @@
-.holi-toast-root {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root {
     position: fixed;
     z-index: 9200;
     pointer-events: none;
     width: min(380px, calc(100vw - 24px));
 }
 
-.holi-toast-root[data-scope="inline"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-scope="inline"] {
     position: relative;
     inset: auto;
     width: 100%;
@@ -13,64 +13,64 @@
     transform: none;
 }
 
-.holi-toast-root[data-scope="block"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-scope="block"] {
     position: absolute;
     width: min(380px, calc(100% - 24px));
 }
 
-.holi-toast-root[data-scope="inline"][data-position] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-scope="inline"][data-position] {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
 }
 
-.holi-toast-root[data-scope="block"][data-position] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-scope="block"][data-position] {
     top: auto;
     right: auto;
     bottom: auto;
     left: auto;
 }
 
-.holi-toast-root[data-position="top-right"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="top-right"] {
     top: 12px;
     right: 12px;
 }
 
-.holi-toast-root[data-position="top-left"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="top-left"] {
     top: 12px;
     left: 12px;
 }
 
-.holi-toast-root[data-position="bottom-right"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="bottom-right"] {
     bottom: 12px;
     right: 12px;
 }
 
-.holi-toast-root[data-position="bottom-left"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="bottom-left"] {
     bottom: 12px;
     left: 12px;
 }
 
-.holi-toast-root[data-position="top-center"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="top-center"] {
     top: 12px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-toast-root[data-position="bottom-center"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position="bottom-center"] {
     bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.holi-toast-stack {
+:where(body[theme="default"], body:not([theme])) .holi-toast-stack {
     display: grid;
     gap: 8px;
     align-content: start;
 }
 
-.holi-toast-item {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item {
     pointer-events: auto;
     border: 1px solid #dbe1ea;
     border-left-width: 4px;
@@ -87,48 +87,48 @@
     transform: translateY(-6px);
 }
 
-.holi-toast-item[data-state="shown"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item[data-state="shown"] {
     opacity: 1;
     transform: translateY(0);
 }
 
-.holi-toast-item[data-state="hide"] {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item[data-state="hide"] {
     opacity: 0;
     transform: translateY(-6px);
 }
 
-.holi-toast-item.toast-info {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item.toast-info {
     background: #f8fbff;
     border-left-color: #60a5fa;
 }
 
-.holi-toast-item.toast-success {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item.toast-success {
     background: #f4fcf8;
     border-left-color: #34d399;
 }
 
-.holi-toast-item.toast-warning {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item.toast-warning {
     background: #fffbf1;
     border-left-color: #fbbf24;
 }
 
-.holi-toast-item.toast-error {
+:where(body[theme="default"], body:not([theme])) .holi-toast-item.toast-error {
     background: #fff7f7;
     border-left-color: #f87171;
 }
 
-.holi-toast-title {
+:where(body[theme="default"], body:not([theme])) .holi-toast-title {
     display: block;
     font-size: 13px;
     margin-bottom: 2px;
 }
 
-.holi-toast-message {
+:where(body[theme="default"], body:not([theme])) .holi-toast-message {
     font-size: 13px;
     color: #1f2937;
 }
 
-.holi-toast-close {
+:where(body[theme="default"], body:not([theme])) .holi-toast-close {
     border: 1px solid #d1d7e0;
     border-radius: 6px;
     width: 24px;
@@ -139,15 +139,15 @@
 }
 
 @media (max-width: 600px) {
-    .holi-toast-root[data-scope="page"] {
+    :where(body[theme="default"], body:not([theme])) .holi-toast-root[data-scope="page"] {
         width: calc(100vw - 16px);
     }
 
-    .holi-toast-root[data-position^="top"] {
+    :where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position^="top"] {
         top: 8px;
     }
 
-    .holi-toast-root[data-position^="bottom"] {
+    :where(body[theme="default"], body:not([theme])) .holi-toast-root[data-position^="bottom"] {
         bottom: 8px;
     }
 }

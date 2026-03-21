@@ -19,8 +19,28 @@
 
             <section class="offline-demo__panel">
                 <h2>Component Host</h2>
-                <p>Rendered through the Holi component contract, not raw page markup.</p>
+                <p>Rendered through the Holi component contract, not raw page markup. This one is page-scoped.</p>
                 <offline id="demo-offline" heartbeat-ms="2500" probe-timeout-ms="1800" duration="1200" max-attempts="4" ping-url="/api/ping"></offline>
+            </section>
+
+            <section class="offline-demo__panel">
+                <h2>Block-Scoped Variant</h2>
+                <p>The indicator below is attached to a local host container using <code>scope="block"</code> and <code>host="#queue-card"</code>.</p>
+                <section id="queue-card" class="offline-demo__queue-card">
+                    <div class="offline-demo__queue-copy">
+                        <h3>Draft Sync Queue</h3>
+                        <p>Queue fake form saves while offline, then reconnect and watch the queue clear.</p>
+                    </div>
+                    <offline id="queue-offline" scope="block" position="top-right" host="#queue-card" heartbeat-ms="2500" probe-timeout-ms="1800" duration="1200" max-attempts="4" ping-url="/api/ping"></offline>
+                    <label class="offline-demo__field">
+                        <span>Draft Title</span>
+                        <input id="draft-title" type="text" placeholder="Quarterly account note">
+                    </label>
+                    <div class="offline-demo__actions">
+                        <button type="button" id="btn-save-draft">Queue Draft Save</button>
+                        <button type="button" id="btn-sync-now">Simulate Reconnect + Sync</button>
+                    </div>
+                </section>
             </section>
 
             <section class="offline-demo__panel">
@@ -37,6 +57,17 @@
             <section class="offline-demo__panel">
                 <h2>Event Log</h2>
                 <ul id="offline-log" class="offline-demo__log"></ul>
+            </section>
+
+            <section class="offline-demo__panel">
+                <h2>Public API</h2>
+                <ul class="offline-demo__api">
+                    <li><code>&lt;offline&gt;</code>, <code>[component="offline"]</code>, and <code>[role="offline"]</code> are supported declaration forms.</li>
+                    <li><code>scope</code>: <code>page</code>, <code>block</code>, or <code>inline</code>.</li>
+                    <li><code>position</code>: <code>top-left</code>, <code>top-right</code>, <code>bottom-left</code>, <code>bottom-right</code>, <code>top-center</code>, <code>bottom-center</code>.</li>
+                    <li><code>ping-url</code>, <code>heartbeat-ms</code>, <code>probe-timeout-ms</code>, <code>duration</code>, and <code>max-attempts</code> configure polling and visibility.</li>
+                    <li>JS helpers: <code>el.offlineIndicator.retryConnection()</code>, <code>simulateOffline()</code>, <code>simulateOnline()</code>, <code>OfflineIndicator.queue(payload)</code>, <code>OfflineIndicator.clearQueue()</code>, and <code>OfflineIndicator.create(options)</code>.</li>
+                </ul>
             </section>
         </main>
     </body>

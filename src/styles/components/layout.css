@@ -1,48 +1,48 @@
-.holi-layout {
+:where(body[theme="default"], body:not([theme])) .holi-layout {
     width: 100%;
     box-sizing: border-box;
 }
 
-.holi-layout-content {
+:where(body[theme="default"], body:not([theme])) .holi-layout-content {
     display: grid;
     gap: 16px;
 }
 
-.holi-layout-content > header,
-.holi-layout-content > main,
-.holi-layout-content > footer,
-.holi-layout-content > section {
+:where(body[theme="default"], body:not([theme])) .holi-layout-content > header,
+:where(body[theme="default"], body:not([theme])) .holi-layout-content > main,
+:where(body[theme="default"], body:not([theme])) .holi-layout-content > footer,
+:where(body[theme="default"], body:not([theme])) .holi-layout-content > section {
     display: grid;
     gap: 12px;
 }
 
-.holi-block {
+:where(body[theme="default"], body:not([theme])) .holi-block {
     --holi-block-columns: 12;
     --holi-block-gap: 12px;
 }
 
-.holi-block-content {
+:where(body[theme="default"], body:not([theme])) .holi-block-content {
     display: grid;
     grid-template-columns: repeat(var(--holi-block-columns), minmax(0, 1fr));
     gap: var(--holi-block-gap);
     align-items: stretch;
 }
 
-.holi-block-content > region,
-.holi-block-content > [component="region"],
-.holi-block-content > [role="region"] {
+:where(body[theme="default"], body:not([theme])) .holi-block-content > region,
+:where(body[theme="default"], body:not([theme])) .holi-block-content > [component="region"],
+:where(body[theme="default"], body:not([theme])) .holi-block-content > [role="region"] {
     display: block;
     align-self: stretch;
 }
 
-.holi-region {
+:where(body[theme="default"], body:not([theme])) .holi-region {
     --holi-region-span: 12;
     grid-column: span var(--holi-region-span);
     height: 100%;
     min-width: 0;
 }
 
-.holi-region-content {
+:where(body[theme="default"], body:not([theme])) .holi-region-content {
     height: 100%;
     box-sizing: border-box;
     border: 1px solid #dce3ea;
@@ -52,7 +52,7 @@
 }
 
 @media (max-width: 900px) {
-    .holi-region {
+    :where(body[theme="default"], body:not([theme])) .holi-region {
         grid-column: 1 / -1;
     }
 }

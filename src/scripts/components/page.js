@@ -1,6 +1,9 @@
 import { Component } from './component.js';
 import { LayoutComponent } from './layout.js';
 import { LayoutResolver } from '../utils/layout_resolver.js';
+import { LocaleRegistry } from '../utils/locale_registry.js';
+import { ReleaseAssetRegistry } from '../utils/release_asset_registry.js';
+import { ThemeRegistry } from '../utils/theme_registry.js';
 
 class PageComponent extends Component {
     static get selector() {
@@ -130,6 +133,7 @@ class PageComponent extends Component {
     applyDocumentMetadata() {
         const targetHead = this.ensureDocumentSection('head');
         if (!(targetHead instanceof Element)) return;
+        ReleaseAssetRegistry.applyFromElement(this.container);
 
         const title = String(this.container?.getAttribute?.('title') || '').trim();
         if (title) {
@@ -155,14 +159,15 @@ class PageComponent extends Component {
 
         const theme = String(this.container?.getAttribute?.('theme') || '').trim();
         if (theme) {
-            const targetBody = this.ensureDocumentSection('body');
-            targetBody?.setAttribute?.('theme', theme);
+            ThemeRegistry.applyTheme(theme, {
+                dispatch: false,
+                loadCSS: true
+            });
         }
 
         const lang = String(this.container?.getAttribute?.('lang') || '').trim();
         if (lang) {
-            const root = document.documentElement || this.ensureDocumentRoot();
-            root?.setAttribute?.('lang', lang);
+            LocaleRegistry.applyLocale(lang, { dispatch: false });
         }
     }
 

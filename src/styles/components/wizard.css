@@ -1,4 +1,4 @@
-﻿.wizard {
+﻿:where(body[theme="default"], body:not([theme])) .wizard {
     border: 1px solid #d5dce6;
     border-radius: 12px;
     background: #ffffff;
@@ -6,7 +6,7 @@
     box-shadow: 0 8px 22px rgba(15, 32, 55, 0.08);
 }
 
-.wizard-progress-bar {
+:where(body[theme="default"], body:not([theme])) .wizard-progress-bar {
     height: 10px;
     background: #ecf1f8;
     border-radius: 999px;
@@ -14,21 +14,21 @@
     margin-bottom: 1rem;
 }
 
-.wizard-progress {
+:where(body[theme="default"], body:not([theme])) .wizard-progress {
     height: 100%;
     width: 0;
     background: linear-gradient(90deg, #2d7ff0 0%, #2b5dd6 100%);
     transition: width 180ms ease;
 }
 
-.wizard-nav {
+:where(body[theme="default"], body:not([theme])) .wizard-nav {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.wizard-step {
+:where(body[theme="default"], body:not([theme])) .wizard-step {
     display: flex;
     align-items: center;
     gap: 0.55rem;
@@ -41,27 +41,27 @@
     text-align: left;
 }
 
-.wizard-step:hover:enabled {
+:where(body[theme="default"], body:not([theme])) .wizard-step:hover:enabled {
     border-color: #9db3cf;
     background: #eef3fb;
 }
 
-.wizard-step:disabled {
+:where(body[theme="default"], body:not([theme])) .wizard-step:disabled {
     opacity: 0.58;
     cursor: not-allowed;
 }
 
-.wizard-step.current {
+:where(body[theme="default"], body:not([theme])) .wizard-step.current {
     border-color: #2f6fda;
     background: #edf4ff;
 }
 
-.wizard-step.complete {
+:where(body[theme="default"], body:not([theme])) .wizard-step.complete {
     border-color: #39a36f;
     background: #effaf4;
 }
 
-.wizard-step .step-number {
+:where(body[theme="default"], body:not([theme])) .wizard-step .step-number {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -74,22 +74,22 @@
     font-weight: 700;
 }
 
-.wizard-step.current .step-number {
+:where(body[theme="default"], body:not([theme])) .wizard-step.current .step-number {
     border-color: #2f6fda;
     color: #1d53b6;
 }
 
-.wizard-step.complete .step-number {
+:where(body[theme="default"], body:not([theme])) .wizard-step.complete .step-number {
     border-color: #39a36f;
     color: #257651;
 }
 
-.wizard-step .step-name {
+:where(body[theme="default"], body:not([theme])) .wizard-step .step-name {
     font-size: 0.92rem;
     line-height: 1.2;
 }
 
-.wizard-content {
+:where(body[theme="default"], body:not([theme])) .wizard-content {
     min-height: 180px;
     border: 1px solid #dde4ee;
     border-radius: 10px;
@@ -98,26 +98,26 @@
     margin-bottom: 1rem;
 }
 
-.wizard-content:focus {
+:where(body[theme="default"], body:not([theme])) .wizard-content:focus {
     outline: 2px solid #b8cef2;
     outline-offset: 2px;
 }
 
-.wizard-content form {
+:where(body[theme="default"], body:not([theme])) .wizard-content form {
     display: grid;
     gap: 0.7rem;
 }
 
-.wizard-content label {
+:where(body[theme="default"], body:not([theme])) .wizard-content label {
     display: grid;
     gap: 0.28rem;
     font-size: 0.9rem;
     color: #25374d;
 }
 
-.wizard-content input,
-.wizard-content textarea,
-.wizard-content select {
+:where(body[theme="default"], body:not([theme])) .wizard-content input,
+:where(body[theme="default"], body:not([theme])) .wizard-content textarea,
+:where(body[theme="default"], body:not([theme])) .wizard-content select {
     border: 1px solid #bac6d6;
     border-radius: 8px;
     padding: 0.48rem 0.6rem;
@@ -125,21 +125,21 @@
     background: #fff;
 }
 
-.wizard-content input:focus,
-.wizard-content textarea:focus,
-.wizard-content select:focus {
+:where(body[theme="default"], body:not([theme])) .wizard-content input:focus,
+:where(body[theme="default"], body:not([theme])) .wizard-content textarea:focus,
+:where(body[theme="default"], body:not([theme])) .wizard-content select:focus {
     border-color: #2f6fda;
     outline: 2px solid #c6daf8;
     outline-offset: 1px;
 }
 
-.wizard-footer {
+:where(body[theme="default"], body:not([theme])) .wizard-footer {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
 }
 
-.wizard-footer button {
+:where(body[theme="default"], body:not([theme])) .wizard-footer button {
     border: 1px solid #b8c6d8;
     border-radius: 8px;
     background: #f5f8fc;
@@ -148,35 +148,35 @@
     cursor: pointer;
 }
 
-.wizard-footer button:hover:enabled {
+:where(body[theme="default"], body:not([theme])) .wizard-footer button:hover:enabled {
     background: #e9f1fd;
     border-color: #88a9d1;
 }
 
-.wizard-footer button:disabled {
+:where(body[theme="default"], body:not([theme])) .wizard-footer button:disabled {
     opacity: 0.52;
     cursor: not-allowed;
 }
 
-.wizard-footer [data-action="next"],
-.wizard-footer [data-action="complete"] {
+:where(body[theme="default"], body:not([theme])) .wizard-footer [data-action="next"],
+:where(body[theme="default"], body:not([theme])) .wizard-footer [data-action="complete"] {
     background: #2f6fda;
     border-color: #2f6fda;
     color: #fff;
 }
 
-.wizard-footer [data-action="next"]:hover:enabled,
-.wizard-footer [data-action="complete"]:hover:enabled {
+:where(body[theme="default"], body:not([theme])) .wizard-footer [data-action="next"]:hover:enabled,
+:where(body[theme="default"], body:not([theme])) .wizard-footer [data-action="complete"]:hover:enabled {
     background: #285fb8;
     border-color: #285fb8;
 }
 
-.wizard.complete {
+:where(body[theme="default"], body:not([theme])) .wizard.complete {
     border-color: #39a36f;
 }
 
-.wizard-empty,
-.wizard .error {
+:where(body[theme="default"], body:not([theme])) .wizard-empty,
+:where(body[theme="default"], body:not([theme])) .wizard .error {
     border: 1px dashed #c2ccda;
     border-radius: 8px;
     padding: 0.7rem;
@@ -184,24 +184,24 @@
     background: #f8fbff;
 }
 
-.wizard .error {
+:where(body[theme="default"], body:not([theme])) .wizard .error {
     border-color: #e2b6b6;
     color: #7f2525;
     background: #fff6f6;
 }
 
-.wizard-json-field,
-.wizard-field {
+:where(body[theme="default"], body:not([theme])) .wizard-json-field,
+:where(body[theme="default"], body:not([theme])) .wizard-field {
     display: grid;
     gap: 0.28rem;
 }
 
-.wizard-summary {
+:where(body[theme="default"], body:not([theme])) .wizard-summary {
     display: grid;
     gap: 0.55rem;
 }
 
-.wizard-summary section {
+:where(body[theme="default"], body:not([theme])) .wizard-summary section {
     border: 1px solid #e0e6f0;
     border-radius: 8px;
     padding: 0.55rem;

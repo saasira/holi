@@ -1,23 +1,23 @@
-.holi-input {
+:where(body[theme="default"], body:not([theme])) .holi-input {
     display: grid;
     gap: 6px;
 }
 
-.holi-input .required {
+:where(body[theme="default"], body:not([theme])) .holi-input .required {
     color: #b42318;
 }
 
-.holi-input .error {
+:where(body[theme="default"], body:not([theme])) .holi-input .error {
     color: #b42318;
     font-size: 0.88rem;
 }
 
-.holi-input [data-role="control-area"] {
+:where(body[theme="default"], body:not([theme])) .holi-input [data-role="control-area"] {
     resize: vertical;
     min-height: 96px;
 }
 
-.holi-input.is-invalid [data-role="control-input"],
-.holi-input.is-invalid [data-role="control-area"] {
+:where(body[theme="default"], body:not([theme])) .holi-input.is-invalid [data-role="control-input"],
+:where(body[theme="default"], body:not([theme])) .holi-input.is-invalid [data-role="control-area"] {
     border-color: #b42318;
 }
