@@ -33,11 +33,14 @@ class PageComponent extends Component {
 
     async render() {
         this.element = this.container;
+        this.markRenderStart();
+        this.applyDocumentMetadata();
         const layoutName = String(this.container.getAttribute('layout') || '').trim();
 
         if (!layoutName) {
             await this.createChildren();
             this.syncChildren();
+            this.markRenderComplete();
             return;
         }
 
@@ -47,6 +50,7 @@ class PageComponent extends Component {
             inheritMissing: this.shouldInheritMissing(this.container)
         });
         this.reportUnusedBlocks(placement.unusedNames, layoutName);
+        this.applyBuiltInRegions(blocks);
         this.applyHeadContent(layoutFragment);
         this.applyTailContent(layoutFragment);
 
@@ -55,6 +59,7 @@ class PageComponent extends Component {
 
         await this.createChildren();
         this.syncChildren();
+        this.markRenderComplete();
     }
 
     collectNamedBlocks() {
@@ -122,9 +127,142 @@ class PageComponent extends Component {
         return raw === 'true' || raw === '1' || raw === 'yes';
     }
 
+    applyDocumentMetadata() {
+        const targetHead = this.ensureDocumentSection('head');
+        if (!(targetHead instanceof Element)) return;
+
+        const title = String(this.container?.getAttribute?.('title') || '').trim();
+        if (title) {
+            document.title = title;
+
+            let titleNode = targetHead.querySelector('title');
+            if (!(titleNode instanceof HTMLTitleElement)) {
+                titleNode = document.createElement('title');
+                targetHead.appendChild(titleNode);
+            }
+            titleNode.textContent = title;
+        }
+
+        const description = String(this.container?.getAttribute?.('description') || '').trim();
+        if (description) {
+            this.upsertMetaTag(targetHead, 'description', description);
+        }
+
+        const canonical = String(this.container?.getAttribute?.('canonical') || '').trim();
+        if (canonical) {
+            this.upsertLinkTag(targetHead, 'canonical', canonical);
+        }
+
+        const theme = String(this.container?.getAttribute?.('theme') || '').trim();
+        if (theme) {
+            const targetBody = this.ensureDocumentSection('body');
+            targetBody?.setAttribute?.('theme', theme);
+        }
+
+        const lang = String(this.container?.getAttribute?.('lang') || '').trim();
+        if (lang) {
+            const root = document.documentElement || this.ensureDocumentRoot();
+            root?.setAttribute?.('lang', lang);
+        }
+    }
+
+    upsertMetaTag(targetHead, name, content) {
+        if (!(targetHead instanceof Element) || !name) return;
+        let meta = targetHead.querySelector(`meta[name="${name}"]`);
+        if (!(meta instanceof HTMLMetaElement)) {
+            meta = document.createElement('meta');
+            meta.setAttribute('name', name);
+            targetHead.appendChild(meta);
+        }
+        meta.setAttribute('content', content);
+    }
+
+    upsertLinkTag(targetHead, rel, href) {
+        if (!(targetHead instanceof Element) || !rel) return;
+        let link = targetHead.querySelector(`link[rel="${rel}"]`);
+        if (!(link instanceof HTMLLinkElement)) {
+            link = document.createElement('link');
+            link.setAttribute('rel', rel);
+            targetHead.appendChild(link);
+        }
+        link.setAttribute('href', href);
+    }
+
+    ensureDocumentRoot() {
+        let root = document.documentElement;
+        if (root instanceof HTMLHtmlElement) return root;
+
+        root = document.createElement('html');
+        const first = document.firstChild;
+        if (first) {
+            document.insertBefore(root, first);
+        } else {
+            document.appendChild(root);
+        }
+        return root;
+    }
+
+    applyBuiltInRegions(blocks = new Map()) {
+        const headRegionNames = ['meta', 'styles', 'page-styles'];
+        const tailRegionNames = ['scripts', 'page-scripts'];
+        const targetHead = this.ensureDocumentSection('head');
+        const targetBody = this.ensureDocumentSection('body');
+        if (!(targetHead instanceof Element) || !(targetBody instanceof Element)) return;
+
+        const ownerId = String(this.container?.getAttribute?.('data-component-id') || '').trim();
+
+        blocks.forEach((block) => {
+            const regions = block?.regions instanceof Map ? block.regions : null;
+            if (!(regions instanceof Map) || regions.size === 0) return;
+
+            headRegionNames.forEach((name) => {
+                const nodes = regions.get(name);
+                if (!Array.isArray(nodes) || nodes.length === 0) return;
+                this.appendOwnedNodes(targetHead, nodes, 'data-holi-page-head-owner', ownerId);
+                regions.delete(name);
+            });
+
+            tailRegionNames.forEach((name) => {
+                const nodes = regions.get(name);
+                if (!Array.isArray(nodes) || nodes.length === 0) return;
+                this.appendOwnedNodes(targetBody, nodes, 'data-holi-page-tail-owner', ownerId);
+                regions.delete(name);
+            });
+        });
+    }
+
+    appendOwnedNodes(target, nodes, ownerAttr, ownerId) {
+        if (!(target instanceof Element) || !Array.isArray(nodes)) return;
+        nodes.forEach((node) => {
+            if (node.nodeType === Node.TEXT_NODE && !String(node.textContent || '').trim()) {
+                return;
+            }
+
+            if (node instanceof Element && ownerId) {
+                node.setAttribute(ownerAttr, ownerId);
+            }
+
+            target.appendChild(node);
+        });
+    }
+
+    markRenderStart() {
+        if (!this.container?.getAttribute?.('renderer')) {
+            this.container?.setAttribute?.('renderer', 'browser');
+        }
+        this.container?.setAttribute?.('rendered', 'pending');
+    }
+
+    markRenderComplete() {
+        this.container?.removeAttribute?.('renderer');
+        this.container?.removeAttribute?.('rendered');
+    }
+
     applyHeadContent(fragment) {
         const head = fragment.querySelector('layout-head, [data-layout-head]');
         if (!(head instanceof Element)) return;
+        const targetHead = this.ensureDocumentSection('head');
+        if (!(targetHead instanceof Element)) return;
 
         const ownerId = String(this.container?.getAttribute?.('data-component-id') || '').trim();
         if (ownerId) {
@@ -140,13 +278,7 @@ class PageComponent extends Component {
             if (nextNode instanceof Element && ownerId) {
                 nextNode.setAttribute('data-holi-page-head-owner', ownerId);
             }
-
-            if (nextNode instanceof HTMLScriptElement) {
-                (document.body || document.documentElement).appendChild(nextNode);
-                return;
-            }
-
-            document.head.appendChild(nextNode);
+            targetHead.appendChild(nextNode);
         });
 
         head.remove();
@@ -155,6 +287,8 @@ class PageComponent extends Component {
     applyTailContent(fragment) {
         const tail = fragment.querySelector('tail, [data-layout-tail]');
         if (!(tail instanceof Element)) return;
+        const targetBody = this.ensureDocumentSection('body');
+        if (!(targetBody instanceof Element)) return;
 
         const ownerId = String(this.container?.getAttribute?.('data-component-id') || '').trim();
         if (ownerId) {
@@ -170,10 +304,35 @@ class PageComponent extends Component {
             if (nextNode instanceof Element && ownerId) {
                 nextNode.setAttribute('data-holi-page-tail-owner', ownerId);
             }
-            (document.body || document.documentElement).appendChild(nextNode);
+            targetBody.appendChild(nextNode);
         });
 
         tail.remove();
+    }
+
+    ensureDocumentSection(tagName) {
+        const normalized = String(tagName || '').trim().toLowerCase();
+        if (normalized !== 'head' && normalized !== 'body') return null;
+
+        if (normalized === 'head' && document.head) return document.head;
+        if (normalized === 'body' && document.body) return document.body;
+
+        let root = document.documentElement;
+        if (!(root instanceof HTMLHtmlElement)) {
+            root = this.ensureDocumentRoot();
+        }
+
+        let section = root.querySelector(`:scope > ${normalized}`);
+        if (!(section instanceof Element)) {
+            section = document.createElement(normalized);
+            if (normalized === 'head') {
+                root.insertBefore(section, root.firstChild);
+            } else {
+                root.appendChild(section);
+            }
+        }
+
+        return section;
     }
 
     reportUnusedBlocks(unusedNames, layoutName) {

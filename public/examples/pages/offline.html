@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Offline Indicator Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="../styles/offline.css">
+        <script src="/dist/holi.js"></script>
+        <script src="../scripts/offline.js" defer></script>
+    </head>
+    <body>
+        <main class="offline-demo">
+            <header class="offline-demo__hero">
+                <p class="offline-demo__eyebrow">Offline Indicator</p>
+                <h1>Verify offline state, retries, and queue count</h1>
+                <p>This page polls a dedicated uncached heartbeat endpoint every 2.5 seconds, so disconnecting your network should surface the indicator without relying on cached page responses.</p>
+            </header>
+
+            <section class="offline-demo__panel">
+                <h2>Component Host</h2>
+                <p>Rendered through the Holi component contract, not raw page markup.</p>
+                <offline id="demo-offline" heartbeat-ms="2500" probe-timeout-ms="1800" duration="1200" max-attempts="4" ping-url="/api/ping"></offline>
+            </section>
+
+            <section class="offline-demo__panel">
+                <h2>Controls</h2>
+                <div class="offline-demo__actions">
+                    <button type="button" id="btn-offline">Simulate Offline</button>
+                    <button type="button" id="btn-online">Simulate Online</button>
+                    <button type="button" id="btn-queue">Queue Sync Item</button>
+                    <button type="button" id="btn-clear">Clear Queue</button>
+                    <button type="button" id="btn-retry">Retry Now</button>
+                </div>
+            </section>
+
+            <section class="offline-demo__panel">
+                <h2>Event Log</h2>
+                <ul id="offline-log" class="offline-demo__log"></ul>
+            </section>
+        </main>
+    </body>
+</html>

@@ -356,6 +356,17 @@ const appConfig = {
                 }
             };
 
+            const servePing = (_req, res) => {
+                res.setHeader('Content-Type', 'application/json');
+                res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
+                res.status(200).send(JSON.stringify({
+                    ok: true,
+                    ts: Date.now()
+                }));
+            };
+
             devServer.app.get('/examples/api/sales', serveSales);
             devServer.app.get('/api/sales', serveSales);
             devServer.app.post('/examples/api/sales', saveSales);
@@ -370,6 +381,8 @@ const appConfig = {
             devServer.app.put('/api/tree-details', saveTreeDetails);
             devServer.app.post('/examples/api/tree-details', saveTreeDetails);
             devServer.app.post('/api/tree-details', saveTreeDetails);
+            devServer.app.get('/examples/api/ping', servePing);
+            devServer.app.get('/api/ping', servePing);
 
             return middlewares;
         }

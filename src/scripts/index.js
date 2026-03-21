@@ -12,6 +12,7 @@ import '../styles/components/breadcrumbs.css';
 import '../styles/components/backtotop.css';
 import '../styles/components/button.css';
 import '../styles/components/radio.css';
+import '../styles/components/rating.css';
 import '../styles/components/datagrid.css';
 import '../styles/components/datatable.css';
 import '../styles/components/details.css';
@@ -22,7 +23,11 @@ import '../styles/components/gallery.css';
 import '../styles/components/input.css';
 import '../styles/components/layout.css';
 import '../styles/components/loader.css';
+import '../styles/components/offline.css';
+import '../styles/components/refresh.css';
+import '../styles/components/localeswitcher.css';
 import '../styles/components/menubar.css';
+import '../styles/components/page.css';
 import '../styles/components/panel.css';
 import '../styles/components/checkbox.css';
 import '../styles/components/progress.css';
@@ -31,6 +36,7 @@ import '../styles/components/select.css';
 import '../styles/components/statscard.css';
 import '../styles/components/toast.css';
 import '../styles/components/form.css';
+import '../styles/components/themeswitcher.css';
 import '../styles/components/tree.css';
 import '../styles/components/treepanel.css';
 import '../styles/components/tabs.css';
@@ -44,7 +50,7 @@ import './utils/content_provider.js';
 import './utils/state.js';
 
 // Export for global use
-window.HoliApp = { HoliApp, ServiceWorkerManager };
+window.HoliApp = { instance: HoliApp, HoliApp, ServiceWorkerManager };
 window.Holi = window.HoliApp;
 
 const ensureTemplateLibrary = async () => {

@@ -62,6 +62,14 @@ const sourceChecks = [
         patterns: ['component="backtotop"', 'role="backtotop"', '<backtotop']
     },
     {
+        file: 'src/examples/pages/themeswitcher.html',
+        patterns: ['<themeswitcher', 'body theme="presto"', 'themes="presto:Presto,aurora:Aurora,atlas:Atlas"']
+    },
+    {
+        file: 'src/examples/pages/localeswitcher.html',
+        patterns: ['<localeswitcher', '<html lang="en">', 'locales="en:English,fr:Francais,hi:Hindi"']
+    },
+    {
         file: 'src/examples/pages/page-layout.html',
         patterns: ['<page layout="3x9"', 'layouts-base="/examples/layouts/"', '<block name="head">', '<block name="tail">', '<region name="styles">', '<block name="main"', '<region name="middle"']
     },
@@ -80,6 +88,8 @@ const builtChecks = [
     'public/examples/pages/lifecycle-regression.html',
     'public/examples/pages/breadcrumbs.html',
     'public/examples/pages/backtotop.html',
+    'public/examples/pages/themeswitcher.html',
+    'public/examples/pages/localeswitcher.html',
     'public/examples/pages/page-layout.html'
 ];
 

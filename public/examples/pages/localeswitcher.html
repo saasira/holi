@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>LocaleSwitcher Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body {
+                margin: 0;
+                font-family: "Segoe UI", sans-serif;
+                background: #f4ecdf;
+                color: #2d241d;
+            }
+
+            .locale-demo {
+                max-width: 860px;
+                margin: 0 auto;
+                padding: 32px 20px;
+            }
+
+            .locale-demo-card {
+                padding: 20px;
+                border: 1px solid rgba(120, 110, 100, 0.18);
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.64);
+            }
+
+            html[lang="fr"] .locale-copy-en,
+            html[lang="hi"] .locale-copy-en {
+                display: none;
+            }
+
+            html[lang="en"] .locale-copy-fr,
+            html[lang="hi"] .locale-copy-fr {
+                display: none;
+            }
+
+            html[lang="en"] .locale-copy-hi,
+            html[lang="fr"] .locale-copy-hi {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <main class="locale-demo">
+            <div class="locale-demo-card">
+                <h1>LocaleSwitcher</h1>
+                <p>Switches the real <code>html[lang]</code> attribute and dispatches locale change events.</p>
+                <localeswitcher locales="en:English,fr:Francais,hi:Hindi"></localeswitcher>
+                <p class="locale-copy-en">Current language is English.</p>
+                <p class="locale-copy-fr">La langue active est le francais.</p>
+                <p class="locale-copy-hi">Sakriya bhasha Hindi hai.</p>
+            </div>
+        </main>
+    </body>
+</html>

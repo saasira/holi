@@ -1,0 +1,15 @@
+<template id="offline-template">
+    <section class="holi-offline-indicator" data-status="online" data-visible="false" hidden aria-live="polite" aria-atomic="true" role="status">
+        <div class="holi-offline-indicator__badge" aria-hidden="true">
+            <span class="holi-offline-indicator__dot"></span>
+        </div>
+        <div class="holi-offline-indicator__message">
+            <span class="holi-offline-indicator__status" data-role="status-text">Offline</span>
+            <span class="holi-offline-indicator__meta">
+                <span class="holi-offline-indicator__sync" data-role="sync-text">0 pending</span>
+                <span class="holi-offline-indicator__attempts" data-role="attempt-text">Retry 0/5</span>
+            </span>
+        </div>
+        <button type="button" class="holi-offline-indicator__retry" data-action="retry" aria-label="Retry connection">Retry</button>
+    </section>
+</template>

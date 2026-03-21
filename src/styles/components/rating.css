@@ -1,0 +1,14 @@
+.rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    line-height: 1;
+}
+
+.rating .fa {
+    color: #f59e0b;
+}
+
+.rating .fa-star-o {
+    color: #cbd5e1;
+}

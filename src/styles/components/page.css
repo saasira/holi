@@ -1,0 +1,55 @@
+page[renderer="browser"]:not([rendered]),
+page[renderer="browser"][rendered="pending"] {
+    display: block;
+    position: relative;
+    min-height: 70vh;
+    padding: 24px;
+    border: 1px solid #ddd6c8;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(247, 241, 232, 0.92)),
+        linear-gradient(90deg, #efe6d8, #f7f1e8);
+    overflow: hidden;
+}
+
+page[renderer="browser"]:not([rendered]) > *,
+page[renderer="browser"][rendered="pending"] > * {
+    display: none !important;
+}
+
+page[renderer="browser"]:not([rendered])::before,
+page[renderer="browser"][rendered="pending"]::before {
+    content: "";
+    display: block;
+    width: min(420px, 82%);
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #e8dccb, #f6efe5, #e8dccb);
+    background-size: 220% 100%;
+    animation: holi-page-placeholder 1.6s linear infinite;
+}
+
+page[renderer="browser"]:not([rendered])::after,
+page[renderer="browser"][rendered="pending"]::after {
+    content: "";
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    height: calc(70vh - 88px);
+    min-height: 260px;
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(214, 202, 187, 0.5), rgba(255, 255, 255, 0)),
+        linear-gradient(90deg, #eadfce 18%, #f8f2e9 44%, #eadfce 70%);
+    background-size: 240% 100%;
+    animation: holi-page-placeholder 1.9s linear infinite;
+}
+
+@keyframes holi-page-placeholder {
+    from {
+        background-position: 200% 0;
+    }
+
+    to {
+        background-position: -40% 0;
+    }
+}

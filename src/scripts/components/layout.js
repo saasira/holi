@@ -120,9 +120,11 @@ class LayoutComponent extends Component {
             if (!slot) return;
             if (contentNodes && contentNodes.length) {
                 slot.replaceWith(...contentNodes);
+                regions.delete(name);
                 return;
             }
             slot.replaceWith();
+            regions.delete(name);
         });
 
         this.resolveRemainingSlots(fragment, { inheritMissing: false });

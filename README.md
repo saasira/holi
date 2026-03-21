@@ -224,11 +224,22 @@ Rules:
 - Direct `region[name]` inside a block fills matching nested slots inside that block's assigned subtree.
 - Missing slots are empty by default.
 - Set `inherit-missing="true"` on `page` to keep fallback slot content.
+- Use `renderer="browser"` on source pages to show the built-in placeholder until runtime composition completes.
+- After browser or compiler rendering completes, both `renderer` and `rendered` should be removed from the final page node.
 - Use `layout-src` for an explicit layout file or `layouts-base` for a layout folder.
+- Page-level attributes `title`, `description`, `canonical`, and `lang` are applied to the real document metadata.
+- Page-level `theme` is applied to the real `<body>` element for theme scoping and switching.
 - Use `<layout-head data-layout-head="true">` for shared head assets in layouts.
 - Use `<tail data-layout-tail="true">` for deferred body-end assets in layouts.
 - Non-script nodes from `layout-head` go to the real HTML `<head>`.
 - Nodes from `tail` are appended near the end of `<body>`.
+- Built-in region `meta` always targets the real HTML `<head>`.
+- Built-in regions `styles` and `page-styles` always target the real HTML `<head>`, even when the layout does not declare those slots.
+- Built-in regions `scripts` and `page-scripts` always target the end of `<body>`, even when the layout does not declare those slots.
+- Use `styles` for external asset nodes such as `<link rel="stylesheet" href="...">`.
+- Use `scripts` for external asset nodes such as `<script src="..."></script>`.
+- Use `page-styles` for inline `<style>` tags.
+- Use `page-scripts` for inline `<script>` tags.
 
 ## Holi vs React / Angular / Vue
 
@@ -262,3 +273,36 @@ Practical summary:
 - Auto init can be disabled with `window.HoliAutoInit = false` before loading `dist/holi.js`.
 - Component templates are loaded from `dist/components.html` (with runtime fallback paths).
 - Layout templates are loaded from `dist/layouts.html` (with runtime fallback paths).
+
+## OfflineIndicator
+
+`OfflineIndicator` provides a template-driven connectivity banner with automatic polling and queue count display.
+
+Supported declaration styles:
+
+- `<offline></offline>`
+- `<section component="offline"></section>`
+- `<section role="offline"></section>`
+- `[data-offline]`
+
+Useful attributes:
+
+- `scope="page|block|inline"`
+- `position="top-left|top-right|bottom-left|bottom-right|top-center|bottom-center"`
+- `host="#selector"` for `scope="block"`
+- `ping-url="/api/ping"`
+- `heartbeat-ms="2500"`
+- `probe-timeout-ms="1800"`
+- `duration="1200"`
+- `max-attempts="4"`
+
+Instance/static helpers:
+
+- `el.offlineIndicator.retryConnection()`
+- `el.offlineIndicator.simulateOffline()`
+- `el.offlineIndicator.simulateOnline()`
+- `window.OfflineIndicator.queue(payload)`
+- `window.OfflineIndicator.clearQueue()`
+- `window.OfflineIndicator.create(options)`
+
+See [offline example](/D:/Work/Self/Holi/src/examples/pages/offline.html) for page-scoped, block-scoped, and queue-sync scenarios.

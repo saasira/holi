@@ -5,6 +5,10 @@ class LoaderComponent extends Component {
         return 'loader';
     }
 
+    static getNativeSelectors() {
+        return ['[data-loader]'];
+    }
+
     static get library() {
         return 'holi';
     }
@@ -21,6 +25,8 @@ class LoaderComponent extends Component {
         this.scope = this.resolveScope(this.readAttr('scope', 'inline'));
         this.message = this.readAttr('message', 'Loading...');
         this.visible = this.readBooleanAttr('visible', false);
+        this.size = this.resolveSize(this.readAttr('size', 'md'));
+        this.type = this.resolveType(this.readAttr('type', this.readAttr('shape', 'spinner')));
         this.hostSelector = this.readAttr('host', '');
         this.host = null;
         this.appliedRelativeHost = false;
@@ -47,6 +53,19 @@ class LoaderComponent extends Component {
         const value = String(scope || 'inline').trim().toLowerCase();
         if (value === 'page' || value === 'block' || value === 'inline') return value;
         return 'inline';
+    }
+
+    resolveSize(size) {
+        const value = String(size || 'md').trim().toLowerCase();
+        if (value === 'sm' || value === 'md' || value === 'lg') return value;
+        return 'md';
+    }
+
+    resolveType(type) {
+        const value = String(type || 'spinner').trim().toLowerCase();
+        if (value === 'spinner' || value === 'circle') return 'spinner';
+        if (value === 'dots' || value === 'dot') return 'dots';
+        return 'spinner';
     }
 
     resolveHost() {
@@ -76,11 +95,17 @@ class LoaderComponent extends Component {
         await super.render();
         this.element = this.container.querySelector('.holi-loader');
         this.messageEl = this.container.querySelector('[data-role="loader-message"]');
+        this.spinnerEl = this.container.querySelector('[data-role="loader-spinner"]');
         if (!this.element || !this.messageEl) {
             throw new Error('Loader template is missing required nodes');
         }
 
         this.element.setAttribute('data-scope', this.scope);
+        this.element.setAttribute('data-size', this.size);
+        this.element.setAttribute('data-type', this.type);
+        if (this.spinnerEl) {
+            this.spinnerEl.setAttribute('data-type', this.type);
+        }
 
         if (this.scope === 'block') {
             this.host = this.resolveHost();

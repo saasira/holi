@@ -2,7 +2,14 @@
     <section class="holi-loader" data-scope="inline" hidden>
         <div class="holi-loader-backdrop"></div>
         <div class="holi-loader-body" role="status" aria-live="polite" aria-atomic="true">
-            <span class="holi-loader-spinner" aria-hidden="true"></span>
+            <span class="holi-loader-spinner" data-role="loader-spinner" data-type="spinner" aria-hidden="true">
+                <span class="holi-loader-spinner-ring" aria-hidden="true"></span>
+                <span class="holi-loader-dots" aria-hidden="true">
+                    <span class="holi-loader-dot"></span>
+                    <span class="holi-loader-dot"></span>
+                    <span class="holi-loader-dot"></span>
+                </span>
+            </span>
             <span class="holi-loader-message" data-role="loader-message">Loading...</span>
         </div>
     </section>
