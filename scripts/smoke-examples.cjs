@@ -63,11 +63,11 @@ const sourceChecks = [
     },
     {
         file: 'src/examples/pages/themeswitcher.html',
-        patterns: ['<themeswitcher', 'body theme="presto"', 'themes="presto:Presto,aurora:Aurora,atlas:Atlas"']
+        patterns: ['<themeswitcher', 'data-holi-themes', '"activeTheme": "presto"', '"name": "atlas"']
     },
     {
         file: 'src/examples/pages/localeswitcher.html',
-        patterns: ['<localeswitcher', '<html lang="en">', 'locales="en:English,fr:Francais,hi:Hindi"']
+        patterns: ['<localeswitcher', 'data-holi-locales', '"defaultLocale": "en"', '"code": "hi"']
     },
     {
         file: 'src/examples/pages/page-layout.html',
