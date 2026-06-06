@@ -1,43 +1,5 @@
 
 import { ComponentRegistry } from './component_registry.js';
-import { TabsComponent } from '../components/tabs.js';
-import { DataTable } from '../components/datatable.js';
-import { DataGrid } from '../components/datagrid.js';
-import { DropdownComponent } from '../components/dropdown.js';
-import { SelectComponent } from '../components/select.js';
-import { InputComponent } from '../components/input.js';
-import { CheckboxGroupComponent } from '../components/checkbox.js';
-import { FormComponent } from '../components/form.js';
-import { RadioGroupComponent } from '../components/radio.js';
-import { RatingComponent } from '../components/rating.js';
-import { ButtonComponent } from '../components/button.js';
-import { LayoutComponent } from '../components/layout.js';
-import { LoaderComponent } from '../components/loader.js';
-import { IncludeComponent } from '../components/include.js';
-import { OfflineIndicator } from '../components/offline.js';
-import { RefreshComponent } from '../components/refresh.js';
-import { PageComponent } from '../components/page.js';
-import { BlockComponent } from '../components/block.js';
-import { PanelComponent } from '../components/panel.js';
-import { RegionComponent } from '../components/region.js';
-import { AccordionComponent } from '../components/accordion.js';
-import { CalendarComponent } from '../components/calendar.js';
-import { CarouselComponent } from '../components/carousel.js';
-import { BreadCrumbsComponent } from '../components/breadcrumbs.js';
-import { BackToTopComponent } from '../components/backtotop.js';
-import { ChartComponent } from '../components/chart.js';
-import { DialogComponent } from '../components/dialog.js';
-import { ToastComponent } from '../components/toast.js';
-import { DrawerComponent } from '../components/drawer.js';
-import { GalleryComponent } from '../components/gallery.js';
-import { MenubarComponent } from '../components/menubar.js';
-import { TreeComponent } from '../components/tree.js';
-import { TreePanelComponent } from '../components/treepanel.js';
-import { SearchComponent } from '../components/search.js';
-import { LocaleSwitcherComponent } from '../components/localeswitcher.js';
-import { ThemeSwitcherComponent } from '../components/themeswitcher.js';
-import { WizardComponent } from '../components/wizard.js';
-import { StatsCard } from '../components/statscard.js';
 import { ServiceWorkerManager } from './sw.js';
 import { ThemeRegistry } from './theme_registry.js';
 import { LocaleRegistry } from './locale_registry.js';
@@ -47,6 +9,7 @@ class HoliApp {
     
     static contentProviders = {};
     static swManager = null;
+    static builtIns = new Map();
     
     static instance = null;
     static librariesRegistered = false;
@@ -68,11 +31,33 @@ class HoliApp {
         if (HoliApp.instance) return HoliApp.instance;
         HoliApp.instance = this;
     }
+
+    static registerBuiltIns(components = []) {
+        const list = Array.isArray(components) ? components : [components];
+        let changed = false;
+
+        list.forEach((ComponentClass) => {
+            if (typeof ComponentClass !== 'function') return;
+            const key = String(
+                ComponentClass.componentName
+                || ComponentClass.selector
+                || ComponentClass.name
+                || ''
+            ).trim().toLowerCase();
+            if (!key || this.builtIns.has(key)) return;
+            this.builtIns.set(key, ComponentClass);
+            changed = true;
+        });
+
+        if (!changed) return;
+        ComponentRegistry.registerLibrary('holi', Array.from(this.builtIns.values()));
+        this.librariesRegistered = true;
+    }
     
     static ensureLibraries() {
         if (this.librariesRegistered) return;
-        const builtIns = [PageComponent, LayoutComponent, LoaderComponent, IncludeComponent, OfflineIndicator, RefreshComponent, BlockComponent, PanelComponent, RegionComponent, AccordionComponent, CalendarComponent, CarouselComponent, BreadCrumbsComponent, BackToTopComponent, ChartComponent, TabsComponent, DataTable, DataGrid, DropdownComponent, SelectComponent, InputComponent, CheckboxGroupComponent, RadioGroupComponent, RatingComponent, ButtonComponent, FormComponent, DialogComponent, ToastComponent, DrawerComponent, GalleryComponent, MenubarComponent, TreeComponent, TreePanelComponent, SearchComponent, LocaleSwitcherComponent, ThemeSwitcherComponent, WizardComponent, StatsCard].filter(Boolean);
-        ComponentRegistry.registerLibrary('holi', builtIns);
+        if (!this.builtIns.size) return;
+        ComponentRegistry.registerLibrary('holi', Array.from(this.builtIns.values()));
         this.librariesRegistered = true;
     }
 

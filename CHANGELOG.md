@@ -2,6 +2,24 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.20.0] - 2026-06-06
+
+### Added
+
+- Added component authoring documentation for template-driven component structure, lifecycle, props, slots, events, and providers.
+- Added template-driven `formdesigner` and `schedule` components with matching styles, templates, and examples.
+- Added additional reusable page layout templates for single, dashboard, and column-based compositions.
+- Added lazy component loading and form condition utility modules.
+
+### Changed
+
+- Expanded component runtime, page composition, provider, and layout behavior while preserving progressive enhancement.
+- Updated examples build handling and CDN documentation for the current bundled asset conventions.
+
+### Validation
+
+- Pending release validation: `npm run ci:smoke`.
+
 ## [0.1.9] - 2026-03-21
 
 ### Changed

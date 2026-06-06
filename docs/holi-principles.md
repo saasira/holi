@@ -3,6 +3,9 @@
 This document is the canonical architecture and implementation contract for the Holi library.
 All component, runtime, and API changes must conform to these rules.
 
+For the preferred component authoring API, lifecycle, props, slots, events, and provider contract, see:
+- `docs/component-authoring.md`
+
 ## 1) HTML Template Driven
 
 Mandatory:

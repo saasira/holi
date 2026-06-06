@@ -72,22 +72,23 @@ npm run serve
 Main artifacts:
 
 - `dist/holi.js`
-- `dist/holi.css`
+- `dist/holi.css` (optional compatibility bundle with all component styles)
 - `dist/components.html` (component templates)
 - `dist/layouts.html` (layout templates)
+- `dist/styles/components/*.css` (lazy-loaded component styles)
 - `dist/holi.html` (legacy compatibility bundle)
 - `dist/layouts/**` (optional runtime-resolved layouts)
 - Example site output: `public/examples/**`
 
 ## CDN Quick Start
 
-For application pages that consume Holi directly from a CDN, use the published npm package via jsDelivr:
+For application pages that consume Holi directly from a CDN, include the bootstrap via jsDelivr:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css" />
 <script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
+
+`dist/holi.js` discovers the components declared on the page and loads the matching component chunks, utility chunks, templates, layouts, and component CSS files automatically.
 
 Direct file URLs:
 
@@ -101,20 +102,16 @@ Pin an exact version in production so releases remain repeatable.
 
 Holi can be shipped directly from a free CDN after publishing the package to npm.
 
-Recommended jsDelivr links for `v0.1.5`:
+Recommended jsDelivr link for `v0.1.5`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css" />
 <script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
 
 Fallback unpkg links:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.css" />
 <script src="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
 ```
 
 Repository setup details for automated npm publishing are documented in `docs/CDN.md`.
@@ -127,7 +124,6 @@ Repository setup details for automated npm publishing are documented in `docs/CD
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/dist/holi.css" />
     <script src="/dist/holi.js"></script>
   </head>
   <body>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Designer Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <main style="max-width: 1180px; margin: 24px auto; padding: 0 16px;">
+            <formdesigner data-source="../api/formdesigner-definition.json">
+                <h1 slot="title">Conditional Form Designer</h1>
+                <p slot="summary">Define top-level sections, fields, and displayed conditions that persist as JSON.</p>
+            </formdesigner>
+        </main>
+
+        <script>
+            document.querySelector('formdesigner')?.addEventListener('formdesignersave', (event) => {
+                event.preventDefault();
+                console.log('Definition JSON', event.detail.definition);
+            });
+
+            document.querySelector('formdesigner')?.addEventListener('formdesignersubmit', (event) => {
+                event.preventDefault();
+                console.log('Filled form traversal JSON', event.detail);
+            });
+        </script>
+    </body>
+</html>

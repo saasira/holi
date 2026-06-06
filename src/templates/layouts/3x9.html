@@ -1,29 +1,45 @@
 <template id="page-layout-3x9" data-layout="3x9">
-    <header class="holi-page-band holi-page-band-header">
-        <slot name="header"></slot>
-    </header>
-    <slot name="main">
+    <section class="holi-page-layout holi-page-layout-3x9">
+        <header class="holi-page-band holi-page-band-header">
+            <slot name="header"></slot>
+        </header>
+        <section class="holi-page-band holi-page-band-postheader">
+            <slot name="postheader"></slot>
+        </section>
         <main class="holi-page-band holi-page-band-main">
-            <header class="holi-page-band holi-page-band-subheader">
-                <slot name="menubar"></slot>
-            </header>
-            <section class="holi-page-band holi-page-band-columns">
-                <aside class="holi-page-band holi-page-band-column holi-page-band-column-lhs">
-                    <slot name="lhs"></slot>
-                </aside>
-                <section class="holi-page-band holi-page-band-column holi-page-band-column-middle">
-                    <slot name="middle"></slot>
+            <slot name="main">
+                <header class="holi-page-band holi-page-band-subheader">
+                    <slot name="menubar"></slot>
+                </header>
+                <section class="holi-page-band holi-page-band-body">
+                    <aside class="holi-page-sidebar holi-page-sidebar-lsb" data-sidebar="lsb" data-sidebar-mode="fixed">
+                        <slot name="lsb-fixed"></slot>
+                    </aside>
+                    <drawer class="holi-page-sidebar-drawer holi-page-sidebar-drawer-lsb" data-sidebar="lsb" data-sidebar-mode="drawer" direction="left" max-size="320px" trigger-label="Menu">
+                        <header slot="header">Menu</header>
+                        <slot name="lsb-drawer"></slot>
+                    </drawer>
+                    <section class="holi-page-band holi-page-band-column holi-page-band-column-middle">
+                        <slot name="middle"></slot>
+                    </section>
+                    <aside class="holi-page-sidebar holi-page-sidebar-rsb" data-sidebar="rsb" data-sidebar-mode="fixed">
+                        <slot name="rsb-fixed"></slot>
+                    </aside>
+                    <drawer class="holi-page-sidebar-drawer holi-page-sidebar-drawer-rsb" data-sidebar="rsb" data-sidebar-mode="drawer" direction="right" max-size="360px" trigger-label="Tools">
+                        <header slot="header">Tools</header>
+                        <slot name="rsb-drawer"></slot>
+                    </drawer>
                 </section>
-                <aside class="holi-page-band holi-page-band-column holi-page-band-column-rhs">
-                    <slot name="rhs"></slot>
-                </aside>
-            </section>
+            </slot>
         </main>
-    </slot>
-    <section class="holi-page-band holi-page-band-prefooter">
-        <slot name="prefooter"></slot>
+        <section class="holi-page-band holi-page-band-prefooter">
+            <slot name="prefooter"></slot>
+        </section>
+        <footer class="holi-page-band holi-page-band-footer">
+            <slot name="footer"></slot>
+        </footer>
+        <section class="holi-page-band holi-page-band-dialog">
+            <slot name="dialog"></slot>
+        </section>
     </section>
-    <footer class="holi-page-band holi-page-band-footer">
-        <slot name="footer"></slot>
-    </footer>
 </template>

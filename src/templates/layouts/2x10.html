@@ -1,0 +1,31 @@
+<template id="page-layout-2x10" data-layout="2x10">
+    <section class="holi-page-layout holi-page-layout-2x10">
+        <header class="holi-page-band holi-page-band-header">
+            <slot name="header"></slot>
+        </header>
+        <section class="holi-page-band holi-page-band-postheader">
+            <slot name="postheader"></slot>
+        </section>
+        <section class="holi-page-band holi-page-band-body">
+            <aside class="holi-page-sidebar holi-page-sidebar-lsb" data-sidebar="lsb" data-sidebar-mode="fixed">
+                <slot name="lsb-fixed"></slot>
+            </aside>
+            <drawer class="holi-page-sidebar-drawer holi-page-sidebar-drawer-lsb" data-sidebar="lsb" data-sidebar-mode="drawer" direction="left" max-size="320px" trigger-label="Menu">
+                <header slot="header">Menu</header>
+                <slot name="lsb-drawer"></slot>
+            </drawer>
+            <main class="holi-page-band holi-page-band-main">
+                <slot name="main"></slot>
+            </main>
+        </section>
+        <section class="holi-page-band holi-page-band-prefooter">
+            <slot name="prefooter"></slot>
+        </section>
+        <footer class="holi-page-band holi-page-band-footer">
+            <slot name="footer"></slot>
+        </footer>
+        <section class="holi-page-band holi-page-band-dialog">
+            <slot name="dialog"></slot>
+        </section>
+    </section>
+</template>

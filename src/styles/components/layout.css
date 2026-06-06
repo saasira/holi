@@ -3,6 +3,143 @@
     box-sizing: border-box;
 }
 
+:where(body[theme="default"], body:not([theme])) .holi-page-layout {
+    --holi-layout-gap: 16px;
+    --holi-layout-sidebar-min: 14rem;
+    --holi-layout-sidebar-max: 20rem;
+    display: grid;
+    gap: var(--holi-layout-gap);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-band {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-band-postheader:not(:has(> *)),
+:where(body[theme="default"], body:not([theme])) .holi-page-band-prefooter:not(:has(> *)),
+:where(body[theme="default"], body:not([theme])) .holi-page-band-dialog:not(:has(> *)),
+:where(body[theme="default"], body:not([theme])) .holi-page-dashboard-band:not(:has(> *)) {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-band-body {
+    display: grid;
+    gap: var(--holi-layout-gap);
+    align-items: start;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-single .holi-page-band-main {
+    min-width: 0;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout > .holi-page-band-main {
+    display: grid;
+    gap: var(--holi-layout-gap);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x10 .holi-page-band-body {
+    grid-template-columns: minmax(var(--holi-layout-sidebar-min), 2fr) minmax(0, 10fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-10x2 .holi-page-band-body {
+    grid-template-columns: minmax(0, 10fr) minmax(var(--holi-layout-sidebar-min), 2fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2 .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9 .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard .holi-page-band-body {
+    grid-template-columns: minmax(var(--holi-layout-sidebar-min), 2fr) minmax(0, 8fr) minmax(var(--holi-layout-sidebar-min), 2fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-has-lsb="false"][data-has-rsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-has-lsb="false"][data-has-rsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-has-lsb="false"][data-has-rsb="false"] .holi-page-band-body {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-has-lsb="true"][data-has-rsb="false"]:not([data-lsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-has-lsb="true"][data-has-rsb="false"]:not([data-lsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-has-lsb="true"][data-has-rsb="false"]:not([data-lsb-mode="drawer"]) .holi-page-band-body {
+    grid-template-columns: minmax(var(--holi-layout-sidebar-min), 2fr) minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-has-lsb="false"][data-has-rsb="true"]:not([data-rsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-has-lsb="false"][data-has-rsb="true"]:not([data-rsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-has-lsb="false"][data-has-rsb="true"]:not([data-rsb-mode="drawer"]) .holi-page-band-body {
+    grid-template-columns: minmax(0, 1fr) minmax(var(--holi-layout-sidebar-min), 2fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x10[data-lsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-10x2[data-rsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-lsb-mode="drawer"][data-rsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-lsb-mode="drawer"][data-rsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-lsb-mode="drawer"][data-rsb-mode="drawer"] .holi-page-band-body {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-lsb-mode="drawer"]:not([data-rsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-lsb-mode="drawer"]:not([data-rsb-mode="drawer"]) .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-lsb-mode="drawer"]:not([data-rsb-mode="drawer"]) .holi-page-band-body {
+    grid-template-columns: minmax(0, 1fr) minmax(var(--holi-layout-sidebar-min), 2fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2:not([data-lsb-mode="drawer"])[data-rsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9:not([data-lsb-mode="drawer"])[data-rsb-mode="drawer"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard:not([data-lsb-mode="drawer"])[data-rsb-mode="drawer"] .holi-page-band-body {
+    grid-template-columns: minmax(var(--holi-layout-sidebar-min), 2fr) minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-lsb-mode="drawer"][data-has-rsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-lsb-mode="drawer"][data-has-rsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-lsb-mode="drawer"][data-has-rsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2[data-rsb-mode="drawer"][data-has-lsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9[data-rsb-mode="drawer"][data-has-lsb="false"] .holi-page-band-body,
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard[data-rsb-mode="drawer"][data-has-lsb="false"] .holi-page-band-body {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-sidebar {
+    min-width: 0;
+    max-width: var(--holi-layout-sidebar-max);
+    width: 100%;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-sidebar-drawer {
+    display: contents;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-dashboard-band {
+    min-width: 0;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard .holi-page-band-main {
+    display: grid;
+    gap: var(--holi-layout-gap);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-page-dashboard-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--holi-layout-gap);
+}
+
+@media (max-width: 900px) {
+    :where(body[theme="default"], body:not([theme])) .holi-page-layout-2x10 .holi-page-band-body,
+    :where(body[theme="default"], body:not([theme])) .holi-page-layout-10x2 .holi-page-band-body,
+    :where(body[theme="default"], body:not([theme])) .holi-page-layout-2x8x2 .holi-page-band-body,
+    :where(body[theme="default"], body:not([theme])) .holi-page-layout-3x9 .holi-page-band-body,
+    :where(body[theme="default"], body:not([theme])) .holi-page-layout-dashboard .holi-page-band-body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    :where(body[theme="default"], body:not([theme])) .holi-page-sidebar {
+        max-width: none;
+    }
+}
+
 :where(body[theme="default"], body:not([theme])) .holi-layout-content {
     display: grid;
     gap: 16px;

@@ -270,18 +270,25 @@ const appConfig = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'holi.js',
-        publicPath: '/dist/',
+        chunkFilename: '[name].js',
+        publicPath: 'auto',
         clean: true
     },
 
     devServer: {
-        static: {
-            directory: path.resolve(__dirname, 'public')
-        },
+        static: [
+            {
+                directory: path.resolve(__dirname, 'public')
+            },
+            {
+                directory: path.resolve(__dirname, 'dist'),
+                publicPath: '/dist'
+            }
+        ],
         devMiddleware: {
             writeToDisk: true
         },
-        port: 8080,
+        port: 3333,
         setupMiddlewares(middlewares, devServer) {
             if (!devServer || !devServer.app) return middlewares;
 
@@ -449,6 +456,16 @@ const appConfig = {
                 {
                     from: 'src/templates/layouts',
                     to: 'layouts/[path][name][ext]',
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/styles/components',
+                    to: 'styles/components/[path][name][ext]',
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/styles/holi.css',
+                    to: 'holi.css',
                     noErrorOnMissing: true
                 }
             ]

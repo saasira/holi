@@ -49,7 +49,8 @@ class PageComponent extends Component {
 
         const blocks = this.collectNamedBlocks();
         const layoutFragment = await LayoutResolver.resolve(this.container);
-        const placement = LayoutComponent.assignNamedBlocks(layoutFragment, blocks, {
+        const preparedBlocks = this.prepareLayoutOptions(layoutFragment, blocks);
+        const placement = LayoutComponent.assignNamedBlocks(layoutFragment, preparedBlocks, {
             inheritMissing: this.shouldInheritMissing(this.container)
         });
         this.reportUnusedBlocks(placement.unusedNames, layoutName);
@@ -119,6 +120,104 @@ class PageComponent extends Component {
         });
 
         return blocks;
+    }
+
+    prepareLayoutOptions(fragment, blocks) {
+        const nextBlocks = new Map(blocks);
+        const root = fragment.querySelector?.('.holi-page-layout') || fragment.firstElementChild;
+        const lsbMode = this.resolveSidebarMode('lsb');
+        const rsbMode = this.resolveSidebarMode('rsb');
+        const hasLsb = this.hasSidebarContent(nextBlocks, 'lsb', 'lhs');
+        const hasRsb = this.hasSidebarContent(nextBlocks, 'rsb', 'rhs');
+
+        if (root instanceof Element) {
+            root.setAttribute('data-lsb-mode', lsbMode);
+            root.setAttribute('data-rsb-mode', rsbMode);
+            root.setAttribute('data-has-lsb', hasLsb ? 'true' : 'false');
+            root.setAttribute('data-has-rsb', hasRsb ? 'true' : 'false');
+        }
+
+        this.prepareSidebarSlot(fragment, nextBlocks, {
+            canonicalName: 'lsb',
+            legacyName: 'lhs',
+            mode: lsbMode,
+            hasContent: hasLsb
+        });
+
+        this.prepareSidebarSlot(fragment, nextBlocks, {
+            canonicalName: 'rsb',
+            legacyName: 'rhs',
+            mode: rsbMode,
+            hasContent: hasRsb
+        });
+
+        return nextBlocks;
+    }
+
+    hasSidebarContent(blocks, canonicalName, legacyName) {
+        if (blocks.has(canonicalName) || blocks.has(legacyName)) return true;
+        for (const block of blocks.values()) {
+            const regions = block?.regions;
+            if (!(regions instanceof Map)) continue;
+            if (regions.has(canonicalName) || regions.has(legacyName)) return true;
+        }
+        return false;
+    }
+
+    resolveSidebarMode(side) {
+        const specific = String(this.container.getAttribute(`${side}-mode`) || '').trim().toLowerCase();
+        const shared = String(this.container.getAttribute('sidebar-mode') || '').trim().toLowerCase();
+        const value = specific || shared || 'fixed';
+        if (['drawer', 'drawers', 'collapsible', 'expandable', 'overlay'].includes(value)) return 'drawer';
+        return 'fixed';
+    }
+
+    prepareSidebarSlot(fragment, blocks, options) {
+        const { canonicalName, legacyName, mode, hasContent } = options;
+        const sourceName = this.resolveSidebarSourceName(blocks, canonicalName, legacyName);
+        const targetName = `${canonicalName}-${mode === 'drawer' ? 'drawer' : 'fixed'}`;
+        const wrappers = Array.from(fragment.querySelectorAll(`[data-sidebar="${canonicalName}"]`));
+
+        wrappers.forEach((wrapper) => {
+            const wrapperMode = wrapper.getAttribute('data-sidebar-mode') || 'fixed';
+            if (!hasContent || wrapperMode !== mode) {
+                wrapper.remove();
+            }
+        });
+
+        if (!sourceName) return;
+        this.renameSidebarBlock(blocks, sourceName, canonicalName, targetName);
+    }
+
+    resolveSidebarSourceName(blocks, canonicalName, legacyName) {
+        if (blocks.has(canonicalName)) return canonicalName;
+        if (blocks.has(legacyName)) return legacyName;
+        for (const block of blocks.values()) {
+            const regions = block?.regions;
+            if (!(regions instanceof Map)) continue;
+            if (regions.has(canonicalName)) return canonicalName;
+            if (regions.has(legacyName)) return legacyName;
+        }
+        return '';
+    }
+
+    renameSidebarBlock(blocks, sourceName, canonicalName, targetName) {
+        if (blocks.has(sourceName)) {
+            const block = blocks.get(sourceName);
+            blocks.delete(sourceName);
+            if (sourceName !== canonicalName) blocks.delete(canonicalName);
+            blocks.set(targetName, block);
+            return;
+        }
+
+        blocks.forEach((block) => {
+            const regions = block?.regions;
+            if (!(regions instanceof Map) || !regions.has(sourceName)) return;
+            const nodes = regions.get(sourceName);
+            regions.delete(sourceName);
+            if (sourceName !== canonicalName) regions.delete(canonicalName);
+            regions.set(targetName, nodes);
+        });
     }
 
     shouldInheritMissing(element) {
