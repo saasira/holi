@@ -61,6 +61,7 @@ class MenubarComponent extends Component {
 
     validateStructure() {
         super.validateStructure();
+        if (this.hasProviderSource()) return;
         const hasMenu =
             !!this.container.querySelector('[slot="menu"]') ||
             !!this.container.querySelector('ul') ||
@@ -76,8 +77,67 @@ class MenubarComponent extends Component {
         this.bindEvents();
     }
 
+    /** Whether the menu comes from a content provider (`provider` + `data-source`) or inline `items` JSON. */
+    hasProviderSource() {
+        return !!(this.readAttr(['source', 'data-source'], '') || this.readAttr(['items', 'data-items'], ''));
+    }
+
+    /**
+     * The menu: built from a content provider's tree when the menubar names a source, else its own `<ul slot="menu">`.
+     *
+     * A provider's `resolve(source)` answers `[{ name, label, href, children }]`. An item with `children` opens a
+     * submenu; one with an `href` is a link; one with neither is an action, reported by `menuselect`. The tree becomes
+     * the same `<ul>`/`<li>` markup an inline menu is written in, so both behave alike.
+     */
+    async resolveMenu() {
+        if (!this.hasProviderSource()) {
+            return this.container.querySelector('[slot="menu"]') || this.container.querySelector('ul, ol');
+        }
+        const items = await this.resolveProviderData({ fallback: [] });
+        return this.buildMenu(Array.isArray(items) ? items : []);
+    }
+
+    buildMenu(items) {
+        const list = this.renderTemplate('menubar-list-template').firstElementChild;
+        items.forEach((item, index) => {
+            if (!item || typeof item !== 'object') return;
+            const children = Array.isArray(item.children) && item.children.length ? item.children : null;
+            const href = MenubarComponent.safeHref(item.href);
+            const data = {
+                name: String(item.name ?? item.label ?? `item-${index}`),
+                label: String(item.label ?? item.name ?? `Item ${index + 1}`),
+                href
+            };
+            const template = children ? 'menubar-group-template' : (href ? 'menubar-link-template' : 'menubar-action-template');
+            const entry = this.renderTemplate(template, { item: data }).firstElementChild;
+            if (children) {
+                entry.querySelector('[data-role="submenu"]').replaceWith(this.buildMenu(children));
+            }
+            list.appendChild(entry);
+        });
+        return list;
+    }
+
+    /** A link a menu may carry: relative, http(s), mailto or tel -- never javascript: or data:. */
+    static safeHref(value) {
+        const href = String(value ?? '').trim();
+        if (!href) return '';
+        if (/^(https?:|mailto:|tel:)/i.test(href)) return href;
+        if (/^[a-z][a-z0-9+.-]*:/i.test(href)) return '';
+        return href;
+    }
+
+    /** Re-reads a provider's menu, for items that changed. An inline menu is the page's and stays as it is. */
+    async reload() {
+        if (!this.hasProviderSource() || !this.menuHost) return;
+        this.contentProviderInstance = null;
+        this.menuHost.replaceChildren(await this.resolveMenu());
+        this.prepareMenuTree();
+        this.applyMode();
+    }
+
     async render() {
-        const sourceMenu = this.container.querySelector('[slot="menu"]') || this.container.querySelector('ul, ol');
+        const sourceMenu = await this.resolveMenu();
         await super.render();
         this.element = this.container.querySelector('.holi-menubar');
         this.menuHost = this.container.querySelector('[data-role="menu-host"]');
@@ -221,6 +281,15 @@ class MenubarComponent extends Component {
                 return;
             }
 
+            // A chosen item: a link navigates as links do, and every choice is reported, so an action item (no href)
+            // can be handled by the page.
+            if (trigger.tagName !== 'A' || !trigger.getAttribute('href')) event.preventDefault();
+            this.dispatchEvent('menuselect', {
+                name: trigger.getAttribute('data-menu-name') || trigger.textContent.trim(),
+                label: trigger.textContent.trim(),
+                href: trigger.getAttribute('href') || null
+            });
+
             if (this.mode === 'single') {
                 this.closeMenu();
             } else {
@@ -240,8 +309,15 @@ class MenubarComponent extends Component {
             });
         }
 
+        // A press focuses the trigger before it clicks it. Focus opened the submenu and the click then toggled it
+        // shut, so a submenu never opened on click or touch -- only on hover. Focus from a press leaves the opening to
+        // the click; focus from the keyboard still opens.
+        this.element.addEventListener('pointerdown', () => { this.pressing = true; });
+        this.element.addEventListener('click', () => { this.pressing = false; }, true);
+
         this.element.addEventListener('focusin', (event) => {
             if (this.mode !== 'bar') return;
+            if (this.pressing) return;
             this.cancelScheduledClose();
             const trigger = event.target.closest('.holi-menu-trigger');
             if (!trigger) return;

@@ -7,6 +7,8 @@ import { ThemeRegistry } from './utils/theme_registry.js';
 import { LazyComponentLoader } from './utils/lazy_component_loader.js';
 import './utils/content_provider.js';
 import './utils/state.js';
+// The client-side router: documented and used by the navigation example, but not in the bundle until now.
+import './utils/navigation.js';
 
 const captureBundleBase = () => {
     if (typeof document === 'undefined') return '';

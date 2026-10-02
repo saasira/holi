@@ -4,6 +4,7 @@ import { Validator } from '../utils/validator.js';
 import { ComponentStateBridge } from '../utils/component_state_bridge.js';
 import { ComponentPPR } from '../utils/ppr.js';
 import { TemplateRegistry } from '../utils/template_registry.js';
+import { componentNameFromRole } from '../utils/aria_roles.js';
 
 class Component {
     static nextComponentId = 1;
@@ -486,11 +487,13 @@ class Component {
         const source = String(options.source || this.readAttr(['source', 'data-source'], '')).trim();
         const providerName = options.provider || this.readAttr('provider', 'default');
         const fallback = options.fallback ?? [];
-        const inline = options.inlineAttr
-            ? this.readJsonAttr(options.inlineAttr, undefined)
-            : this.readJsonAttr(['items', 'data-items'], undefined);
-
-        if (inline !== undefined) return inline;
+        // Inline JSON only when the attribute is there. Passing undefined as readJsonAttr's fallback gave its default,
+        // null, which counted as inline data: every provider-backed component got null and its provider was never asked.
+        const inlineNames = options.inlineAttr || ['items', 'data-items'];
+        if (this.hasAttr(inlineNames)) {
+            const inline = this.readJsonAttr(inlineNames, null);
+            if (inline !== null) return inline;
+        }
         if (!source) return fallback;
 
         const provider = await this.ensureContentProvider(providerName);
@@ -555,6 +558,7 @@ class Component {
             element.getAttribute('data-component-id'),
             element.getAttribute('component'),
             element.getAttribute('role'),
+            componentNameFromRole(element.getAttribute('role')),
             element.getAttribute('data-holi-component-class'),
             String(element.tagName || '').toLowerCase()
         ];

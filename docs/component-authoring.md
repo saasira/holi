@@ -193,7 +193,8 @@ Mandatory:
 - Use `@{...}` interpolation for binding.
 - Prefer `static props`, `static events`, `projectSlots`, and `renderTemplate` for consistency.
 - Keep reusable non-component utilities under `src/scripts/utils`.
-- Support tag, `component="name"`, and `role="name"` discovery through `selector` and `componentName`.
+- Support tag, `component="name"`, and `role="holi-name"` discovery through `selector` and `componentName`
+  (`role="name"` is matched too unless the name is an ARIA role -- `roleSelectorsFor` in `utils/aria_roles.js`).
 
 Forbidden:
 

@@ -39,11 +39,19 @@ const sourceChecks = [
     },
     {
         file: 'src/examples/pages/menubar.html',
-        patterns: ['component="menubar"', 'role="menubar"', '<menubar']
+        patterns: ['component="menubar"', 'role="holi-menubar"', '<menubar', 'provider="mainmenu"', 'menuselect']
+    },
+    {
+        file: 'src/examples/pages/navigation.html',
+        patterns: ['/dist/holi.js', 'new Navigation({ hashMode: true })', 'StateHub.create(', 'StateConnector.connect(']
+    },
+    {
+        file: 'src/examples/pages/accordion.html',
+        patterns: ['component="accordion"', 'role="accordion"', '<accordion', 'provider="faq"', 'getContent']
     },
     {
         file: 'src/examples/pages/tree.html',
-        patterns: ['component="tree"', 'role="tree"', '<tree']
+        patterns: ['component="tree"', 'role="holi-tree"', '<tree']
     },
     {
         file: 'src/examples/pages/treepanel.html',
@@ -95,6 +103,8 @@ const builtChecks = [
     'public/examples/pages/layout.html',
     'public/examples/pages/gallery.html',
     'public/examples/pages/menubar.html',
+    'public/examples/pages/accordion.html',
+    'public/examples/pages/navigation.html',
     'public/examples/pages/tree.html',
     'public/examples/pages/treepanel.html',
     'public/examples/pages/lifecycle-regression.html',

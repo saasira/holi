@@ -139,7 +139,9 @@ class Navigation {
     pathToRegex(path, keys) {
         const escaped = path
             .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-            .replace(/\\\/:([a-zA-Z0-9_]+)/g, (_m, key) => {
+            // A parameter follows a plain slash: the escaping above leaves '/' alone, so the old pattern -- an escaped
+            // slash before the colon -- never matched, and no route with a :param ever did.
+            .replace(/\/:([a-zA-Z0-9_]+)/g, (_m, key) => {
                 keys.push(key);
                 return '/([^/]+)';
             });

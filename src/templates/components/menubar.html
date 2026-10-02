@@ -4,3 +4,19 @@
         <div class="holi-menubar-menuhost" data-role="menu-host"></div>
     </nav>
 </template>
+
+<template id="menubar-list-template">
+    <ul></ul>
+</template>
+
+<template id="menubar-link-template">
+    <li><a href="@{item.href}" data-menu-name="@{item.name}">@{item.label}</a></li>
+</template>
+
+<template id="menubar-action-template">
+    <li><button type="button" data-menu-name="@{item.name}">@{item.label}</button></li>
+</template>
+
+<template id="menubar-group-template">
+    <li><button type="button" data-menu-name="@{item.name}">@{item.label}</button><ul data-role="submenu"></ul></li>
+</template>
