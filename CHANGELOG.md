@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [0.21.1] - 2026-10-02
 
 ### Changed (breaking for the role form of five components)
 

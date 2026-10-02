@@ -87,16 +87,16 @@ Main artifacts:
 For application pages that consume Holi directly from a CDN, include the bootstrap via jsDelivr:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/holi.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/holi.js"></script>
 ```
 
 `dist/holi.js` discovers the components declared on the page and loads the matching component chunks, utility chunks, templates, layouts, and component CSS files automatically.
 
 Direct file URLs:
 
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/holi.js`
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/holi.css`
-- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/components.html`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/holi.js`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/holi.css`
+- `https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/components.html`
 
 Pin an exact version in production so releases remain repeatable.
 
@@ -107,13 +107,13 @@ Holi can be shipped directly from a free CDN after publishing the package to npm
 Recommended jsDelivr link for `v0.1.5`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/holi.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/holi.js"></script>
 ```
 
 Fallback unpkg links:
 
 ```html
-<script src="https://unpkg.com/@saasira/holi@0.21.0/dist/holi.js"></script>
+<script src="https://unpkg.com/@saasira/holi@0.21.1/dist/holi.js"></script>
 ```
 
 Repository setup details for automated npm publishing are documented in `docs/CDN.md`.
