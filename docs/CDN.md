@@ -30,7 +30,7 @@ https://cdn.jsdelivr.net/npm/<package-name>@<version>/<file>
 For Holi `v0.1.5`:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.0/dist/holi.js"></script>
 ```
 
 The bootstrap then loads `components.html`, `layouts.html`, lazy JS chunks, and per-component CSS from the same `dist/` base as needed.
@@ -40,7 +40,7 @@ The bootstrap then loads `components.html`, `layouts.html`, lazy JS chunks, and 
 unpkg can be used with the same package versioning model:
 
 ```html
-<script src="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.js"></script>
+<script src="https://unpkg.com/@saasira/holi@0.21.0/dist/holi.js"></script>
 ```
 
 ## Versioning Guidance

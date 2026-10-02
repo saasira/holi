@@ -2,10 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [0.21.0] - 2026-10-02
 
 ### Added
 
+- `browser` component: an item picker with its template, styles and example.
+- `rte` rich-text editor component, with its extension API documented in `docs/rte.md`.
+- `workflow` builder component (`utils/workflow_graph.js`), with an example over `workflow-steps.json`.
 - `timerange` component: quick relative ranges (`now-15m`, presets configurable), an absolute from/to, optional
   auto-refresh, and local or UTC display (`timezone="utc"`). A relative range is re-resolved whenever it is read.
   Emits bubbling `timerangechange` and `timerangerefresh` with `{ from, to, relative, label }`; API `getRange()`,
@@ -18,11 +21,24 @@ All notable changes to this project are documented in this file.
   `tabchange` carries the tab's `name`.
 - Examples: `histogram.html`, `timerange.html`, and an inline variant in `tabs.html`, with smoke checks.
 
+### Changed
+
+- `breadcrumbs`, `formdesigner` and `schedule` reworked, with their examples.
+- The development server runs on port 7777.
+- CDN examples in the README and `docs/CDN.md` point at this release.
+
 ### Fixed
 
 - In the minified `dist/` build a component's instance was not reachable from its host (`el.chartcomponent`,
   `el.datatable`): babel compiles each class to a function the minifier renamed to a single letter, and the instance
   key is the class name. Terser now keeps class and function names.
+- The datatable's row-details dialog never opened from the built library: it looked its templates up with
+  `document.getElementById`, while component templates live in the TemplateRegistry.
+
+### Validation
+
+- `npm run ci:smoke`; the new components driven in Chromium (hover, brush, select, legend, presets, absolute range,
+  refresh, inline tabs).
 
 ## [0.20.0] - 2026-06-06
 
