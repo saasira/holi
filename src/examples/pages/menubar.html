@@ -111,5 +111,37 @@
                 </menubar>
             </div>
         </section>
+        <section class="demo">
+            <h2>Variant 4: a content provider</h2>
+            <div class="panel">
+                <p class="note">The menu tree comes from a provider's <code>resolve()</code>: an item with
+                    <code>children</code> opens a submenu, one with an <code>href</code> is a link, one with neither is an
+                    action reported by <code>menuselect</code>. A <code>javascript:</code> link is refused.</p>
+                <section component="menubar" id="menu-provider" provider="mainmenu" data-source="main" open-on-click
+                         mobile-breakpoint="600"></section>
+                <p id="menu-provider-log">Event log: none</p>
+            </div>
+        </section>
+
+        <script>
+            window.contentProviders = window.contentProviders || {};
+            window.contentProviders.mainmenu = {
+                resolve() {
+                    return [
+                        { name: 'home', label: 'Home', href: '#home' },
+                        { name: 'reports', label: 'Reports', children: [
+                            { name: 'daily', label: 'Daily', href: '#daily' },
+                            { name: 'export', label: 'Export' }
+                        ] },
+                        { name: 'signout', label: 'Sign out' },
+                        { name: 'unsafe', label: 'Unsafe link', href: 'javascript:alert(1)' }
+                    ];
+                }
+            };
+            document.getElementById('menu-provider').addEventListener('menuselect', (event) => {
+                document.getElementById('menu-provider-log').textContent =
+                    `Event log: menuselect ${event.detail.name}${event.detail.href ? ' ' + event.detail.href : ''}`;
+            }, true);
+        </script>
     </body>
 </html>

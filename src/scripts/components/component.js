@@ -486,11 +486,13 @@ class Component {
         const source = String(options.source || this.readAttr(['source', 'data-source'], '')).trim();
         const providerName = options.provider || this.readAttr('provider', 'default');
         const fallback = options.fallback ?? [];
-        const inline = options.inlineAttr
-            ? this.readJsonAttr(options.inlineAttr, undefined)
-            : this.readJsonAttr(['items', 'data-items'], undefined);
-
-        if (inline !== undefined) return inline;
+        // Inline JSON only when the attribute is there. Passing undefined as readJsonAttr's fallback gave its default,
+        // null, which counted as inline data: every provider-backed component got null and its provider was never asked.
+        const inlineNames = options.inlineAttr || ['items', 'data-items'];
+        if (this.hasAttr(inlineNames)) {
+            const inline = this.readJsonAttr(inlineNames, null);
+            if (inline !== null) return inline;
+        }
         if (!source) return fallback;
 
         const provider = await this.ensureContentProvider(providerName);

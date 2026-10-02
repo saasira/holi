@@ -277,8 +277,19 @@ class ComponentStateBridge {
             this.container?.setAttribute?.(attrName, String(value));
         }
 
+        // Reflected onto a component property only when it differs, and never re-entered for the same path. A property
+        // whose setter writes the state back -- radio's value setter calls syncState, which sets state.value -- looped
+        // without end: state -> property -> state -> ... ("Maximum call stack size exceeded" on the form example).
         if (cleanPath in this.component && typeof this.component[cleanPath] !== 'function') {
-            this.component[cleanPath] = value;
+            this.reflectingPaths = this.reflectingPaths || new Set();
+            if (!this.reflectingPaths.has(cleanPath) && this.component[cleanPath] !== value) {
+                this.reflectingPaths.add(cleanPath);
+                try {
+                    this.component[cleanPath] = value;
+                } finally {
+                    this.reflectingPaths.delete(cleanPath);
+                }
+            }
         }
 
         if (typeof this.component?.onStateReflect === 'function') {
