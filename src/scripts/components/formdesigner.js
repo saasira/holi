@@ -48,46 +48,7 @@ class FormDesignerComponent extends Component {
             schemaVersion: 'holi-formdesigner/v1',
             id: this.container.getAttribute('data-form-id') || 'application_form',
             title: this.container.getAttribute('data-title') || 'Application Form',
-            sections: [
-                {
-                    id: 'section_1',
-                    label: 'Clinical Details',
-                    description: '',
-                    displayed: '',
-                    fields: [
-                        {
-                            id: 'field_1',
-                            name: 'disease',
-                            label: 'Disease',
-                            type: 'select',
-                            required: true,
-                            displayed: '',
-                            fieldset: '',
-                            placeholder: '',
-                            helpText: '',
-                            options: [
-                                { value: 'diabetes', label: 'Diabetes' },
-                                { value: 'hypertension', label: 'Hypertension' }
-                            ]
-                        },
-                        {
-                            id: 'field_2',
-                            name: 'diabetes_type',
-                            label: 'Type',
-                            type: 'select',
-                            required: false,
-                            displayed: "@{disease eq 'diabetes'}",
-                            fieldset: '',
-                            placeholder: '',
-                            helpText: '',
-                            options: [
-                                { value: 'type_i', label: 'Type I' },
-                                { value: 'type_ii', label: 'Type II' }
-                            ]
-                        }
-                    ]
-                }
-            ]
+            sections: []
         };
     }
 
@@ -503,6 +464,9 @@ class FormDesignerComponent extends Component {
     }
 
     addField() {
+        if (!this.definition.sections.length) {
+            this.addSection();
+        }
         const section = this.getSelectedSection() || this.definition.sections[0];
         if (!section) return;
         const id = this.nextId('field');

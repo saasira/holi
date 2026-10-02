@@ -1,8 +1,8 @@
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumbs {
+:where(body[theme="default"], body:not([theme])) .journey {
     --holi-breadcrumb-separator: "/";
 }
 
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumbs-list {
+:where(body[theme="default"], body:not([theme])) .crumbs {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -12,34 +12,25 @@
     gap: 6px;
 }
 
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-item {
+:where(body[theme="default"], body:not([theme])) .crumb {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     color: #334155;
 }
 
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-item + .holi-breadcrumb-item::before {
+:where(body[theme="default"], body:not([theme])) .crumb + .crumb::before {
     content: var(--holi-breadcrumb-separator);
     color: #94a3b8;
     margin-right: 2px;
 }
 
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-link {
+:where(body[theme="default"], body:not([theme])) .crumb a {
     color: #2563eb;
     text-decoration: none;
 }
 
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-link:hover,
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-link:focus-visible {
+:where(body[theme="default"], body:not([theme])) .crumb a:hover,
+:where(body[theme="default"], body:not([theme])) .crumb a:focus-visible {
     text-decoration: underline;
-}
-
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-current {
-    color: #0f172a;
-    font-weight: 600;
-}
-
-:where(body[theme="default"], body:not([theme])) .holi-breadcrumb-ellipsis {
-    color: #64748b;
 }

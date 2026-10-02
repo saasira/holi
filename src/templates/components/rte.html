@@ -1,0 +1,31 @@
+<!-- Template: rte.html src\templates\components\rte.html -->
+<template id="rte-template">
+    <section class="holi-rte" data-role="rte-root">
+        <!-- Toolbar buttons are rendered from the resolved command list (built-ins + customer
+             commands/plugins). It wraps to the next line when buttons exceed the width. -->
+        <div class="holi-rte-toolbar" data-role="toolbar" role="toolbar" aria-label="Text formatting"></div>
+
+        <div class="holi-rte-surface"
+             data-role="editable"
+             contenteditable="true"
+             role="textbox"
+             aria-multiline="true"
+             aria-label="Rich text editor"></div>
+
+        <input type="hidden" data-role="value">
+    </section>
+</template>
+
+<!-- One toolbar button, bound from a resolved command descriptor. Structure lives here (not in JS). -->
+<template id="rte-button-template">
+    <button type="button"
+            class="holi-rte-btn"
+            data-command="@{cmd.name}"
+            data-value="@{cmd.value}"
+            title="@{cmd.title}"
+            aria-label="@{cmd.title}">@{cmd.label}</button>
+</template>
+
+<template id="rte-separator-template">
+    <span class="holi-rte-sep" aria-hidden="true"></span>
+</template>

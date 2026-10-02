@@ -17,7 +17,8 @@ Holi follows strict architectural principles:
 - Progressive enhancement first.
 - Multiple component libraries and pluggable content providers are supported.
 
-Canonical reference: `docs/holi-principles.md`.
+Canonical reference: `docs/holi-principles.md`. Authoring API: `docs/component-authoring.md`.
+Rich text editor & its extension API: `docs/rte.md`.
 
 ## What You Get
 

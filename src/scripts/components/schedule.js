@@ -2,6 +2,11 @@ import { Component } from './component.js';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const SHORT_DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const PERIODICITY_VIEW_MAP = {
+    daily: 'daily',
+    weekly: 'weekly',
+    monthly: 'monthly'
+};
 
 function pad(value) {
     return String(value).padStart(2, '0');
@@ -19,6 +24,28 @@ function parseTime(value, fallback = 0) {
 function formatTime(minutes) {
     const safe = Math.max(0, Math.min(24 * 60, Number(minutes) || 0));
     return `${pad(Math.floor(safe / 60))}:${pad(safe % 60)}`;
+}
+
+function parseLocalDate(value) {
+    const match = String(value || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return null;
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    if (Number.isNaN(date.getTime())) return null;
+    return date;
+}
+
+function addDays(date, count) {
+    const next = new Date(date);
+    next.setDate(next.getDate() + count);
+    return next;
+}
+
+function formatIsoDate(date) {
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+function formatDateLabel(date) {
+    return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}`;
 }
 
 function toKebab(value) {
@@ -70,7 +97,9 @@ class ScheduleComponent extends Component {
         this.dialogTitleId = `${this.hostId}-dialog-title`;
         this.selectedDayIndex = 0;
         this.contentProviderInstance = null;
-        this.days = this.resolveDays();
+        this.baseDays = this.resolveDays();
+        this.viewMode = 'weekly';
+        this.days = [...this.baseDays];
         this.events = [];
         this.timeline = this.resolveTimeline();
         this.slotted = this.captureSlottedContent();
@@ -175,7 +204,7 @@ class ScheduleComponent extends Component {
     applyData(data) {
         const payload = Array.isArray(data) ? { events: data } : (data || {});
         if (Array.isArray(payload.days) && payload.days.length) {
-            this.days = this.normalizeDays(payload.days);
+            this.baseDays = this.normalizeDays(payload.days);
         }
         if (Array.isArray(payload.events)) {
             this.events = this.normalizeEvents(payload.events);
@@ -205,15 +234,73 @@ class ScheduleComponent extends Component {
         return days.map((day, index) => {
             const raw = typeof day === 'string' ? { label: day } : (day || {});
             const label = raw.label || raw.name || DAY_NAMES[index % 7];
+            const date = parseLocalDate(raw.date || raw.value);
             return {
-                key: raw.key || toKebab(label) || String(index),
+                key: raw.key || (date ? formatIsoDate(date) : toKebab(label)) || String(index),
                 label,
                 shortLabel: raw.shortLabel || raw.short || String(label).slice(0, 3),
-                dateLabel: raw.dateLabel || raw.date || '',
-                day: Number.isInteger(Number(raw.day)) ? Number(raw.day) : index,
+                dateLabel: raw.dateLabel || (date ? formatDateLabel(date) : raw.date || ''),
+                date: date ? formatIsoDate(date) : raw.date || '',
+                day: Number.isInteger(Number(raw.day)) ? Number(raw.day) : (date ? date.getDay() : index),
                 index
             };
         });
+    }
+
+    createDayFromDate(date, index) {
+        const day = date.getDay();
+        const isoDate = formatIsoDate(date);
+        return {
+            key: isoDate,
+            label: DAY_NAMES[day],
+            shortLabel: SHORT_DAY_NAMES[day],
+            dateLabel: formatDateLabel(date),
+            date: isoDate,
+            day,
+            index
+        };
+    }
+
+    getWeekStart() {
+        const start = Number(this.readAttr('week-start', '1'));
+        return Number.isInteger(start) && start >= 0 && start <= 6 ? start : 1;
+    }
+
+    resolveAnchorDate() {
+        const filters = this.getFilters();
+        return parseLocalDate(filters.date) || parseLocalDate(this.readAttr('date', '')) || new Date();
+    }
+
+    resolveViewMode() {
+        const filters = this.getFilters();
+        const configured = toKebab(filters.periodicity || this.readAttr('view', 'weekly'));
+        return PERIODICITY_VIEW_MAP[configured] || 'weekly';
+    }
+
+    resolveViewDays() {
+        const viewMode = this.resolveViewMode();
+        const anchor = this.resolveAnchorDate();
+        this.viewMode = viewMode;
+
+        if (viewMode === 'daily') {
+            return [this.createDayFromDate(anchor, 0)];
+        }
+
+        if (viewMode === 'monthly') {
+            const first = new Date(anchor.getFullYear(), anchor.getMonth(), 1);
+            const daysInMonth = new Date(anchor.getFullYear(), anchor.getMonth() + 1, 0).getDate();
+            return Array.from({ length: daysInMonth }, (_item, index) => this.createDayFromDate(addDays(first, index), index));
+        }
+
+        const filters = this.getFilters();
+        if (!filters.date && this.baseDays.length) {
+            return this.baseDays.map((day, index) => ({ ...day, index }));
+        }
+
+        const weekStart = this.getWeekStart();
+        const offset = (anchor.getDay() - weekStart + 7) % 7;
+        const first = addDays(anchor, -offset);
+        return Array.from({ length: 7 }, (_item, index) => this.createDayFromDate(addDays(first, index), index));
     }
 
     resolveTimeline() {
@@ -262,6 +349,12 @@ class ScheduleComponent extends Component {
 
     resolveEventDayIndex(event) {
         const value = event.dayIndex ?? event.day ?? event.weekday ?? event.date;
+        const eventDate = parseLocalDate(event.date || event.startDate);
+        if (eventDate) {
+            const isoDate = formatIsoDate(eventDate);
+            const byDate = this.days.find((day) => day.date === isoDate || day.key === isoDate);
+            if (byDate) return byDate.index;
+        }
         if (Number.isInteger(Number(value))) {
             const numeric = Number(value);
             const direct = this.days.find((day) => day.index === numeric);
@@ -282,8 +375,13 @@ class ScheduleComponent extends Component {
     updateView() {
         if (!this.element) return;
         this.timeline = this.resolveTimeline();
+        this.days = this.resolveViewDays();
+        if (!this.days.length) this.days = this.resolveDays();
+        if (this.selectedDayIndex >= this.days.length) this.selectedDayIndex = 0;
         this.events = this.normalizeEvents(this.events.map((event) => event.raw || event));
         this.applyTimelineVars();
+        this.element.setAttribute('data-view', this.viewMode);
+        this.element.style.setProperty('--schedule-day-count', String(Math.max(1, this.days.length)));
         this.renderTabs();
         this.renderDays();
         this.renderTimeline();
@@ -399,7 +497,12 @@ class ScheduleComponent extends Component {
                 this.dispatchEvent('scheduledialogfilterchange', { filters: this.getDialogFilters() });
                 return;
             }
-            this.dispatchEvent('schedulefilterchange', { filters: this.getFilters() });
+            this.updateView();
+            this.dispatchEvent('schedulefilterchange', {
+                filters: this.getFilters(),
+                view: this.viewMode,
+                days: this.days
+            });
         });
 
         this.formEl?.addEventListener('submit', (event) => {

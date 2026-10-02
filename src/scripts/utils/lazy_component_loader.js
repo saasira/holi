@@ -35,6 +35,13 @@ const componentEntries = [
         load: () => import('../components/block.js')
     },
     {
+        id: 'browser',
+        aliases: ['browser'],
+        styles: ['browser'],
+        resolve: (mod) => mod.BrowserComponent,
+        load: () => import('../components/browser.js')
+    },
+    {
         id: 'breadcrumbs',
         aliases: ['breadcrumbs'],
         styles: ['breadcrumbs'],
@@ -274,6 +281,13 @@ const componentEntries = [
         load: () => import('../components/region.js')
     },
     {
+        id: 'rte',
+        aliases: ['rte'],
+        styles: ['rte'],
+        resolve: (mod) => mod.RteComponent,
+        load: () => import('../components/rte.js')
+    },
+    {
         id: 'search',
         aliases: ['search'],
         styles: ['search'],
@@ -367,6 +381,16 @@ const componentEntries = [
         styles: ['wizard'],
         resolve: (mod) => mod.WizardComponent,
         load: () => import('../components/wizard.js')
+    },
+    {
+        id: 'workflow',
+        aliases: ['workflow', 'holi-workflow', 'workflow-builder'],
+        styles: ['workflow'],
+        selectors: [
+            ...standardSelectors(['workflow', 'holi-workflow', 'workflow-builder'])
+        ],
+        resolve: (mod) => mod.WorkflowComponent,
+        load: () => import('../components/workflow.js')
     }
 ];
 

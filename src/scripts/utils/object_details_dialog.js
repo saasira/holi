@@ -1,3 +1,5 @@
+import { TemplateRegistry } from './template_registry.js';
+
 class ObjectDetailsDialog {
     constructor() {
         this.overlay = null;
@@ -181,7 +183,7 @@ class ObjectDetailsDialog {
         headerActions.appendChild(closeBtn);
         header.appendChild(headerActions);
 
-        const skeletonTemplate = document.getElementById('object-details-skeleton-template');
+        const skeletonTemplate = TemplateRegistry.getTemplate('object-details-skeleton-template');
         if (skeletonTemplate && skeletonTemplate.content) {
             body.appendChild(skeletonTemplate.content.cloneNode(true));
         } else {
@@ -214,7 +216,7 @@ class ObjectDetailsDialog {
     }
 
     createDialogScaffold() {
-        const template = document.getElementById('object-details-template');
+        const template = TemplateRegistry.getTemplate('object-details-template');
         if (!template || !template.content) {
             throw new Error('Template "object-details-template" not found');
         }

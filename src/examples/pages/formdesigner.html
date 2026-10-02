@@ -9,21 +9,86 @@
     </head>
     <body>
         <main style="max-width: 1180px; margin: 24px auto; padding: 0 16px;">
-            <formdesigner data-source="../api/formdesigner-definition.json">
+            <formdesigner>
                 <h1 slot="title">Conditional Form Designer</h1>
-                <p slot="summary">Define top-level sections, fields, and displayed conditions that persist as JSON.</p>
+                <p slot="summary">Start with an empty form, add sections and fields, then define displayed conditions for dependencies.</p>
             </formdesigner>
+
+            <section id="saved-form-output" style="margin-top: 24px; display: grid; gap: 16px;">
+                <header>
+                    <h2>Saved Form Traversal</h2>
+                    <p>Save the definition, then submit the preview to see the selected field path and dependency matches.</p>
+                </header>
+                <section>
+                    <h3>Saved Definition</h3>
+                    <pre id="saved-definition-json">No form has been saved yet.</pre>
+                </section>
+                <section>
+                    <h3>Field Choice Traversal</h3>
+                    <ol id="saved-traversal-list">
+                        <li>No preview submission has been captured yet.</li>
+                    </ol>
+                </section>
+            </section>
         </main>
 
         <script>
-            document.querySelector('formdesigner')?.addEventListener('formdesignersave', (event) => {
+            const designer = document.querySelector('formdesigner');
+            const savedDefinition = document.getElementById('saved-definition-json');
+            const traversalList = document.getElementById('saved-traversal-list');
+
+            function clearNode(node) {
+                while (node.firstChild) node.removeChild(node.firstChild);
+            }
+
+            function appendText(parent, text) {
+                parent.appendChild(document.createTextNode(text));
+            }
+
+            function appendTraversalItem(section, field) {
+                const item = document.createElement('li');
+                const title = document.createElement('strong');
+                appendText(title, `${section.label} / ${field.label}`);
+                item.appendChild(title);
+
+                const details = document.createElement('span');
+                const value = field.value == null || field.value === '' ? '(empty)' : String(field.value);
+                const dependsOn = field.dependsOn?.length ? field.dependsOn.join(', ') : 'none';
+                const condition = field.displayed || 'always displayed';
+                appendText(details, ` => ${field.name}: ${value}; condition: ${condition}; depends on: ${dependsOn}`);
+                item.appendChild(details);
+                traversalList.appendChild(item);
+            }
+
+            function renderTraversal(payload) {
+                clearNode(traversalList);
+                const sections = payload?.traversal?.sections || [];
+                let count = 0;
+
+                sections.forEach((section) => {
+                    (section.fields || []).forEach((field) => {
+                        appendTraversalItem(section, field);
+                        count += 1;
+                    });
+                });
+
+                if (!count) {
+                    const empty = document.createElement('li');
+                    appendText(empty, 'No displayed field choices were submitted.');
+                    traversalList.appendChild(empty);
+                }
+            }
+
+            designer?.addEventListener('formdesignersave', (event) => {
                 event.preventDefault();
-                console.log('Definition JSON', event.detail.definition);
+                const definition = event.detail.definition;
+                savedDefinition.textContent = JSON.stringify(definition, null, 2);
+                window.localStorage?.setItem?.('holi-formdesigner-example-definition', JSON.stringify(definition));
             });
 
-            document.querySelector('formdesigner')?.addEventListener('formdesignersubmit', (event) => {
+            designer?.addEventListener('formdesignersubmit', (event) => {
                 event.preventDefault();
-                console.log('Filled form traversal JSON', event.detail);
+                renderTraversal(event.detail);
             });
         </script>
     </body>

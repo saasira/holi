@@ -61,6 +61,27 @@
 .schedule__content {
     position: relative;
 }
+
+.schedule[data-view="monthly"] .schedule__content {
+    overflow-x: auto;
+}
+
+.schedule[data-view="monthly"] .schedule__controls {
+    min-width: calc(var(--schedule-day-count, 31) * 5rem);
+}
+
+.schedule[data-view="monthly"] .schedule__days {
+    min-width: calc(var(--schedule-day-count, 31) * 5rem);
+}
+
+.schedule[data-view="daily"] .schedule__days {
+    max-width: 30rem;
+}
+
+.schedule[data-view="daily"] .schedule__controls {
+    max-width: 30rem;
+}
+
 @media (min-width: 64rem) {
     .schedule__timeline {
         display: block;
@@ -117,6 +138,10 @@
         width: 100%;
         display: flex;
         height: calc(var(--schedule-number-units) * var(--schedule-unit-height));
+    }
+
+    .schedule[data-view="monthly"] .schedule__days {
+        width: max(100%, calc(var(--schedule-day-count, 31) * 5rem));
     }
 }
 

@@ -1,6 +1,7 @@
 @import "./styles/components/accordion.css";
 @import "./styles/components/backtotop.css";
 @import "./styles/components/breadcrumbs.css";
+@import "./styles/components/browser.css";
 @import "./styles/components/button.css";
 @import "./styles/components/calendar.css";
 @import "./styles/components/carousel.css";
@@ -39,3 +40,4 @@
 @import "./styles/components/tree.css";
 @import "./styles/components/treepanel.css";
 @import "./styles/components/wizard.css";
+@import "./styles/components/workflow.css";

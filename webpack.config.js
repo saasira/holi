@@ -288,7 +288,7 @@ const appConfig = {
         devMiddleware: {
             writeToDisk: true
         },
-        port: 3333,
+        port: 7777,
         setupMiddlewares(middlewares, devServer) {
             if (!devServer || !devServer.app) return middlewares;
 
