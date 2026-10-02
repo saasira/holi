@@ -74,6 +74,18 @@ const sourceChecks = [
         patterns: ['<page layout="3x9"', 'layouts-base="/examples/layouts/"', '<block name="head">', '<block name="tail">', '<region name="styles">', '<block name="main"', '<region name="middle"']
     },
     {
+        file: 'src/examples/pages/histogram.html',
+        patterns: ['<histogram', 'component="histogram"', 'interval="1m"', 'histogrambrush', 'histogramselect']
+    },
+    {
+        file: 'src/examples/pages/timerange.html',
+        patterns: ['<timerange', 'component="timerange"', 'timezone="utc"', 'timerangechange', 'setAbsolute']
+    },
+    {
+        file: 'src/examples/pages/tabs.html',
+        patterns: ['<tabs id="tabs-inline" default="signatures">', '<tab name="events" label="Events">']
+    },
+    {
         file: 'src/examples/layouts/3x9.html',
         patterns: ['data-layout="3x9"', '<layout-head', '<tail', '<slot name="styles"></slot>', '<slot name="header">', '<slot name="middle">']
     }
@@ -90,7 +102,10 @@ const builtChecks = [
     'public/examples/pages/backtotop.html',
     'public/examples/pages/themeswitcher.html',
     'public/examples/pages/localeswitcher.html',
-    'public/examples/pages/page-layout.html'
+    'public/examples/pages/page-layout.html',
+    'public/examples/pages/histogram.html',
+    'public/examples/pages/timerange.html',
+    'public/examples/pages/tabs.html'
 ];
 
 const builtAssetPatterns = [

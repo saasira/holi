@@ -130,3 +130,7 @@
         padding: 10px;
     }
 }
+
+:where(body[theme="default"], body:not([theme])) .tabs .tab_content > tab {
+    display: block;
+}

@@ -17,6 +17,7 @@
 @import "./styles/components/formdesigner.css";
 @import "./styles/components/gallery.css";
 @import "./styles/components/grid.css";
+@import "./styles/components/histogram.css";
 @import "./styles/components/input.css";
 @import "./styles/components/layout.css";
 @import "./styles/components/loader.css";
@@ -35,6 +36,7 @@
 @import "./styles/components/statscard.css";
 @import "./styles/components/tabs.css";
 @import "./styles/components/textarea.css";
+@import "./styles/components/timerange.css";
 @import "./styles/components/themeswitcher.css";
 @import "./styles/components/toast.css";
 @import "./styles/components/tree.css";

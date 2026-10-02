@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const bundleTemplates = (patterns, label) => {
     let bundledHtml = `<!-- ${label} v1.0.0 -->\n`;
@@ -267,6 +268,13 @@ const appConfig = {
     cache: false,
     entry: './src/scripts/index.js', // Single entry bundles ALL JS
     
+    // Class and function names survive minification: a component exposes its instance on its host element under
+    // its class name (el.chartcomponent, el.datatable -- Component's instanceKey), and babel turns each class into a
+    // function the minifier would otherwise rename to a single letter, so in dist/ none of those properties existed.
+    optimization: {
+        minimizer: [new TerserPlugin({ terserOptions: { keep_classnames: true, keep_fnames: true } })]
+    },
+
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'holi.js',

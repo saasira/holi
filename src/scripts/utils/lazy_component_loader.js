@@ -153,6 +153,13 @@ const componentEntries = [
         load: () => import('../components/gallery.js')
     },
     {
+        id: 'histogram',
+        aliases: ['histogram'],
+        styles: ['histogram'],
+        resolve: (mod) => mod.HistogramComponent,
+        load: () => import('../components/histogram.js')
+    },
+    {
         id: 'include',
         aliases: ['include'],
         resolve: (mod) => mod.IncludeComponent,
@@ -353,6 +360,13 @@ const componentEntries = [
         styles: ['themeswitcher'],
         resolve: (mod) => mod.ThemeSwitcherComponent,
         load: () => import('../components/themeswitcher.js')
+    },
+    {
+        id: 'timerange',
+        aliases: ['timerange'],
+        styles: ['timerange'],
+        resolve: (mod) => mod.TimeRangeComponent,
+        load: () => import('../components/timerange.js')
     },
     {
         id: 'toast',

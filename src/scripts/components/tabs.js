@@ -27,6 +27,12 @@ class TabsComponent extends Component {
         this.loadingStates = new Map();
         this.tabs = [];
         this.activeIndex = -1;
+        // INLINE tabs: <tab name="..." label="...">content</tab> children, for content already in the page. Taken out
+        // before the template renders, and each one becomes its own panel's content when first shown; without a
+        // data-source they are the tabs, so no content provider is needed.
+        this.inlineTabs = Array.from(this.container.children)
+            .filter((child) => child.localName === 'tab' || child.hasAttribute('data-tab-label'));
+        this.inlineTabs.forEach((tab) => tab.remove());
         if (options.autoInit !== false) {
             this.init();
         }
@@ -37,7 +43,14 @@ class TabsComponent extends Component {
         this.data = await this.resolveDataSource();
         await this.render();
         this.bindEvents();
-        await this.loadTabContent(0);
+        await this.loadTabContent(this.initialIndex());
+    }
+
+    /** The tab shown first: the one `default` names, else the first. */
+    initialIndex() {
+        const wanted = this.container.getAttribute('default');
+        const index = wanted ? (this.data || []).findIndex((item) => item?.name === wanted) : -1;
+        return index >= 0 ? index : 0;
     }
 
     async render() {
@@ -57,7 +70,7 @@ class TabsComponent extends Component {
         });
         this.renderDataTabs();
         this.refreshTabs();
-        await this.switchToTab(0, false);
+        await this.switchToTab(this.initialIndex(), false);
     }
 
     renderDataTabs() {
@@ -76,6 +89,20 @@ class TabsComponent extends Component {
             link.href = '#';
             link.dataset.tab = String(index);
             link.textContent = item?.label || `Tab ${index + 1}`;
+            if (item?.name) link.dataset.tabName = item.name;
+            if (item?.inline) {
+                // Inline content is the page's own: nothing to refresh, and closing it would lose it.
+                li.appendChild(link);
+                tabbar.appendChild(li);
+                const inlinePanel = document.createElement('div');
+                inlinePanel.className = 'tab_content_panel';
+                inlinePanel.id = `tab-${index}`;
+                const inlineContent = document.createElement('div');
+                inlineContent.className = 'tab_content';
+                inlinePanel.appendChild(inlineContent);
+                panels.appendChild(inlinePanel);
+                return;
+            }
 
             const controls = document.createElement('span');
             controls.className = 'tab-controls';
@@ -175,6 +202,15 @@ class TabsComponent extends Component {
 
     async resolveDataSource() {
         const dataSource = this.container.dataset.source;
+        if (!dataSource && this.inlineTabs.length) {
+            return this.inlineTabs.map((node, index) => ({
+                name: node.getAttribute('name') || `tab-${index}`,
+                label: node.getAttribute('label') || node.getAttribute('data-tab-label') || node.getAttribute('name')
+                    || `Tab ${index + 1}`,
+                node,
+                inline: true
+            }));
+        }
         if (!dataSource) return [];
 
         await this.ensureProviderInstance();
@@ -220,9 +256,11 @@ class TabsComponent extends Component {
     }
 
     async fetchTabContent(index) {
+        const tabData = this.data[index];
+        if (tabData?.inline) return tabData.node;
+
         await this.ensureProviderInstance();
 
-        const tabData = this.data[index];
         const tab = this.tabs[index];
         if (tab?.link?.dataset.src) {
             const res = await fetch(tab.link.dataset.src);
@@ -274,9 +312,17 @@ class TabsComponent extends Component {
 
         this.dispatchEvent('tabchange', {
             index,
+            name: this.data[index]?.name,
             data: this.data[index],
             fromCache: this.panelCache.has(`tab-${index}`)
         });
+    }
+
+    /** Shows the tab of this name (an inline tab's `name`, or a provider item's). */
+    async selectTab(name) {
+        const index = (this.data || []).findIndex((item) => item?.name === name);
+        if (index >= 0) await this.switchToTab(index);
+        return index >= 0;
     }
 
     updateTabVisuals(index) {
