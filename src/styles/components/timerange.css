@@ -1,0 +1,162 @@
+:where(body[theme="default"], body:not([theme])) .holi-timerange {
+    --timerange-border: var(--holi-border, #d9e2ef);
+    --timerange-surface: var(--holi-surface, #ffffff);
+    --timerange-text: var(--holi-text, #0f172a);
+    --timerange-muted: var(--holi-muted, #64748b);
+    --timerange-accent: var(--holi-primary, #2563eb);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--timerange-text);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--timerange-border);
+    border-radius: 8px;
+    background: var(--timerange-surface);
+    color: inherit;
+    padding: 6px 10px;
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-trigger:hover,
+:where(body[theme="default"], body:not([theme])) .holi-timerange-trigger[aria-expanded="true"] {
+    border-color: var(--timerange-accent);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-icon {
+    color: var(--timerange-accent);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--timerange-muted);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-refresh[hidden] {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-refresh select {
+    border: 1px solid var(--timerange-border);
+    border-radius: 8px;
+    background: var(--timerange-surface);
+    color: var(--timerange-text);
+    padding: 5px 6px;
+    font: inherit;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 50;
+    display: grid;
+    grid-template-columns: minmax(160px, auto) minmax(220px, auto);
+    gap: 16px;
+    padding: 14px;
+    border: 1px solid var(--timerange-border);
+    border-radius: 10px;
+    background: var(--timerange-surface);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-panel[hidden] {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-heading {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--timerange-muted);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-zone {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-presets {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-preset {
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    padding: 6px 8px;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-preset:hover {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-preset.is-active {
+    color: var(--timerange-accent);
+    font-weight: 600;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-absolute {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    color: var(--timerange-muted);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-field input {
+    border: 1px solid var(--timerange-border);
+    border-radius: 6px;
+    background: var(--timerange-surface);
+    color: var(--timerange-text);
+    padding: 6px 8px;
+    font: inherit;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-error {
+    margin: 0;
+    color: #dc2626;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-timerange-apply {
+    align-self: flex-start;
+    border: 0;
+    border-radius: 6px;
+    background: var(--timerange-accent);
+    color: #ffffff;
+    padding: 7px 14px;
+    font: inherit;
+    cursor: pointer;
+}
+
+@media (max-width: 560px) {
+    :where(body[theme="default"], body:not([theme])) .holi-timerange-panel {
+        grid-template-columns: 1fr;
+        left: auto;
+        right: 0;
+    }
+}

@@ -1,10 +1,10 @@
-.progress {
+:where(body[theme="default"], body:not([theme])) .progress {
     display: grid;
     gap: 0.35rem;
     width: 100%;
 }
 
-.progress-track {
+:where(body[theme="default"], body:not([theme])) .progress-track {
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -13,7 +13,7 @@
     height: 0.5rem;
 }
 
-.progress-buffer {
+:where(body[theme="default"], body:not([theme])) .progress-buffer {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -21,7 +21,7 @@
     background: #93c5fd;
 }
 
-.progress-fill {
+:where(body[theme="default"], body:not([theme])) .progress-fill {
     position: absolute;
     inset-block: 0;
     inset-inline-start: 0;
@@ -30,19 +30,19 @@
     transition: width 180ms ease;
 }
 
-.progress-label {
+:where(body[theme="default"], body:not([theme])) .progress-label {
     color: #111827;
     font-size: 0.85rem;
     line-height: 1;
 }
 
-.progress--xs .progress-track { height: 0.25rem; }
-.progress--sm .progress-track { height: 0.375rem; }
-.progress--md .progress-track { height: 0.5rem; }
-.progress--lg .progress-track { height: 0.75rem; }
-.progress--xl .progress-track { height: 1rem; }
+:where(body[theme="default"], body:not([theme])) .progress--xs .progress-track { height: 0.25rem; }
+:where(body[theme="default"], body:not([theme])) .progress--sm .progress-track { height: 0.375rem; }
+:where(body[theme="default"], body:not([theme])) .progress--md .progress-track { height: 0.5rem; }
+:where(body[theme="default"], body:not([theme])) .progress--lg .progress-track { height: 0.75rem; }
+:where(body[theme="default"], body:not([theme])) .progress--xl .progress-track { height: 1rem; }
 
-.progress--indeterminate .progress-fill {
+:where(body[theme="default"], body:not([theme])) .progress--indeterminate .progress-fill {
     width: 35%;
     animation: progress-indeterminate 1.25s ease-in-out infinite;
 }

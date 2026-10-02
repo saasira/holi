@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Browser Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; max-width: 640px; }
+            .demo { margin-bottom: 24px; }
+            .demo h2 { margin: 0 0 8px; font-size: 18px; }
+            .note { margin: 0 0 10px; color: #334155; font-size: 13px; }
+            .out { margin-top: 8px; font-size: 13px; color: #0f172a; }
+            .out code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+        </style>
+    </head>
+    <body>
+        <h1>Browser (node picker)</h1>
+        <p class="note">
+            A value picker that browses a hierarchy in a modal and returns the selected node. It composes the
+            <code>tree</code> (lazy children via <code>children-loader</code>) inside a dialog. Selecting a node and
+            confirming sets the value, updates a hidden input, and fires a bubbling <code>browserchange</code> event.
+        </p>
+
+        <section class="demo">
+            <h2>Variant 1: path picker (lazy, any node selectable)</h2>
+            <p class="note">Browse from a root; children load on first expand via the <code>children-loader</code>.</p>
+            <div component="browser"
+                 children-loader="loadBrowserChildren"
+                 root-id="/content" root-label="content"
+                 title="Pick a node" placeholder="No node selected"
+                 name="pickedPath"></div>
+            <div class="out" data-out="v1">Selected: <code>(none)</code></div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: leaf-only, with an initial value</h2>
+            <p class="note">Only leaf nodes may be selected (branches are not confirmable). Starts pre-filled.</p>
+            <div component="browser"
+                 children-loader="loadBrowserChildren"
+                 root-id="/content" root-label="content"
+                 value="/content/data/students/naresh" label="naresh"
+                 title="Pick a record" placeholder="No record selected"
+                 leaf-only name="pickedRecord"></div>
+            <div class="out" data-out="v2">Selected: <code>/content/data/students/naresh</code></div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: flat list (single level — e.g. a model picker)</h2>
+            <p class="note">A root whose children are all leaves acts as a flat chooser.</p>
+            <div component="browser"
+                 children-loader="loadModelChildren"
+                 root-id="models" root-label="models"
+                 title="Pick a model" placeholder="No model selected"
+                 leaf-only name="pickedModel"></div>
+            <div class="out" data-out="v3">Selected: <code>(none)</code></div>
+        </section>
+
+        <script>
+            // In-memory hierarchy so the example is self-contained (no backend). A real app points the
+            // loader at an endpoint returning [{ id, label, lazy }] for the given node id.
+            const TREE = {
+                '/content': [
+                    { id: '/content/site', label: 'site', lazy: true },
+                    { id: '/content/data', label: 'data', lazy: true }
+                ],
+                '/content/site': [
+                    { id: '/content/site/home', label: 'home', lazy: false },
+                    { id: '/content/site/about', label: 'about', lazy: false }
+                ],
+                '/content/data': [
+                    { id: '/content/data/students', label: 'students', lazy: true },
+                    { id: '/content/data/models', label: 'models', lazy: false }
+                ],
+                '/content/data/students': [
+                    { id: '/content/data/students/naresh', label: 'naresh', lazy: false },
+                    { id: '/content/data/students/bhanu', label: 'bhanu', lazy: false }
+                ]
+            };
+            window.loadBrowserChildren = async ({ id }) => TREE[id] || [];
+
+            const MODELS = [
+                { id: 'sample:Student', label: 'sample:Student', lazy: false },
+                { id: 'sample:Course', label: 'sample:Course', lazy: false },
+                { id: 'sample:Teacher', label: 'sample:Teacher', lazy: false }
+            ];
+            window.loadModelChildren = async ({ id }) => (id === 'models' ? MODELS : []);
+
+            // browserchange bubbles, so a single delegated listener handles every picker on the page.
+            document.addEventListener('browserchange', (event) => {
+                const host = event.target.closest('[data-component-id]')?.parentElement?.closest('.demo')
+                    || event.target.closest('.demo');
+                const out = host?.querySelector('[data-out]');
+                if (out) out.innerHTML = 'Selected: <code>' + (event.detail.value || '(none)') + '</code>';
+                console.log('browserchange', event.detail);
+            });
+        </script>
+    </body>
+</html>

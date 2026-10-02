@@ -1,0 +1,39 @@
+<template id="timerange-template">
+    <div class="holi-timerange">
+        <button type="button" class="holi-timerange-trigger" data-action="toggle" aria-haspopup="true" aria-expanded="false">
+            <span class="holi-timerange-icon" aria-hidden="true">&#9719;</span>
+            <span class="holi-timerange-label" data-role="label"></span>
+        </button>
+        <label class="holi-timerange-refresh" data-role="refresh-wrap">
+            <span class="holi-timerange-refresh-label">Refresh</span>
+            <select data-role="refresh" aria-label="Auto refresh"></select>
+        </label>
+        <div class="holi-timerange-panel" data-role="panel" role="group" aria-label="Time range" hidden>
+            <section class="holi-timerange-section">
+                <h4 class="holi-timerange-heading">Quick select</h4>
+                <div class="holi-timerange-presets" data-role="presets"></div>
+            </section>
+            <form class="holi-timerange-section holi-timerange-absolute" data-role="absolute">
+                <h4 class="holi-timerange-heading">Absolute <span class="holi-timerange-zone" data-role="zone"></span></h4>
+                <label class="holi-timerange-field">
+                    <span>From</span>
+                    <input type="datetime-local" step="1" data-role="from" required>
+                </label>
+                <label class="holi-timerange-field">
+                    <span>To</span>
+                    <input type="datetime-local" step="1" data-role="to" required>
+                </label>
+                <p class="holi-timerange-error" data-role="error" hidden></p>
+                <button type="submit" class="holi-timerange-apply">Apply</button>
+            </form>
+        </div>
+    </div>
+</template>
+
+<template id="timerange-preset-template">
+    <button type="button" class="holi-timerange-preset" data-action="preset" data-value="@{item.value}">@{item.label}</button>
+</template>
+
+<template id="timerange-refresh-option-template">
+    <option value="@{item.value}">@{item.label}</option>
+</template>

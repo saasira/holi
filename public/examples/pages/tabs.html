@@ -29,6 +29,16 @@
             <tabs provider="demo" data-source="@{demo.simple}"></tabs>
         </section>
 
+        <section class="demo">
+            <h2>Variant 4: inline &lt;tab&gt; children, no provider, default tab by name</h2>
+            <tabs id="tabs-inline" default="signatures">
+                <tab name="events" label="Events"><p>Every event in the range, newest first.</p></tab>
+                <tab name="signatures" label="Signatures"><p>Error signatures, ranked by independent failures.</p></tab>
+                <tab name="transactions" label="Transactions"><p>Transactions and how they ended.</p></tab>
+            </tabs>
+            <p id="tabs-inline-log">Event log: none</p>
+        </section>
+
         <script>
             const tabData = {
                 primary: [
@@ -61,6 +71,10 @@
                     return item?.content || '';
                 }
             };
+
+            document.getElementById('tabs-inline').addEventListener('tabchange', (event) => {
+                document.getElementById('tabs-inline-log').textContent = `Event log: tabchange ${event.detail.name}`;
+            }, true);
         </script>
     </body>
 </html>

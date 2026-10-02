@@ -30,19 +30,17 @@ https://cdn.jsdelivr.net/npm/<package-name>@<version>/<file>
 For Holi `v0.1.5`:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.css" />
-<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://cdn.jsdelivr.net/npm/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/@saasira/holi@0.21.1/dist/holi.js"></script>
 ```
+
+The bootstrap then loads `components.html`, `layouts.html`, lazy JS chunks, and per-component CSS from the same `dist/` base as needed.
 
 ## Fallback CDN
 
 unpkg can be used with the same package versioning model:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.css" />
-<script src="https://unpkg.com/@saasira/holi@0.1.5/dist/holi.js"></script>
-<link rel="preload" as="fetch" href="https://unpkg.com/@saasira/holi@0.1.5/dist/components.html" crossorigin="anonymous" />
+<script src="https://unpkg.com/@saasira/holi@0.21.1/dist/holi.js"></script>
 ```
 
 ## Versioning Guidance
@@ -56,9 +54,10 @@ unpkg can be used with the same package versioning model:
 The npm package is configured to publish:
 
 - `dist/holi.js`
-- `dist/holi.css`
+- `dist/holi.css` (optional compatibility stylesheet)
 - `dist/components.html`
 - `dist/layouts.html`
+- `dist/styles/components/*.css`
 - `dist/holi.html` (legacy compatibility bundle)
 - `README.md`
 - `CHANGELOG.md`

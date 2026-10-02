@@ -16,6 +16,8 @@ const outStyles = path.join(outBase, 'styles');
 const outScripts = path.join(outBase, 'scripts');
 const outApi = path.join(outBase, 'api');
 const outLayouts = path.join(outBase, 'layouts');
+const distBase = path.join(root, 'dist');
+const publicDist = path.join(root, 'public', 'dist');
 
 function ensureDir(dir) {
     fs.mkdirSync(dir, { recursive: true });
@@ -94,6 +96,7 @@ function buildExamples() {
     copyDirIfExists(srcScripts, outScripts);
     copyDirIfExists(srcApi, outApi);
     copyDirIfExists(srcLayouts, outLayouts);
+    copyDirIfExists(distBase, publicDist);
 
     if (fs.existsSync(srcPages)) {
         const pages = collectHtmlFiles(srcPages);

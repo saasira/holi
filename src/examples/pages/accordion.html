@@ -65,7 +65,35 @@
             </accordion>
         </section>
 
+        <section class="demo">
+            <h2>Variant 4: a content provider, sections loaded when first opened</h2>
+            <accordion id="acc-provider" provider="faq" data-source="faq" multiple></accordion>
+            <p id="acc-provider-log">Event log: none</p>
+        </section>
+
         <script>
+            // Sections from a provider: resolve() gives the list; a section without content is asked of
+            // getContent() the first time it opens.
+            window.contentProviders = window.contentProviders || {};
+            window.contentProviders.faq = {
+                resolve() {
+                    return [
+                        { name: 'shipping', label: 'Shipping', content: 'Orders ship within two working days.', open: true },
+                        { name: 'returns', label: 'Returns' },
+                        { name: 'warranty', label: 'Warranty' }
+                    ];
+                },
+                async getContent(item) {
+                    await new Promise((resolve) => setTimeout(resolve, 200));
+                    return `${item.label}: loaded when first opened.`;
+                }
+            };
+
+            document.getElementById('acc-provider').addEventListener('accordionchange', (event) => {
+                document.getElementById('acc-provider-log').textContent =
+                    `Event log: accordionchange ${event.detail.name} open=${event.detail.open}`;
+            }, true);
+
             const multi = document.getElementById('acc-multi');
             document.getElementById('btn-open-all')?.addEventListener('click', () => {
                 multi?.accordioncomponent?.openAll();

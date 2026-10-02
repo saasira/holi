@@ -1,4 +1,4 @@
-.holi-menubar {
+:where(body[theme="default"], body:not([theme])) .holi-menubar {
     position: relative;
     --menubar-border: #d6dde8;
     --menubar-surface: #ffffff;
@@ -8,7 +8,7 @@
     --menubar-focus: #1d4ed8;
 }
 
-.holi-menubar-toggle {
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -24,25 +24,25 @@
     transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
-.holi-menubar-toggle[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle[hidden] {
     display: none !important;
 }
 
-.holi-menubar-toggle:hover,
-.holi-menubar-toggle:focus-visible {
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle:hover,
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle:focus-visible {
     background: var(--menubar-surface-soft);
     border-color: #c3cddd;
     box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.08);
 }
 
-.holi-menubar-toggle[data-toggle-appearance="icon"] {
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle[data-toggle-appearance="icon"] {
     width: 40px;
     min-width: 40px;
     padding: 0;
     font-size: 0;
 }
 
-.holi-menubar-toggle[data-toggle-appearance="icon"]::before {
+:where(body[theme="default"], body:not([theme])) .holi-menubar-toggle[data-toggle-appearance="icon"]::before {
     content: "";
     width: 16px;
     height: 12px;
@@ -52,14 +52,14 @@
         linear-gradient(var(--menubar-text), var(--menubar-text)) 0 10px / 16px 2px no-repeat;
 }
 
-.holi-menubar .holi-menu-root,
-.holi-menubar .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-menubar .holi-menu-root,
+:where(body[theme="default"], body:not([theme])) .holi-menubar .holi-submenu {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.holi-menubar[data-mode="bar"] .holi-menu-root {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="bar"] .holi-menu-root {
     display: flex;
     align-items: center;
     gap: 2px;
@@ -72,15 +72,15 @@
     overflow: visible;
 }
 
-.holi-menubar .holi-menu-root[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-menubar .holi-menu-root[hidden] {
     display: none !important;
 }
 
-.holi-menu-item {
+:where(body[theme="default"], body:not([theme])) .holi-menu-item {
     position: relative;
 }
 
-.holi-menu-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-menu-trigger {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -95,14 +95,14 @@
     transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 
-.holi-menu-trigger:hover,
-.holi-menu-trigger:focus-visible,
-.holi-menu-item.open > .holi-menu-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-menu-trigger:hover,
+:where(body[theme="default"], body:not([theme])) .holi-menu-trigger:focus-visible,
+:where(body[theme="default"], body:not([theme])) .holi-menu-item.open > .holi-menu-trigger {
     background: var(--menubar-surface-soft);
     border-color: var(--menubar-border);
 }
 
-.holi-menu-item.has-submenu > .holi-menu-trigger::after {
+:where(body[theme="default"], body:not([theme])) .holi-menu-item.has-submenu > .holi-menu-trigger::after {
     content: "";
     width: 6px;
     height: 6px;
@@ -111,7 +111,7 @@
     transform: rotate(45deg);
 }
 
-.holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-submenu {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -124,41 +124,41 @@
     z-index: 1100;
 }
 
-.holi-submenu .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-submenu .holi-submenu {
     top: -6px;
     left: calc(100% + 4px);
 }
 
-.holi-menu-item[data-submenu-align="left"] > .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-menu-item[data-submenu-align="left"] > .holi-submenu {
     left: auto;
     right: calc(100% + 4px);
 }
 
-.holi-menu-item[data-submenu-align="right"] > .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-menu-item[data-submenu-align="right"] > .holi-submenu {
     left: calc(100% + 4px);
     right: auto;
 }
 
-.holi-menu-item[data-submenu-align="viewport"] > .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-menu-item[data-submenu-align="viewport"] > .holi-submenu {
     left: auto;
     right: 0;
 }
 
-.holi-submenu .holi-menu-item {
+:where(body[theme="default"], body:not([theme])) .holi-submenu .holi-menu-item {
     display: block;
 }
 
-.holi-submenu .holi-menu-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-submenu .holi-menu-trigger {
     width: 100%;
     justify-content: flex-start;
     border-color: transparent;
 }
 
-.holi-submenu[hidden] {
+:where(body[theme="default"], body:not([theme])) .holi-submenu[hidden] {
     display: none !important;
 }
 
-.holi-menubar[data-mode="single"] .holi-menu-root {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="single"] .holi-menu-root {
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
@@ -171,11 +171,11 @@
     z-index: 1100;
 }
 
-.holi-menubar[data-mode="single"] .holi-menu-item {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="single"] .holi-menu-item {
     display: block;
 }
 
-.holi-menubar[data-mode="single"] .holi-menu-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="single"] .holi-menu-trigger {
     width: 100%;
     border-color: transparent;
     background: transparent;
@@ -183,11 +183,11 @@
     border-radius: 8px;
 }
 
-.holi-menubar[data-mode="single"] .holi-menu-item + .holi-menu-item {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="single"] .holi-menu-item + .holi-menu-item {
     border-top: 1px solid #eef2f7;
 }
 
-.holi-menubar[data-mode="single"] .holi-submenu {
+:where(body[theme="default"], body:not([theme])) .holi-menubar[data-mode="single"] .holi-submenu {
     position: static;
     top: auto;
     left: auto;

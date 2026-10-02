@@ -1,4 +1,4 @@
-.stats-card-view {
+:where(body[theme="default"], body:not([theme])) .stats-card-view {
     border: 1px solid #e5e7eb;
     border-radius: 0.75rem;
     background: #ffffff;
@@ -8,13 +8,13 @@
     min-height: 8rem;
 }
 
-.stats-header {
+:where(body[theme="default"], body:not([theme])) .stats-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.stats-icon {
+:where(body[theme="default"], body:not([theme])) .stats-icon {
     width: 2rem;
     height: 2rem;
     border-radius: 0.5rem;
@@ -25,30 +25,30 @@
     font-weight: 700;
 }
 
-.stats-change {
+:where(body[theme="default"], body:not([theme])) .stats-change {
     display: inline-flex;
     gap: 0.3rem;
     font-size: 0.85rem;
     align-items: center;
 }
 
-.trend-up .stats-change { color: #15803d; }
-.trend-down .stats-change { color: #b91c1c; }
-.trend-neutral .stats-change { color: #475569; }
+:where(body[theme="default"], body:not([theme])) .trend-up .stats-change { color: #15803d; }
+:where(body[theme="default"], body:not([theme])) .trend-down .stats-change { color: #b91c1c; }
+:where(body[theme="default"], body:not([theme])) .trend-neutral .stats-change { color: #475569; }
 
-.stats-value {
+:where(body[theme="default"], body:not([theme])) .stats-value {
     font-size: 1.5rem;
     line-height: 1.1;
     font-weight: 700;
     color: #0f172a;
 }
 
-.stats-label {
+:where(body[theme="default"], body:not([theme])) .stats-label {
     font-size: 0.9rem;
     color: #475569;
 }
 
-.stats-sparkline {
+:where(body[theme="default"], body:not([theme])) .stats-sparkline {
     height: 0.35rem;
     border-radius: 999px;
     background: linear-gradient(90deg, #bfdbfe, #60a5fa);
@@ -56,7 +56,7 @@
     transition: opacity 160ms ease, transform 160ms ease;
 }
 
-.stats-sparkline.spark-active {
+:where(body[theme="default"], body:not([theme])) .stats-sparkline.spark-active {
     opacity: 1;
     transform: scaleX(1.02);
 }

@@ -1,0 +1,100 @@
+.holi-browser { display: inline-block; width: 100%; }
+
+.holi-browser-field {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+}
+
+.holi-browser-value {
+    flex: 1;
+    min-width: 0;
+    padding: .45rem .6rem;
+    border: 1px solid var(--holi-border, #cbd5e1);
+    border-radius: 7px;
+    background: var(--holi-surface, #fff);
+    font: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.holi-browser-value.is-empty { color: var(--holi-muted, #94a3b8); }
+
+.holi-browser-btn {
+    padding: .45rem .7rem;
+    border: 1px solid var(--holi-border, #cbd5e1);
+    border-radius: 7px;
+    background: var(--holi-surface, #fff);
+    font: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.holi-browser-btn:hover { background: var(--holi-surface-hover, #f1f5f9); }
+.holi-browser-clear { padding: .45rem .55rem; }
+
+.holi-browser-primary {
+    background: var(--holi-primary, #2563eb);
+    border-color: var(--holi-primary, #2563eb);
+    color: #fff;
+}
+.holi-browser-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+.holi-browser-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.holi-browser-overlay[hidden] { display: none; }
+
+.holi-browser-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, .45);
+}
+
+.holi-browser-panel {
+    position: relative;
+    width: min(560px, 92vw);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--holi-surface, #fff);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, .3);
+    overflow: hidden;
+}
+
+.holi-browser-head,
+.holi-browser-foot {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .85rem 1rem;
+}
+.holi-browser-head { border-bottom: 1px solid var(--holi-border, #f1f5f9); font-weight: 700; }
+.holi-browser-foot { border-top: 1px solid var(--holi-border, #f1f5f9); }
+.holi-browser-title { flex: 1; }
+.holi-browser-x { background: none; border: none; font-size: 18px; cursor: pointer; color: #64748b; }
+
+.holi-browser-body {
+    flex: 1;
+    overflow: auto;
+    padding: .75rem 1rem;
+    min-height: 12rem;
+}
+
+.holi-browser-selection {
+    flex: 0 1 auto;
+    min-width: 0;
+    color: var(--holi-muted, #64748b);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.holi-browser-spacer { flex: 1; }

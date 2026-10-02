@@ -39,11 +39,19 @@ const sourceChecks = [
     },
     {
         file: 'src/examples/pages/menubar.html',
-        patterns: ['component="menubar"', 'role="menubar"', '<menubar']
+        patterns: ['component="menubar"', 'role="holi-menubar"', '<menubar', 'provider="mainmenu"', 'menuselect']
+    },
+    {
+        file: 'src/examples/pages/navigation.html',
+        patterns: ['/dist/holi.js', 'new Navigation({ hashMode: true })', 'StateHub.create(', 'StateConnector.connect(']
+    },
+    {
+        file: 'src/examples/pages/accordion.html',
+        patterns: ['component="accordion"', 'role="accordion"', '<accordion', 'provider="faq"', 'getContent']
     },
     {
         file: 'src/examples/pages/tree.html',
-        patterns: ['component="tree"', 'role="tree"', '<tree']
+        patterns: ['component="tree"', 'role="holi-tree"', '<tree']
     },
     {
         file: 'src/examples/pages/treepanel.html',
@@ -62,8 +70,28 @@ const sourceChecks = [
         patterns: ['component="backtotop"', 'role="backtotop"', '<backtotop']
     },
     {
+        file: 'src/examples/pages/themeswitcher.html',
+        patterns: ['<themeswitcher', 'data-holi-themes', '"activeTheme": "presto"', '"name": "atlas"']
+    },
+    {
+        file: 'src/examples/pages/localeswitcher.html',
+        patterns: ['<localeswitcher', 'data-holi-locales', '"defaultLocale": "en"', '"code": "hi"']
+    },
+    {
         file: 'src/examples/pages/page-layout.html',
         patterns: ['<page layout="3x9"', 'layouts-base="/examples/layouts/"', '<block name="head">', '<block name="tail">', '<region name="styles">', '<block name="main"', '<region name="middle"']
+    },
+    {
+        file: 'src/examples/pages/histogram.html',
+        patterns: ['<histogram', 'component="histogram"', 'interval="1m"', 'histogrambrush', 'histogramselect']
+    },
+    {
+        file: 'src/examples/pages/timerange.html',
+        patterns: ['<timerange', 'component="timerange"', 'timezone="utc"', 'timerangechange', 'setAbsolute']
+    },
+    {
+        file: 'src/examples/pages/tabs.html',
+        patterns: ['<tabs id="tabs-inline" default="signatures">', '<tab name="events" label="Events">']
     },
     {
         file: 'src/examples/layouts/3x9.html',
@@ -75,12 +103,19 @@ const builtChecks = [
     'public/examples/pages/layout.html',
     'public/examples/pages/gallery.html',
     'public/examples/pages/menubar.html',
+    'public/examples/pages/accordion.html',
+    'public/examples/pages/navigation.html',
     'public/examples/pages/tree.html',
     'public/examples/pages/treepanel.html',
     'public/examples/pages/lifecycle-regression.html',
     'public/examples/pages/breadcrumbs.html',
     'public/examples/pages/backtotop.html',
-    'public/examples/pages/page-layout.html'
+    'public/examples/pages/themeswitcher.html',
+    'public/examples/pages/localeswitcher.html',
+    'public/examples/pages/page-layout.html',
+    'public/examples/pages/histogram.html',
+    'public/examples/pages/timerange.html',
+    'public/examples/pages/tabs.html'
 ];
 
 const builtAssetPatterns = [

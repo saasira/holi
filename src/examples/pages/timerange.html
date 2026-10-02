@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Time Range Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 22px; }
+            .demo-card { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px; background: #f8fafc; min-height: 60px; }
+            .event-log { margin-top: 10px; color: #334155; font-size: 13px; }
+            .controls { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 7px 11px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h1>Time Range</h1>
+        <p>Quick relative ranges, an absolute from/to, and auto-refresh. A relative range is re-resolved each time it is
+            read, so "Last 15 minutes" always ends now.</p>
+
+        <section class="demo">
+            <h2>Variant 1: &lt;timerange&gt;, local time, with auto-refresh</h2>
+            <section class="demo-card">
+                <timerange id="range-local" value="now-15m" refresh="off"></timerange>
+                <div class="controls">
+                    <button id="btn-last-hour">setRelative('now-1h')</button>
+                    <button id="btn-morning">setAbsolute(today 09:00 - 12:00)</button>
+                </div>
+                <div class="event-log" id="range-log">Event log: none</div>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: component="timerange", UTC, custom presets, no refresh control</h2>
+            <section class="demo-card">
+                <section
+                    component="timerange"
+                    id="range-utc"
+                    timezone="utc"
+                    show-refresh="false"
+                    value="now-6h"
+                    presets='[
+                        {"label":"Last 30 minutes","value":"now-30m"},
+                        {"label":"Last 6 hours","value":"now-6h"},
+                        {"label":"Last 2 days","value":"now-2d"}
+                    ]'>
+                </section>
+                <div class="event-log" id="range-utc-log">Event log: none</div>
+            </section>
+        </section>
+
+        <script>
+            const local = document.getElementById('range-local');
+            const log = document.getElementById('range-log');
+            const describe = (event) => `${event.type}: ${event.detail.label} (${event.detail.from} → ${event.detail.to})`;
+
+            local.addEventListener('timerangechange', (event) => { log.textContent = `Event log: ${describe(event)}`; });
+            local.addEventListener('timerangerefresh', (event) => { log.textContent = `Event log: ${describe(event)}`; });
+            document.getElementById('range-utc').addEventListener('timerangechange', (event) => {
+                document.getElementById('range-utc-log').textContent = `Event log: ${describe(event)}`;
+            });
+
+            document.getElementById('btn-last-hour').addEventListener('click', () => {
+                local.timerangecomponent?.setRelative('now-1h');
+            });
+            document.getElementById('btn-morning').addEventListener('click', () => {
+                const from = new Date(); from.setHours(9, 0, 0, 0);
+                const to = new Date(); to.setHours(12, 0, 0, 0);
+                local.timerangecomponent?.setAbsolute(from, to);
+            });
+        </script>
+    </body>
+</html>

@@ -1,19 +1,19 @@
-.holi-accordion {
+:where(body[theme="default"], body:not([theme])) .holi-accordion {
     border: 1px solid #d9dee8;
     border-radius: 10px;
     background: #fff;
     overflow: hidden;
 }
 
-.holi-accordion-list {
+:where(body[theme="default"], body:not([theme])) .holi-accordion-list {
     display: grid;
 }
 
-.holi-accordion .accordion-item + .accordion-item {
+:where(body[theme="default"], body:not([theme])) .holi-accordion .accordion-item + .accordion-item {
     border-top: 1px solid #e6eaf0;
 }
 
-.holi-accordion .accordion-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-accordion .accordion-trigger {
     width: 100%;
     border: 0;
     background: #f8fafc;
@@ -24,11 +24,11 @@
     cursor: pointer;
 }
 
-.holi-accordion .accordion-item.is-open .accordion-trigger {
+:where(body[theme="default"], body:not([theme])) .holi-accordion .accordion-item.is-open .accordion-trigger {
     background: #eef4fb;
 }
 
-.holi-accordion .accordion-panel {
+:where(body[theme="default"], body:not([theme])) .holi-accordion .accordion-panel {
     padding: 12px 14px;
     background: #fff;
 }

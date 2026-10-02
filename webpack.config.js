@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const bundleTemplates = (patterns, label) => {
     let bundledHtml = `<!-- ${label} v1.0.0 -->\n`;
@@ -267,21 +268,35 @@ const appConfig = {
     cache: false,
     entry: './src/scripts/index.js', // Single entry bundles ALL JS
     
+    // Class and function names survive minification: a component exposes its instance on its host element under
+    // its class name (el.chartcomponent, el.datatable -- Component's instanceKey), and babel turns each class into a
+    // function the minifier would otherwise rename to a single letter, so in dist/ none of those properties existed.
+    optimization: {
+        minimizer: [new TerserPlugin({ terserOptions: { keep_classnames: true, keep_fnames: true } })]
+    },
+
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'holi.js',
-        publicPath: '/dist/',
+        chunkFilename: '[name].js',
+        publicPath: 'auto',
         clean: true
     },
 
     devServer: {
-        static: {
-            directory: path.resolve(__dirname, 'public')
-        },
+        static: [
+            {
+                directory: path.resolve(__dirname, 'public')
+            },
+            {
+                directory: path.resolve(__dirname, 'dist'),
+                publicPath: '/dist'
+            }
+        ],
         devMiddleware: {
             writeToDisk: true
         },
-        port: 8080,
+        port: 7777,
         setupMiddlewares(middlewares, devServer) {
             if (!devServer || !devServer.app) return middlewares;
 
@@ -356,6 +371,17 @@ const appConfig = {
                 }
             };
 
+            const servePing = (_req, res) => {
+                res.setHeader('Content-Type', 'application/json');
+                res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
+                res.status(200).send(JSON.stringify({
+                    ok: true,
+                    ts: Date.now()
+                }));
+            };
+
             devServer.app.get('/examples/api/sales', serveSales);
             devServer.app.get('/api/sales', serveSales);
             devServer.app.post('/examples/api/sales', saveSales);
@@ -370,6 +396,8 @@ const appConfig = {
             devServer.app.put('/api/tree-details', saveTreeDetails);
             devServer.app.post('/examples/api/tree-details', saveTreeDetails);
             devServer.app.post('/api/tree-details', saveTreeDetails);
+            devServer.app.get('/examples/api/ping', servePing);
+            devServer.app.get('/api/ping', servePing);
 
             return middlewares;
         }
@@ -436,6 +464,16 @@ const appConfig = {
                 {
                     from: 'src/templates/layouts',
                     to: 'layouts/[path][name][ext]',
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/styles/components',
+                    to: 'styles/components/[path][name][ext]',
+                    noErrorOnMissing: true
+                },
+                {
+                    from: 'src/styles/holi.css',
+                    to: 'holi.css',
                     noErrorOnMissing: true
                 }
             ]

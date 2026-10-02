@@ -1,54 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<body>
-<!-- Routes via data-route attributes -->
-<nav>
-    <a href="/dashboard" data-route="dashboard">Dashboard</a>
-    <a href="/profile/:id" data-route="profile">Profile</a>
-    <a href="/settings">Settings</a>
-</nav>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Navigation Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            nav { display: flex; gap: 12px; margin-bottom: 16px; }
+            nav a { padding: 6px 10px; border: 1px solid #cfd6df; border-radius: 6px; text-decoration: none; color: #0f172a; }
+            nav a.active { background: #2563eb; border-color: #2563eb; color: #fff; }
+            .route-content[hidden] { display: none; }
+            .route-content { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px 16px; background: #f8fafc; }
+            label { display: inline-flex; gap: 8px; align-items: center; }
+            .event-log { margin-top: 12px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Navigation and shared state</h1>
+        <p>Client-side routes with <code>Navigation</code> (hash mode, so it works from any static server), and values shared
+            through a <code>StateHub</code> store bound to the page with <code>StateConnector</code>.</p>
 
-<!-- Route content areas -->
-<main data-route-outlet>
-    <div data-route="/" class="route-content">
-        <h1>Home</h1>
-    </div>
-    <div data-route="/dashboard" class="route-content hidden">
-        <h1>Dashboard</h1>
-        <grid-widget data-state="dashboardStore"></grid-widget>
-    </div>
-    <div data-route="/profile/:id" class="route-content hidden">
-        <h1>Profile <span data-state="userStore" data-state-path="id"></span></h1>
-    </div>
-</main>
+        <nav>
+            <a href="#/" data-nav="/">Home</a>
+            <a href="#/dashboard" data-nav="/dashboard">Dashboard</a>
+            <a href="#/profile/42" data-nav="/profile">Profile 42</a>
+            <a href="#/profile/7" data-nav="/profile">Profile 7</a>
+        </nav>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Create stores
-        window.userStore = new StateHub({});
-        window.dashboardStore = new StateHub({});
+        <main>
+            <section class="route-content" data-route="/">
+                <h2>Home</h2>
+                <p>Signed in as <strong data-state="user" data-state-path="name"></strong>.</p>
+            </section>
+            <section class="route-content" data-route="/dashboard" hidden>
+                <h2>Dashboard</h2>
+                <label>Your name <input type="text" data-state="user" data-state-path="name"></label>
+                <p>Typing here updates every element bound to <code>user.name</code>.</p>
+            </section>
+            <section class="route-content" data-route="/profile" hidden>
+                <h2>Profile <span data-state="user" data-state-path="profileId"></span></h2>
+                <p>The id comes from the route parameter <code>/profile/:id</code>.</p>
+            </section>
+        </main>
 
-        // Initialize router
-        window.navigation = new Navigation({ base: '/' });
+        <p class="event-log" id="nav-log">Event log: none</p>
 
-        // Auto-init ALL
-        Tabs.apply(); Grid.apply(); StateConnector.connect();
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // A store for the page's shared values, bound by data-state / data-state-path.
+                const user = StateHub.create({ name: 'Ada', profileId: '' }, { id: 'user' });
+                StateConnector.connect(document);
 
-        // Route definitions (HTML-driven)
-        navigation.route('/', () => updateOutlet('/'));
-        navigation.route('/dashboard', () => updateOutlet('/dashboard'));
-        navigation.route('/profile/:id', ({ params }) => {
-            updateOutlet('/profile/' + params.id);
-            userStore.proxy.id = params.id;
-        });
+                const show = (route) => {
+                    document.querySelectorAll('[data-route]').forEach((section) => {
+                        section.hidden = section.dataset.route !== route;
+                    });
+                    document.querySelectorAll('[data-nav]').forEach((link) => {
+                        link.classList.toggle('active', link.dataset.nav === route);
+                    });
+                };
 
-        // Route outlet handler
-        function updateOutlet(activeRoute) {
-            document.querySelectorAll('[data-route]').forEach(el => {
-                el.classList.toggle('hidden', el.dataset.route !== activeRoute);
+                const navigation = new Navigation({ hashMode: true });
+                navigation.route('/', () => show('/'));
+                navigation.route('/dashboard', () => show('/dashboard'));
+                navigation.route('/profile/:id', ({ params }) => {
+                    user.proxy.profileId = params.id;
+                    show('/profile');
+                });
+                navigation.onChange((next) => {
+                    document.getElementById('nav-log').textContent = `Event log: route ${next.path}`;
+                });
+                navigation.dispatch(navigation.getCurrentPath());
             });
-        }
-    });
-</script>
-</body>
+        </script>
+    </body>
 </html>

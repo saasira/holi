@@ -1,3 +1,5 @@
+import { roleSelectorsFor } from './aria_roles.js';
+
 // Register for auto-loading
 // ComponentRegistry.registerLibrary('holi', [TabsComponent]);
 // ComponentRegistry.registerLibrary('holi', [ModalComponent, ToastComponent]);
@@ -129,7 +131,7 @@ class ComponentRegistry {
             selectors.add(componentName);
             selectors.add(`[component="${componentName}"]`);
             if (includeRoleSelectors) {
-                selectors.add(`[role="${componentName}"]`);
+                roleSelectorsFor(componentName).forEach((roleSelector) => selectors.add(roleSelector));
             }
         }
 

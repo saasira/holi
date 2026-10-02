@@ -1,4 +1,4 @@
-.holi.datagrid {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid {
     border: 1px solid #d9dee8;
     border-radius: 8px;
     background: #fff;
@@ -7,7 +7,7 @@
     padding: 0;
 }
 
-.holi.datagrid .datagrid-toolbar {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -17,15 +17,15 @@
     border-bottom: 1px solid #e6eaf0;
 }
 
-.holi.datagrid .datagrid-toolbar input[type="search"],
-.holi.datagrid .datagrid-toolbar select {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar input[type="search"],
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar select {
     min-height: 32px;
     padding: 4px 8px;
     max-width: 100%;
 }
 
-.holi.datagrid .datagrid-toolbar button,
-.holi.datagrid .datagrid-card-actions button {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar button,
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-actions button {
     border: 1px solid #cfd6df;
     background: #fff;
     border-radius: 6px;
@@ -33,7 +33,7 @@
     cursor: pointer;
 }
 
-.holi.datagrid .datagrid-field-chooser {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field-chooser {
     border: 1px solid #d9dee8;
     border-radius: 6px;
     padding: 10px;
@@ -41,59 +41,59 @@
     background: #f9fafb;
 }
 
-.holi.datagrid .datagrid-field-option {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field-option {
     display: flex;
     align-items: center;
     gap: 8px;
     margin: 4px 0;
 }
 
-.holi.datagrid .datagrid-content {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-content {
     padding: 10px 12px;
 }
 
-.holi.datagrid .datagrid-content.datagrid-scrollable {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-content.datagrid-scrollable {
     max-height: 500px;
     overflow-y: auto;
 }
 
-.holi.datagrid .datagrid-cards {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-cards {
     display: grid;
     gap: 12px;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
-.holi.datagrid[data-cards="1"] .datagrid-cards {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="1"] .datagrid-cards {
     grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-.holi.datagrid[data-cards="2"] .datagrid-cards {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="2"] .datagrid-cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.holi.datagrid[data-cards="3"] .datagrid-cards {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="3"] .datagrid-cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.holi.datagrid[data-cards="4"] .datagrid-cards {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="4"] .datagrid-cards {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.holi.datagrid .datagrid-card {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card {
     border: 1px solid #e5e9f0;
     border-radius: 8px;
     background: #f8fafc;
     padding: 10px;
 }
 
-.holi.datagrid .datagrid-card-head {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-head {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
 }
 
-.holi.datagrid .datagrid-card-avatar {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-avatar {
     width: 32px;
     height: 32px;
     border-radius: 999px;
@@ -101,7 +101,7 @@
     background: #e5e7eb;
 }
 
-.holi.datagrid .datagrid-card-icon {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-icon {
     width: 30px;
     height: 30px;
     border-radius: 999px;
@@ -111,13 +111,13 @@
     background: #e5ebf3;
 }
 
-.holi.datagrid .datagrid-card-title {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-title {
     margin: 0;
     font-size: 14px;
     color: #111827;
 }
 
-.holi.datagrid .datagrid-field {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
@@ -125,22 +125,22 @@
     border-top: 1px solid #edf1f7;
 }
 
-.holi.datagrid .datagrid-field:first-child {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field:first-child {
     border-top: 0;
 }
 
-.holi.datagrid .datagrid-field-label {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field-label {
     color: #6b7280;
     font-size: 12px;
 }
 
-.holi.datagrid .datagrid-field-value {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field-value {
     color: #111827;
     font-size: 13px;
     text-align: right;
 }
 
-.holi.datagrid .datagrid-card-actions {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-card-actions {
     border-top: 1px solid #edf1f7;
     margin-top: 8px;
     padding-top: 8px;
@@ -149,7 +149,7 @@
     gap: 6px;
 }
 
-.holi.datagrid .datagrid-empty {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-empty {
     border: 1px dashed #d5dbe5;
     border-radius: 8px;
     background: #fbfcfd;
@@ -158,7 +158,7 @@
     text-align: center;
 }
 
-.holi.datagrid .datagrid-footer {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-footer {
     padding: 8px 12px;
     color: #4b5563;
     font-size: 13px;
@@ -170,27 +170,27 @@
     border-top: 1px solid #e6eaf0;
 }
 
-.holi.datagrid [data-role="pagination-controls"] {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="pagination-controls"] {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.holi.datagrid [data-role="pagination-controls"][hidden] {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="pagination-controls"][hidden] {
     display: none;
 }
 
-.holi.datagrid [data-role="request-status"] {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="request-status"] {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
-.holi.datagrid [data-role="request-status"][data-state="idle"] {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="request-status"][data-state="idle"] {
     display: none;
 }
 
-.holi.datagrid [data-role="request-status"][data-state="loading"]::before {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="request-status"][data-state="loading"]::before {
     content: "";
     width: 12px;
     height: 12px;
@@ -201,7 +201,7 @@
     animation: datagrid-spin 0.7s linear infinite;
 }
 
-.holi.datagrid [data-role="request-status"][data-state="error"] {
+:where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="request-status"][data-state="error"] {
     color: #b91c1c;
 }
 
@@ -211,43 +211,43 @@
 }
 
 @media (max-width: 1080px) {
-    .holi.datagrid[data-cards="3"] .datagrid-cards,
-    .holi.datagrid[data-cards="4"] .datagrid-cards {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="3"] .datagrid-cards,
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid[data-cards="4"] .datagrid-cards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 700px) {
-    .holi.datagrid .datagrid-toolbar > * {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar > * {
         flex: 1 1 100%;
     }
 
-    .holi.datagrid .datagrid-toolbar input[type="search"],
-    .holi.datagrid .datagrid-toolbar select,
-    .holi.datagrid .datagrid-toolbar button {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar input[type="search"],
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar select,
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-toolbar button {
         width: 100%;
         min-height: 36px;
     }
 
-    .holi.datagrid .datagrid-footer {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-footer {
         flex-wrap: wrap;
         align-items: flex-start;
     }
 
-    .holi.datagrid [data-role="pagination-controls"] {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid [data-role="pagination-controls"] {
         flex-wrap: wrap;
     }
 
-    .holi.datagrid .datagrid-field {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field {
         grid-template-columns: 1fr;
         gap: 2px;
     }
 
-    .holi.datagrid .datagrid-field-value {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-field-value {
         text-align: left;
     }
 
-    .holi.datagrid .datagrid-cards {
+    :where(body[theme="default"], body:not([theme])) .holi.datagrid .datagrid-cards {
         grid-template-columns: 1fr;
     }
 }

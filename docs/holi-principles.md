@@ -3,6 +3,9 @@
 This document is the canonical architecture and implementation contract for the Holi library.
 All component, runtime, and API changes must conform to these rules.
 
+For the preferred component authoring API, lifecycle, props, slots, events, and provider contract, see:
+- `docs/component-authoring.md`
+
 ## 1) HTML Template Driven
 
 Mandatory:
@@ -31,7 +34,9 @@ Page developers may declare a component in any supported style:
 <section component="tabs" provider="tabs"></section>
 ```
 
-- Role style:
+- Role style (`role="holi-<name>"` works for every component; `role="<name>"` only when the name is not a WAI-ARIA
+  role -- `dialog`, `menubar`, `region`, `search` and `tree` are, so use `role="holi-dialog"` and so on; see
+  `src/scripts/utils/aria_roles.js`):
 ```html
 <section role="tabs" provider="tabs"></section>
 ```
@@ -104,7 +109,9 @@ When implementing or refactoring:
 
 Before finalizing a change, verify:
 - No inline HTML strings were introduced in component JS.
-- Component can be discovered via tag, `component="name"`, and `role="name"` forms.
+- Component can be discovered via tag, `component="name"`, and `role="holi-name"` (or `role="name"` when that is not an
+  ARIA role) forms.
+- A template uses real ARIA roles for accessibility; they never name a component.
 - No unsafe expression evaluation path exists.
 - Templates remain the source of structural truth.
 - Progressive enhancement behavior is preserved.
