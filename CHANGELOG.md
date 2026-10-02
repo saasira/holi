@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Added
+
+- `timerange` component: quick relative ranges (`now-15m`, presets configurable), an absolute from/to, optional
+  auto-refresh, and local or UTC display (`timezone="utc"`). A relative range is re-resolved whenever it is read.
+  Emits bubbling `timerangechange` and `timerangerefresh` with `{ from, to, relative, label }`; API `getRange()`,
+  `setRelative()`, `setAbsolute()`, `setRefresh()`.
+- `histogram` component: counts per time bucket, stacked (or side by side) by series, over a time axis whose ticks fall
+  on round times in the zone shown. Hover tooltip, drag-to-select (`histogrambrush`), click a bucket
+  (`histogramselect`), legend toggles a series (`histogramseriestoggle`); redraws on resize; API `update(data, options)`.
+- `tabs` accepts inline `<tab name="..." label="...">` children when it has no `data-source`, so page content can be
+  tabbed without a content provider; `default="<name>"` picks the first tab, `selectTab(name)` switches by name, and
+  `tabchange` carries the tab's `name`.
+- Examples: `histogram.html`, `timerange.html`, and an inline variant in `tabs.html`, with smoke checks.
+
+### Fixed
+
+- In the minified `dist/` build a component's instance was not reachable from its host (`el.chartcomponent`,
+  `el.datatable`): babel compiles each class to a function the minifier renamed to a single letter, and the instance
+  key is the class name. Terser now keeps class and function names.
+
 ## [0.20.0] - 2026-06-06
 
 ### Added

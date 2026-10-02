@@ -1,0 +1,32 @@
+<template id="histogram-template">
+    <section class="holi-histogram">
+        <div class="holi-histogram-plot" data-role="plot">
+            <svg class="holi-histogram-svg" data-role="svg" role="img"></svg>
+            <div class="holi-histogram-tooltip" data-role="tooltip" role="tooltip" hidden>
+                <div class="holi-histogram-tooltip-time" data-role="tooltip-time"></div>
+                <ul class="holi-histogram-tooltip-rows" data-role="tooltip-rows"></ul>
+                <div class="holi-histogram-tooltip-total" data-role="tooltip-total"></div>
+            </div>
+        </div>
+        <p class="holi-histogram-empty" data-role="empty" hidden>No data in this range.</p>
+        <ul class="holi-histogram-legend" data-role="legend"></ul>
+    </section>
+</template>
+
+<template id="histogram-legend-item-template">
+    <li class="holi-histogram-legend-item">
+        <button type="button" class="holi-histogram-legend-button" data-action="toggle-series" data-series="@{item.key}" aria-pressed="true">
+            <span class="holi-histogram-swatch" data-role="swatch"></span>
+            <span class="holi-histogram-legend-label">@{item.label}</span>
+            <span class="holi-histogram-legend-total">@{item.total}</span>
+        </button>
+    </li>
+</template>
+
+<template id="histogram-tooltip-row-template">
+    <li class="holi-histogram-tooltip-row">
+        <span class="holi-histogram-swatch" data-role="swatch"></span>
+        <span class="holi-histogram-tooltip-label">@{item.label}</span>
+        <span class="holi-histogram-tooltip-value">@{item.value}</span>
+    </li>
+</template>
