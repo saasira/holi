@@ -140,3 +140,7 @@ vite.config.ts.timestamp-*
 
 # Release packaging artifacts
 release-assets/
+
+# Generated service worker build artifacts
+public/sw.js
+public/sw.js.LICENSE.txt

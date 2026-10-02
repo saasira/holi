@@ -1,27 +1,27 @@
-.holi-gallery-root {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-root {
     display: grid;
     gap: 12px;
 }
 
-.holi-gallery-toolbar {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-toolbar {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 10px;
 }
 
-.holi-gallery-field {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-field {
     display: grid;
     gap: 4px;
     font-size: 13px;
     color: #334155;
 }
 
-.holi-gallery-field span {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-field span {
     font-weight: 600;
 }
 
-.holi-gallery-field input,
-.holi-gallery-field select {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-field input,
+:where(body[theme="default"], body:not([theme])) .holi-gallery-field select {
     border: 1px solid #cdd7e5;
     border-radius: 8px;
     padding: 7px 10px;
@@ -29,11 +29,11 @@
     color: #0f172a;
 }
 
-.holi-gallery-field-sm {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-field-sm {
     min-width: 140px;
 }
 
-.holi-gallery-state {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-state {
     font-size: 13px;
     border: 1px solid #d9e1ee;
     border-radius: 8px;
@@ -42,7 +42,7 @@
     padding: 8px 10px;
 }
 
-.holi-gallery-grid-wrap {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-grid-wrap {
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 12px;
@@ -51,13 +51,13 @@
     overflow: auto;
 }
 
-.holi-gallery-grid {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 12px;
 }
 
-.holi-gallery-thumb {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-thumb {
     border: 1px solid #d7dee8;
     border-radius: 10px;
     padding: 0;
@@ -66,32 +66,32 @@
     background: #fff;
 }
 
-.holi-gallery-thumb:hover,
-.holi-gallery-thumb:focus-visible {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-thumb:hover,
+:where(body[theme="default"], body:not([theme])) .holi-gallery-thumb:focus-visible {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
-.holi-gallery-thumb img {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-thumb img {
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
     display: block;
 }
 
-.holi-gallery-sentinel {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-sentinel {
     height: 2px;
 }
 
-.holi-gallery-pagination {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-pagination {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.holi-gallery-pagination button {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-pagination button {
     border: 1px solid #c9d3e3;
     background: #fff;
     border-radius: 8px;
@@ -99,28 +99,28 @@
     cursor: pointer;
 }
 
-.holi-gallery-pagination button:disabled {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-pagination button:disabled {
     cursor: not-allowed;
     opacity: 0.45;
 }
 
-.holi-gallery-pagination [data-role="page-status"] {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-pagination [data-role="page-status"] {
     font-size: 13px;
     color: #334155;
 }
 
-.holi-gallery-lightbox .holi-carousel {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel {
     border: 0;
     border-radius: 0;
     max-width: none;
     background: #020617;
 }
 
-.holi-gallery-lightbox .holi-carousel .slide {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel .slide {
     background: #020617;
 }
 
-.holi-gallery-lightbox .holi-carousel .slide img {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel .slide img {
     width: 100%;
     max-height: min(78vh, 900px);
     object-fit: contain;
@@ -128,55 +128,55 @@
     background: #020617;
 }
 
-.holi-gallery-lightbox .holi-carousel-footer {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel-footer {
     background: #0f172a;
     border-top-color: #1e293b;
 }
 
-.holi-gallery-lightbox .holi-carousel .controls button,
-.holi-gallery-lightbox .holi-carousel .dot {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel .controls button,
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel .dot {
     background: #cbd5e1;
 }
 
-.holi-gallery-lightbox .holi-carousel .dot.selected {
+:where(body[theme="default"], body:not([theme])) .holi-gallery-lightbox .holi-carousel .dot.selected {
     background: #38bdf8;
 }
 
 @media (max-width: 900px) {
-    .holi-gallery-toolbar {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-toolbar {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 
-    .holi-gallery-grid {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-grid {
         grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     }
 }
 
 @media (max-width: 640px) {
-    .holi-gallery-toolbar {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-toolbar {
         grid-template-columns: 1fr;
     }
 
-    .holi-gallery-field-sm {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-field-sm {
         min-width: 0;
     }
 
-    .holi-gallery-grid-wrap {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-grid-wrap {
         padding: 8px;
         max-height: 68vh;
     }
 
-    .holi-gallery-grid {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
     }
 
-    .holi-gallery-pagination {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-pagination {
         flex-wrap: wrap;
         gap: 8px;
     }
 
-    .holi-gallery-pagination button {
+    :where(body[theme="default"], body:not([theme])) .holi-gallery-pagination button {
         min-width: 120px;
     }
 }

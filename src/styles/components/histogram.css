@@ -1,0 +1,156 @@
+:where(body[theme="default"], body:not([theme])) .holi-histogram {
+    --histogram-grid: var(--holi-border, #e2e8f0);
+    --histogram-axis: var(--holi-muted, #64748b);
+    --histogram-text: var(--holi-text, #0f172a);
+    --histogram-surface: var(--holi-surface, #ffffff);
+    --histogram-accent: var(--holi-primary, #2563eb);
+    color: var(--histogram-text);
+    font-size: 12px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-plot {
+    position: relative;
+    width: 100%;
+    touch-action: none;
+    user-select: none;
+    cursor: crosshair;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-grid line {
+    stroke: var(--histogram-grid);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-axis-y {
+    fill: var(--histogram-axis);
+    font-size: 11px;
+    text-anchor: end;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-axis-x line {
+    stroke: var(--histogram-axis);
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-axis-x text {
+    fill: var(--histogram-axis);
+    font-size: 11px;
+    text-anchor: middle;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-bar {
+    shape-rendering: crispEdges;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-hover {
+    fill: var(--histogram-accent);
+    fill-opacity: 0.08;
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-brush {
+    fill: var(--histogram-accent);
+    fill-opacity: 0.18;
+    stroke: var(--histogram-accent);
+    stroke-width: 1;
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip {
+    position: absolute;
+    top: 4px;
+    z-index: 10;
+    min-width: 150px;
+    padding: 8px 10px;
+    border: 1px solid var(--histogram-grid);
+    border-radius: 8px;
+    background: var(--histogram-surface);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip[hidden] {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip-time {
+    margin-bottom: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip-rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip-row {
+    display: grid;
+    grid-template-columns: 10px 1fr auto;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.6;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip-value {
+    font-variant-numeric: tabular-nums;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-tooltip-total {
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px solid var(--histogram-grid);
+    color: var(--histogram-axis);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-empty {
+    margin: 6px 0 0;
+    color: var(--histogram-axis);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-legend-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 2px 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-legend-button.is-hidden {
+    opacity: 0.4;
+    text-decoration: line-through;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-histogram-legend-total {
+    color: var(--histogram-axis);
+    font-variant-numeric: tabular-nums;
+}

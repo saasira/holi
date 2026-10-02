@@ -1,0 +1,26 @@
+<template id="browser-template">
+    <div class="holi-browser">
+        <div class="holi-browser-field">
+            <span class="holi-browser-value is-empty" data-role="value"></span>
+            <button type="button" class="holi-browser-btn" data-role="open">Browse…</button>
+            <button type="button" class="holi-browser-btn holi-browser-clear" data-role="clear" aria-label="Clear">✕</button>
+            <input type="hidden" data-role="input" />
+        </div>
+        <div class="holi-browser-overlay" data-role="overlay" hidden>
+            <div class="holi-browser-backdrop" data-role="backdrop"></div>
+            <section class="holi-browser-panel" role="dialog" aria-modal="true">
+                <header class="holi-browser-head">
+                    <span class="holi-browser-title" data-role="title">Select</span>
+                    <button type="button" class="holi-browser-x" data-role="cancel" aria-label="Close">×</button>
+                </header>
+                <div class="holi-browser-body" data-role="tree-host"></div>
+                <footer class="holi-browser-foot">
+                    <span class="holi-browser-selection" data-role="selection"></span>
+                    <span class="holi-browser-spacer"></span>
+                    <button type="button" class="holi-browser-btn" data-role="cancel2">Cancel</button>
+                    <button type="button" class="holi-browser-btn holi-browser-primary" data-role="confirm" disabled>Select</button>
+                </footer>
+            </section>
+        </div>
+    </div>
+</template>

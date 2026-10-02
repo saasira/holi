@@ -19,7 +19,7 @@ class RadioGroupComponent extends Component {
     static getNativeSelectors() {
         return [
             'input[type="radio"][component="radio"]',
-            'input[type="radio"][role="radio"]'
+            'input[type="radio"][role="holi-radio"]'
         ];
     }
 

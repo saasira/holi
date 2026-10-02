@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Workflow Builder Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+    </head>
+    <body>
+        <main style="max-width: 1240px; margin: 24px auto; padding: 0 16px;">
+            <!--
+              Engine-neutral: step types and their outgoing branches are declared via `node-types`.
+              These labels are arbitrary (start/task/gate/end here) — the component knows nothing about
+              any particular workflow engine. The "gate" type declares three branches, so it renders
+              three output ports. Omit `node-types` to get the generic action/decision defaults.
+            -->
+            <workflow data-steps-endpoint="../api/workflow-steps.json"
+                      node-types='[
+                        {"type":"start","label":"Start"},
+                        {"type":"task","label":"Task"},
+                        {"type":"gate","label":"Gate","branches":["approve","reject","revise"]},
+                        {"type":"end","label":"End"}
+                      ]'>
+                <h1 slot="title">Workflow Builder</h1>
+                <p slot="summary">Step types &amp; branches are configured on the element; process steps come from an API catalog and serialized step state is preserved as opaque engine data.</p>
+            </workflow>
+
+            <section style="margin-top: 24px;">
+                <h2>Latest Export</h2>
+                <pre id="workflow-export">No export captured yet.</pre>
+            </section>
+        </main>
+
+        <script>
+            const workflow = document.querySelector('workflow');
+            const output = document.getElementById('workflow-export');
+
+            workflow?.addEventListener('workflowexport', (event) => {
+                output.textContent = JSON.stringify(event.detail.workflow, null, 2);
+            });
+
+            // The component emits a cancelable `workflowsave`; a host persists the graph. Here we
+            // just show it and report validation (drag from the toolbox, add nodes, Undo/Redo, Save).
+            workflow?.addEventListener('workflowsave', (event) => {
+                const { workflow: graph, validation } = event.detail;
+                output.textContent =
+                    (validation.valid ? '// valid — would POST to server\n' : '// INVALID:\n')
+                    + (validation.valid ? '' : validation.issues.map((i) => '// - ' + i.message).join('\n') + '\n')
+                    + JSON.stringify(graph, null, 2);
+            });
+        </script>
+    </body>
+</html>

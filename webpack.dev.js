@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   entry: 'examples/index.js',
   devServer: {
-    port: 8080,
+    port: 7777,
     inline:true,
     open: true,
     hot: true,              // Automatically refresh the page whenever bundle.js 

@@ -660,7 +660,8 @@ class DataTable extends Component {
     }
 
     isLocalDomReuseEnabled() {
-        return !this.config.serverSide;
+        if (this.config.serverSide) return false;
+        return this.parseBooleanAttr('data-dom-reuse', false);
     }
 
     bumpLocalRowsVersion() {

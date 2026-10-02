@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rich Text Editor Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; max-width: 820px; }
+            .demo { margin-bottom: 32px; }
+            h2 { font-size: 1rem; color: #334155; }
+            pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: 8px; overflow: auto; font-size: 12px; }
+            button.act { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 6px 10px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h1>Rich Text Editor</h1>
+
+        <section class="demo">
+            <h2>Variant 1: &lt;rte&gt; with authored content (progressive enhancement)</h2>
+            <rte name="article-body">
+                <h2>Welcome</h2>
+                <p>This content was <strong>authored in HTML</strong> and is editable. Try
+                <em>selecting text</em> and using the toolbar.</p>
+                <ul>
+                    <li>Bullet one</li>
+                    <li>Bullet two</li>
+                </ul>
+            </rte>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: component="rte" (empty, with placeholder)</h2>
+            <div component="rte" placeholder="Write something great…"></div>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 3: live value + events</h2>
+            <div role="rte" id="rte-live">
+                <p>Edit me and watch the HTML update below.</p>
+            </div>
+            <div style="margin-top:8px;">
+                <button type="button" class="act" id="dump">Log getHTML()</button>
+                <button type="button" class="act" id="setval">Set sample content</button>
+            </div>
+            <pre id="out"></pre>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 4: extensibility — custom command + plugin</h2>
+            <p>A registered <code>highlight</code> command and an <code>emoji</code> plugin appear
+            automatically after the built-in buttons.</p>
+            <div component="rte">
+                <p>Select some text and hit <strong>HL</strong>, or drop a <strong>🙂</strong>.</p>
+            </div>
+        </section>
+
+        <script>
+            // Queue RTE extensions before the (code-split) RTE chunk loads. Holi drains this queue
+            // when the editor loads, so custom buttons appear on first render.
+            window.HoliRte = window.HoliRte || { commands: [], plugins: [] };
+            window.HoliRte.commands.push({
+                name: 'highlight', label: 'HL', title: 'Highlight',
+                run: (rte) => rte.exec('hiliteColor', 'yellow')
+            });
+            window.HoliRte.plugins.push({
+                name: 'emoji',
+                commands: [
+                    { name: 'emoji', label: '🙂', title: 'Insert emoji',
+                      run: (rte) => rte.insertHTML('🙂') }
+                ]
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const host = document.getElementById('rte-live');
+                const out = document.getElementById('out');
+                const show = () => { out.textContent = host.rtecomponent?.getHTML?.() ?? host.rte?.getHTML?.() ?? ''; };
+                // component instance is auto-exposed on the element (el.rtecomponent)
+                host.addEventListener('rtechange', (e) => { out.textContent = e.detail.html; });
+                document.getElementById('dump').addEventListener('click', () => {
+                    console.log('RTE HTML:', host.rtecomponent?.getHTML?.());
+                    show();
+                });
+                document.getElementById('setval').addEventListener('click', () => {
+                    const inst = host.rtecomponent;
+                    if (inst) inst.value = '<h3>Set programmatically</h3><p>Content replaced via the <code>value</code> setter.</p>';
+                    show();
+                });
+            });
+        </script>
+    </body>
+</html>

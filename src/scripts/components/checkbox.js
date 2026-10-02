@@ -19,7 +19,7 @@ class CheckboxGroupComponent extends Component {
     static getNativeSelectors() {
         return [
             'input[type="checkbox"][component="checkbox"]',
-            'input[type="checkbox"][role="checkbox"]'
+            'input[type="checkbox"][role="holi-checkbox"]'
         ];
     }
 

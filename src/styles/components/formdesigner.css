@@ -1,0 +1,211 @@
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner {
+    display: grid;
+    gap: 16px;
+    color: #172033;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner button,
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner input,
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner select,
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner textarea {
+    font: inherit;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-header,
+:where(body[theme="default"], body:not([theme])) .formdesigner-toolbar,
+:where(body[theme="default"], body:not([theme])) .formdesigner-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-header h2,
+:where(body[theme="default"], body:not([theme])) .formdesigner-header p,
+:where(body[theme="default"], body:not([theme])) .formdesigner-panel-head h3 {
+    margin: 0;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-header p {
+    margin-top: 4px;
+    color: #5f6b7a;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-toolbar {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 10px;
+    border: 1px solid #d9e0ea;
+    border-radius: 8px;
+    background: #f7f9fc;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner button {
+    min-height: 36px;
+    border: 1px solid #c7d2e2;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #172033;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-toolbar button {
+    padding: 0 12px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner button:hover {
+    border-color: #3867d6;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-layout,
+:where(body[theme="default"], body:not([theme])) .formdesigner-output {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.95fr) minmax(320px, 1.25fr);
+    gap: 16px;
+    align-items: start;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-builder,
+:where(body[theme="default"], body:not([theme])) .formdesigner-inspector,
+:where(body[theme="default"], body:not([theme])) .formdesigner-output > section {
+    display: grid;
+    gap: 12px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-sections,
+:where(body[theme="default"], body:not([theme])) .formdesigner-inspector-form,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview {
+    display: grid;
+    gap: 10px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-section-item {
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid #d9e0ea;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-section-item.is-selected {
+    border-color: #3867d6;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-item-button,
+:where(body[theme="default"], body:not([theme])) .formdesigner-field-item {
+    display: grid;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
+    text-align: left;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-item-title {
+    font-weight: 700;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-item-meta,
+:where(body[theme="default"], body:not([theme])) .formdesigner-field-item [data-role="type"] {
+    color: #667085;
+    font-size: 0.86rem;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-field-list {
+    display: grid;
+    gap: 6px;
+    padding-left: 12px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-field-item {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border-style: dashed;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-field-item.is-selected {
+    border-color: #3867d6;
+    background: #eef4ff;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-inspector-form label,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-field {
+    display: grid;
+    gap: 6px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-inspector-form span,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-field > span,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-field legend {
+    font-weight: 650;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-check {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner input,
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner select,
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px 10px;
+    background: #ffffff;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner input[type="checkbox"],
+:where(body[theme="default"], body:not([theme])) .holi-formdesigner input[type="radio"] {
+    width: auto;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-output textarea {
+    min-height: 220px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    font-size: 0.88rem;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview {
+    padding: 12px;
+    border: 1px solid #d9e0ea;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-section {
+    display: grid;
+    gap: 10px;
+    padding-block: 8px 14px;
+    border-bottom: 1px solid #e6ebf2;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-section h4,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-section p {
+    margin: 0;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-section p,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-field small {
+    color: #667085;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-fields,
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-options {
+    display: grid;
+    gap: 8px;
+}
+
+:where(body[theme="default"], body:not([theme])) .formdesigner-preview-option {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+@media (max-width: 860px) {
+    :where(body[theme="default"], body:not([theme])) .formdesigner-layout,
+    :where(body[theme="default"], body:not([theme])) .formdesigner-output {
+        grid-template-columns: 1fr;
+    }
+}

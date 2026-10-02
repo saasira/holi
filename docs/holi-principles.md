@@ -3,6 +3,9 @@
 This document is the canonical architecture and implementation contract for the Holi library.
 All component, runtime, and API changes must conform to these rules.
 
+For the preferred component authoring API, lifecycle, props, slots, events, and provider contract, see:
+- `docs/component-authoring.md`
+
 ## 1) HTML Template Driven
 
 Mandatory:
@@ -31,7 +34,9 @@ Page developers may declare a component in any supported style:
 <section component="tabs" provider="tabs"></section>
 ```
 
-- Role style:
+- Role style (`role="holi-<name>"` works for every component; `role="<name>"` only when the name is not a WAI-ARIA
+  role -- `dialog`, `menubar`, `region`, `search` and `tree` are, so use `role="holi-dialog"` and so on; see
+  `src/scripts/utils/aria_roles.js`):
 ```html
 <section role="tabs" provider="tabs"></section>
 ```
@@ -77,6 +82,21 @@ Mandatory:
 - Reusable components encapsulate behavior + styles while structure remains template-driven.
 - Site-level orchestration lives in centralized app surface (`HoliApp` singleton pattern).
 
+Page composition contract:
+- `page` may declare `layout="<name>"` and resolve a matching layout template at runtime.
+- Top-level `block[name]` elements inside a page fill matching named `<slot>` placeholders in the layout.
+- Direct `region[name]` elements inside a block fill matching named `<slot>` placeholders inside that block's resolved layout subtree.
+- Missing slots are empty by default; fallback slot content is only kept when inheritance is explicitly requested.
+- Nested block composition is not part of the current contract. Supported structure is `page -> block -> region`.
+
+Layout asset placement:
+- Layout templates that need shared page assets must use `<layout-head data-layout-head="true">`, not a literal `<head>` element inside the template.
+- Layout templates may use `<tail data-layout-tail="true">` for deferred body-end assets.
+- Content resolved into the layout head container is redistributed at runtime:
+  - `meta`, `link`, `style`, and other head nodes go to `document.head`
+- Content resolved into the layout tail container is redistributed to the end of `document.body`.
+- This allows layout-defined defaults plus page-level overrides without duplicating page assets on every page.
+
 ## 7) Implementation Guardrails
 
 When implementing or refactoring:
@@ -89,7 +109,9 @@ When implementing or refactoring:
 
 Before finalizing a change, verify:
 - No inline HTML strings were introduced in component JS.
-- Component can be discovered via tag, `component="name"`, and `role="name"` forms.
+- Component can be discovered via tag, `component="name"`, and `role="holi-name"` (or `role="name"` when that is not an
+  ARIA role) forms.
+- A template uses real ARIA roles for accessibility; they never name a component.
 - No unsafe expression evaluation path exists.
 - Templates remain the source of structural truth.
 - Progressive enhancement behavior is preserved.
@@ -121,7 +143,9 @@ Examples live in source-first directories:
 - pages: `src/examples/pages/*.html`
 - styles: `src/examples/styles/*.css`
 - scripts: `src/examples/scripts/*.js`
+- layouts: `src/examples/layouts/*.html`
 
 Build output requirements:
 - generated examples must be emitted under `public/examples/**`
 - example pages must reference built library assets from `dist/` (for example `../../../dist/holi.js`)
+- example layout files must be emitted under `public/examples/layouts/**` when present

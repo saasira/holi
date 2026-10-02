@@ -1,0 +1,46 @@
+<template id="page-layout-dashboard" data-layout="dashboard">
+    <section class="holi-page-layout holi-page-layout-dashboard">
+        <header class="holi-page-band holi-page-band-header">
+            <slot name="header"></slot>
+        </header>
+        <section class="holi-page-band holi-page-band-postheader">
+            <slot name="postheader"></slot>
+        </section>
+        <section class="holi-page-band holi-page-band-body">
+            <aside class="holi-page-sidebar holi-page-sidebar-lsb" data-sidebar="lsb" data-sidebar-mode="fixed">
+                <slot name="lsb-fixed"></slot>
+            </aside>
+            <drawer class="holi-page-sidebar-drawer holi-page-sidebar-drawer-lsb" data-sidebar="lsb" data-sidebar-mode="drawer" direction="left" max-size="320px" trigger-label="Menu">
+                <header slot="header">Menu</header>
+                <slot name="lsb-drawer"></slot>
+            </drawer>
+            <main class="holi-page-band holi-page-band-main">
+                <section class="holi-page-dashboard-band holi-page-dashboard-summary">
+                    <slot name="summary"></slot>
+                </section>
+                <section class="holi-page-dashboard-band holi-page-dashboard-primary">
+                    <slot name="main"></slot>
+                </section>
+                <section class="holi-page-dashboard-band holi-page-dashboard-secondary">
+                    <slot name="secondary"></slot>
+                </section>
+            </main>
+            <aside class="holi-page-sidebar holi-page-sidebar-rsb" data-sidebar="rsb" data-sidebar-mode="fixed">
+                <slot name="rsb-fixed"></slot>
+            </aside>
+            <drawer class="holi-page-sidebar-drawer holi-page-sidebar-drawer-rsb" data-sidebar="rsb" data-sidebar-mode="drawer" direction="right" max-size="360px" trigger-label="Tools">
+                <header slot="header">Tools</header>
+                <slot name="rsb-drawer"></slot>
+            </drawer>
+        </section>
+        <section class="holi-page-band holi-page-band-prefooter">
+            <slot name="prefooter"></slot>
+        </section>
+        <footer class="holi-page-band holi-page-band-footer">
+            <slot name="footer"></slot>
+        </footer>
+        <section class="holi-page-band holi-page-band-dialog">
+            <slot name="dialog"></slot>
+        </section>
+    </section>
+</template>

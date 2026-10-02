@@ -3,6 +3,8 @@ import { ComponentRegistry } from '../utils/component_registry.js';
 import { Validator } from '../utils/validator.js';
 import { ComponentStateBridge } from '../utils/component_state_bridge.js';
 import { ComponentPPR } from '../utils/ppr.js';
+import { TemplateRegistry } from '../utils/template_registry.js';
+import { componentNameFromRole } from '../utils/aria_roles.js';
 
 class Component {
     static nextComponentId = 1;
@@ -30,10 +32,18 @@ class Component {
         this.isDestroyed = false;
         this.ppr = {};
         this.pprMeta = {};
+        this.props = {};
+        this.slots = new Map();
+        this.declaredEventHandlers = [];
+        this.contentProviderInstance = null;
         Object.assign(this, options);
         if (this.container instanceof Element && !this.container.getAttribute('data-component-id')) {
             this.container.setAttribute('data-component-id', `holi-${Component.nextComponentId++}`);
         }
+        this.props = {
+            ...(this.props || {}),
+            ...this.readProps(options.props || {})
+        };
         // auto-expose instance on element; 
         // with this, all components now accessible as: el.modal, el.toast, el.loader, etc.
         this.instanceKey = this.constructor.name.toLowerCase();
@@ -91,6 +101,123 @@ class Component {
 
     parseValidators(raw) {
         return Validator.parseList(raw);
+    }
+
+    readAttr(names, fallback = '') {
+        const candidates = Array.isArray(names) ? names : [names];
+        for (let i = 0; i < candidates.length; i += 1) {
+            const rawName = String(candidates[i] || '').trim();
+            if (!rawName) continue;
+            const values = [
+                this.container?.getAttribute?.(rawName),
+                rawName.startsWith('data-') ? null : this.container?.getAttribute?.(`data-${rawName}`)
+            ];
+
+            for (let j = 0; j < values.length; j += 1) {
+                const value = values[j];
+                if (value != null && String(value).trim() !== '') return String(value).trim();
+            }
+        }
+        return fallback;
+    }
+
+    hasAttr(names) {
+        const candidates = Array.isArray(names) ? names : [names];
+        return candidates.some((name) => {
+            const rawName = String(name || '').trim();
+            if (!rawName) return false;
+            return !!(
+                this.container?.hasAttribute?.(rawName)
+                || (!rawName.startsWith('data-') && this.container?.hasAttribute?.(`data-${rawName}`))
+            );
+        });
+    }
+
+    readBooleanAttr(names, fallback = false) {
+        if (!this.hasAttr(names)) return fallback;
+        const raw = this.readAttr(names, '');
+        if (raw === '') return true;
+        const value = String(raw).trim().toLowerCase();
+        if (['1', 'true', 'yes', 'on'].includes(value)) return true;
+        if (['0', 'false', 'no', 'off'].includes(value)) return false;
+        return fallback;
+    }
+
+    readNumberAttr(names, fallback = 0) {
+        const raw = this.readAttr(names, '');
+        if (raw === '') return fallback;
+        const value = Number(raw);
+        return Number.isFinite(value) ? value : fallback;
+    }
+
+    readJsonAttr(names, fallback = null) {
+        const raw = this.readAttr(names, '');
+        if (!raw) return fallback;
+        try {
+            return JSON.parse(raw);
+        } catch (_error) {
+            return fallback;
+        }
+    }
+
+    readProps(overrides = {}) {
+        const schema = this.constructor.props || {};
+        const props = {};
+        Object.entries(schema).forEach(([key, config]) => {
+            const definition = config && typeof config === 'object' && !Array.isArray(config)
+                ? config
+                : { default: config };
+            const attr = definition.attr || definition.attribute || this.toKebabCase(key);
+            const hasOverride = Object.prototype.hasOwnProperty.call(overrides, key);
+            const fallback = hasOverride ? overrides[key] : definition.default;
+            const raw = hasOverride ? overrides[key] : this.readAttr(attr, fallback);
+            props[key] = this.coerceProp(raw, definition.type, fallback);
+        });
+        return props;
+    }
+
+    coerceProp(value, type, fallback) {
+        const normalizedType = typeof type === 'function' ? type : String(type || 'string').toLowerCase();
+        if (typeof normalizedType === 'function') return normalizedType(value, fallback, this);
+        if (normalizedType === 'boolean' || normalizedType === 'bool') {
+            if (typeof value === 'boolean') return value;
+            if (value == null || value === '') return !!fallback;
+            const normalized = String(value).trim().toLowerCase();
+            if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
+            if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
+            return !!fallback;
+        }
+        if (normalizedType === 'number') {
+            const number = Number(value);
+            return Number.isFinite(number) ? number : fallback;
+        }
+        if (normalizedType === 'integer' || normalizedType === 'int') {
+            const number = parseInt(value, 10);
+            return Number.isFinite(number) ? number : fallback;
+        }
+        if (normalizedType === 'json' || normalizedType === 'object' || normalizedType === 'array') {
+            if (typeof value !== 'string') return value == null ? fallback : value;
+            try {
+                const parsed = JSON.parse(value);
+                if (normalizedType === 'array') return Array.isArray(parsed) ? parsed : fallback;
+                if (normalizedType === 'object') return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : fallback;
+                return parsed;
+            } catch (_error) {
+                return fallback;
+            }
+        }
+        return value == null ? fallback : String(value);
+    }
+
+    toKebabCase(value) {
+        return String(value || '')
+            .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+            .replace(/[_\s]+/g, '-')
+            .toLowerCase();
+    }
+
+    prop(name, fallback = undefined) {
+        return Object.prototype.hasOwnProperty.call(this.props || {}, name) ? this.props[name] : fallback;
     }
 
     runValidator(token, value, context = {}) {
@@ -154,8 +281,31 @@ class Component {
     }
 
     // Pure component lifecycle
+    async initComponent() {
+        if (this.initializing) return;
+        this.initializing = true;
+        const start = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
+        try {
+            this.validateStructure();
+            this.slots = this.captureSlots();
+            await this.beforeSetup?.();
+            await this.setup?.();
+            await this.render();
+            await this.afterRender?.();
+            this.bindDeclaredEvents();
+            await this.ready?.();
+        } finally {
+            const elapsed = (typeof performance !== 'undefined' ? performance.now() : Date.now()) - start;
+            if (elapsed > 100) {
+                console.warn('Component init slow:', this.constructor.name);
+            }
+            this.initializing = false;
+        }
+    }
+
     async render() {
-        const template = document.getElementById(this.templateId);
+        const template = TemplateRegistry.getTemplate(this.templateId);
         if (!template || !template.content) {
             throw new Error(`Template "${this.templateId}" not found`);
         }
@@ -165,6 +315,92 @@ class Component {
         this.container.appendChild(this.fragment);
         await this.createChildren();
         this.syncChildren();
+    }
+
+    captureSlots(options = {}) {
+        const includeDefault = !!options.includeDefault;
+        const slots = new Map();
+        const children = Array.from(this.container?.children || []);
+
+        children.forEach((child) => {
+            if (child.getAttribute?.(this.instanceClassAttr) === this.constructor.name) return;
+            const slotName = child.getAttribute?.('slot') || (includeDefault ? 'default' : '');
+            if (!slotName) return;
+            if (!slots.has(slotName)) slots.set(slotName, []);
+            slots.get(slotName).push(child);
+        });
+
+        return slots;
+    }
+
+    projectSlot(name, options = {}) {
+        const scope = options.scope || this.element || this.container;
+        if (!(scope instanceof Element)) return false;
+        const selector = name === 'default' ? 'slot:not([name])' : `slot[name="${name}"]`;
+        const slot = scope.querySelector(selector);
+        if (!slot) return false;
+
+        const source = options.slots instanceof Map ? options.slots : this.slots;
+        const nodes = source?.get?.(name) || [];
+        if (nodes.length) {
+            const fragment = document.createDocumentFragment();
+            nodes.forEach((node) => {
+                node.removeAttribute?.('slot');
+                fragment.appendChild(node);
+            });
+            slot.replaceWith(fragment);
+            return true;
+        }
+
+        if (options.keepFallback === false) {
+            slot.replaceWith();
+            return true;
+        }
+
+        const fallback = document.createDocumentFragment();
+        fallback.append(...Array.from(slot.childNodes));
+        slot.replaceWith(fallback);
+        return true;
+    }
+
+    projectSlots(names, options = {}) {
+        const slotNames = Array.isArray(names)
+            ? names
+            : Array.from((options.slots || this.slots || new Map()).keys());
+        slotNames.forEach((name) => this.projectSlot(name, options));
+    }
+
+    getTemplate(templateOrId) {
+        if (templateOrId instanceof HTMLTemplateElement) return templateOrId;
+        return TemplateRegistry.getTemplate(templateOrId) || document.getElementById(templateOrId);
+    }
+
+    renderTemplate(templateOrId, context = {}) {
+        const template = this.getTemplate(templateOrId);
+        if (!(template instanceof HTMLTemplateElement)) {
+            throw new Error(`Template "${templateOrId}" not found`);
+        }
+        const fragment = template.content.cloneNode(true);
+        this.applyBindings(fragment, this.getBindingContext(context));
+        return fragment;
+    }
+
+    renderList(target, templateOrId, items = [], itemName = 'item', extraContext = {}) {
+        if (!(target instanceof Element)) return [];
+        const list = Array.isArray(items) ? items : [];
+        const nodes = [];
+        target.replaceChildren();
+        list.forEach((item, index) => {
+            const fragment = this.renderTemplate(templateOrId, {
+                ...extraContext,
+                [itemName]: item,
+                item,
+                index
+            });
+            nodes.push(...Array.from(fragment.childNodes));
+            target.appendChild(fragment);
+        });
+        return nodes;
     }
 	
     populateSlots(fragment) {
@@ -183,6 +419,94 @@ class Component {
 	
     refresh() {
         this.refreshChildren();
+    }
+
+    bindDeclaredEvents(root = this.element || this.container) {
+        if (!(root instanceof Element)) return;
+        this.unbindDeclaredEvents();
+        const declarations = this.constructor.events || {};
+        Object.entries(declarations).forEach(([descriptor, handlerRef]) => {
+            const parsed = this.parseEventDescriptor(descriptor);
+            if (!parsed.eventName) return;
+            const listener = (event) => {
+                const match = parsed.selector
+                    ? event.target?.closest?.(parsed.selector)
+                    : root;
+                if (!match || (parsed.selector && !root.contains(match))) return;
+
+                const handler = typeof handlerRef === 'string' ? this[handlerRef] : handlerRef;
+                if (typeof handler !== 'function') return;
+                handler.call(this, event, match);
+            };
+            root.addEventListener(parsed.eventName, listener);
+            this.declaredEventHandlers.push({ root, eventName: parsed.eventName, listener });
+        });
+    }
+
+    unbindDeclaredEvents() {
+        (this.declaredEventHandlers || []).forEach(({ root, eventName, listener }) => {
+            root?.removeEventListener?.(eventName, listener);
+        });
+        this.declaredEventHandlers = [];
+    }
+
+    parseEventDescriptor(descriptor) {
+        const value = String(descriptor || '').trim();
+        if (!value) return { eventName: '', selector: '' };
+        const parts = value.split(/\s+/);
+        const eventName = parts.shift() || '';
+        return {
+            eventName,
+            selector: parts.join(' ')
+        };
+    }
+
+    getContentProviders() {
+        return this.container?.contentProviders || window.contentProviders || {};
+    }
+
+    async ensureContentProvider(providerName = '') {
+        if (this.contentProviderInstance) return this.contentProviderInstance;
+
+        const name = String(providerName || this.providerName || this.readAttr('provider', 'default')).trim();
+        const providerClass = this.getContentProviders()[name];
+        if (!providerClass) return null;
+
+        const context = window.appState || window.pageContext || {};
+        if (typeof providerClass === 'function') {
+            this.contentProviderInstance = new providerClass(context);
+            await this.contentProviderInstance.init?.();
+        } else if (typeof providerClass === 'object') {
+            this.contentProviderInstance = providerClass;
+        }
+
+        return this.contentProviderInstance;
+    }
+
+    async resolveProviderData(options = {}) {
+        const source = String(options.source || this.readAttr(['source', 'data-source'], '')).trim();
+        const providerName = options.provider || this.readAttr('provider', 'default');
+        const fallback = options.fallback ?? [];
+        // Inline JSON only when the attribute is there. Passing undefined as readJsonAttr's fallback gave its default,
+        // null, which counted as inline data: every provider-backed component got null and its provider was never asked.
+        const inlineNames = options.inlineAttr || ['items', 'data-items'];
+        if (this.hasAttr(inlineNames)) {
+            const inline = this.readJsonAttr(inlineNames, null);
+            if (inline !== null) return inline;
+        }
+        if (!source) return fallback;
+
+        const provider = await this.ensureContentProvider(providerName);
+        if (!provider) return fallback;
+
+        const methodName = options.method || 'resolve';
+        if (typeof provider[methodName] === 'function') {
+            return provider[methodName](source, options.params || {}, this);
+        }
+        if (typeof provider.getContent === 'function') {
+            return provider.getContent(source, options.params || {}, this);
+        }
+        return fallback;
     }
 
     // Declarative dependency-update contract:
@@ -234,6 +558,7 @@ class Component {
             element.getAttribute('data-component-id'),
             element.getAttribute('component'),
             element.getAttribute('role'),
+            componentNameFromRole(element.getAttribute('role')),
             element.getAttribute('data-holi-component-class'),
             String(element.tagName || '').toLowerCase()
         ];
@@ -323,6 +648,7 @@ class Component {
     }
 	
     destroy() {
+        this.unbindDeclaredEvents();
         this.pprBridge?.uninstall?.();
         this.stateBridge?.uninstall?.();
         this.children.forEach(child => child.destroy());

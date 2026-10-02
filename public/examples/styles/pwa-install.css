@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.16), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #ecfeff 45%, #e2e8f0 100%);
+    color: #0f172a;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.pwa-demo {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 36px 16px 72px;
+}
+
+.pwa-demo__hero {
+    margin-bottom: 20px;
+}
+
+.pwa-demo__eyebrow {
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f766e;
+}
+
+.pwa-demo__hero h1 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.pwa-demo__panel {
+    margin-top: 18px;
+    padding: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.24);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+.pwa-demo__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pwa-demo__actions button {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: #0f172a;
+    color: #f8fafc;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.pwa-demo__actions button[hidden] {
+    display: none;
+}
+
+.pwa-demo__status {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 14px 0 8px;
+}
+
+.pwa-demo__hint {
+    margin: 0;
+    color: #475569;
+}
+
+.pwa-demo__meta {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.pwa-demo__meta div {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+}
+
+.pwa-demo__meta dt {
+    font-weight: 700;
+}
+
+.pwa-demo__meta dd {
+    margin: 0;
+    color: #334155;
+}
+
+.pwa-demo__log {
+    margin: 0;
+    padding-left: 18px;
+    max-height: 280px;
+    overflow: auto;
+}
+
+.pwa-demo__log li {
+    margin-bottom: 6px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.9rem;
+}

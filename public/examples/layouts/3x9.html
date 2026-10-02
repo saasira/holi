@@ -1,0 +1,50 @@
+<template id="page-layout-3x9" data-layout="3x9">
+    <layout-head data-layout-head="true">
+        <meta name="example-layout" content="3x9">
+        <meta name="example-layout-owner" content="holi">
+        <slot name="meta"></slot>
+        <slot name="styles"></slot>
+    </layout-head>
+    <header class="example-page-shell example-page-shell-header">
+        <slot name="header">
+            <h1>Default heading</h1>
+        </slot>
+    </header>
+    <slot name="main">
+        <main class="example-page-shell example-page-shell-main">
+            <header class="example-page-shell-menubar">
+                <slot name="menubar">
+                    <div>Default menubar</div>
+                </slot>
+            </header>
+            <aside class="example-page-shell-sidebar">
+                <slot name="lhs">
+                    <div>Default left side</div>
+                </slot>
+            </aside>
+            <section class="example-page-shell-content">
+                <slot name="middle">
+                    <div>Default middle content</div>
+                </slot>
+            </section>
+            <aside class="example-page-shell-sidebar-alt">
+                <slot name="rhs">
+                    <div>Default right side</div>
+                </slot>
+            </aside>
+        </main>
+    </slot>
+    <section class="example-page-shell example-page-shell-prefooter">
+        <slot name="prefooter">
+            <div>Default prefooter</div>
+        </slot>
+    </section>
+    <footer class="example-page-shell example-page-shell-footer">
+        <slot name="footer">
+            <div>Default footer</div>
+        </slot>
+    </footer>
+    <tail data-layout-tail="true">
+        <slot name="scripts"></slot>
+    </tail>
+</template>

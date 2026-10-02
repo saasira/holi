@@ -13,6 +13,13 @@ class BlockComponent extends Component {
         return 'block';
     }
 
+    static canInitElement(host) {
+        if (!(host instanceof Element)) return true;
+        const parent = host.parentElement;
+        if (!(parent instanceof Element)) return true;
+        return !parent.matches('page[layout], [component="page"][layout], [role="page"][layout]');
+    }
+
     static templateId = 'block-template';
 
     constructor(container, options = {}) {

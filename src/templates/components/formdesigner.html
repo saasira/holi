@@ -1,0 +1,171 @@
+<template id="formdesigner-template">
+    <section class="holi-formdesigner" data-role="designer">
+        <header class="formdesigner-header">
+            <div>
+                <slot name="title">
+                    <h2 data-role="form-title">Form Designer</h2>
+                </slot>
+                <slot name="summary">
+                    <p data-role="form-summary">Design conditional form sections and fields as JSON.</p>
+                </slot>
+            </div>
+            <div class="formdesigner-header-actions">
+                <slot name="actions"></slot>
+            </div>
+        </header>
+
+        <section class="formdesigner-toolbar" aria-label="Designer actions">
+            <button type="button" data-action="add-section">Add Section</button>
+            <button type="button" data-action="add-field">Add Field</button>
+            <button type="button" data-action="duplicate">Duplicate</button>
+            <button type="button" data-action="remove">Remove</button>
+            <button type="button" data-action="export-json">Export JSON</button>
+            <button type="button" data-action="save-definition">Save Definition</button>
+        </section>
+
+        <section class="formdesigner-layout">
+            <section class="formdesigner-builder" aria-label="Form structure">
+                <div class="formdesigner-panel-head">
+                    <h3>Structure</h3>
+                </div>
+                <div class="formdesigner-sections" data-role="sections"></div>
+            </section>
+
+            <section class="formdesigner-inspector" aria-label="Selected item details">
+                <div class="formdesigner-panel-head">
+                    <h3>Inspector</h3>
+                </div>
+                <form class="formdesigner-inspector-form" data-role="inspector">
+                    <label>
+                        <span>Id</span>
+                        <input name="id" data-inspect="id" autocomplete="off">
+                    </label>
+                    <label>
+                        <span>Name</span>
+                        <input name="name" data-inspect="name" autocomplete="off">
+                    </label>
+                    <label>
+                        <span>Label</span>
+                        <input name="label" data-inspect="label" autocomplete="off">
+                    </label>
+                    <label>
+                        <span>Description</span>
+                        <textarea name="description" data-inspect="description" rows="3"></textarea>
+                    </label>
+                    <label data-role="field-type-row">
+                        <span>Type</span>
+                        <select name="type" data-inspect="type">
+                            <option value="text">Text</option>
+                            <option value="number">Number</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="select">Select</option>
+                            <option value="radio">Radio</option>
+                            <option value="checkbox">Checkbox</option>
+                            <option value="date">Date</option>
+                        </select>
+                    </label>
+                    <label data-role="fieldset-row">
+                        <span>Fieldset</span>
+                        <input name="fieldset" data-inspect="fieldset" autocomplete="off">
+                    </label>
+                    <label data-role="placeholder-row">
+                        <span>Placeholder</span>
+                        <input name="placeholder" data-inspect="placeholder" autocomplete="off">
+                    </label>
+                    <label data-role="required-row" class="formdesigner-check">
+                        <input type="checkbox" name="required" data-inspect="required">
+                        <span>Required</span>
+                    </label>
+                    <label>
+                        <span>Displayed Condition</span>
+                        <input name="displayed" data-inspect="displayed" placeholder="@{field_name eq 'value'}" autocomplete="off">
+                    </label>
+                    <label data-role="options-row">
+                        <span>Options</span>
+                        <textarea name="options" data-inspect="options" rows="5" placeholder="value|Label"></textarea>
+                    </label>
+                </form>
+            </section>
+        </section>
+
+        <section class="formdesigner-output">
+            <section>
+                <div class="formdesigner-panel-head">
+                    <h3>Definition JSON</h3>
+                </div>
+                <textarea data-role="definition-json" readonly rows="16"></textarea>
+            </section>
+            <section>
+                <div class="formdesigner-panel-head">
+                    <h3>Preview</h3>
+                </div>
+                <form class="formdesigner-preview" data-role="preview"></form>
+                <textarea data-role="filled-json" readonly rows="8"></textarea>
+            </section>
+        </section>
+    </section>
+</template>
+
+<template id="formdesigner-section-template">
+    <article class="formdesigner-section-item" data-role="section-item">
+        <button type="button" class="formdesigner-item-button" data-action="select-section">
+            <span class="formdesigner-item-title" data-role="label"></span>
+            <span class="formdesigner-item-meta" data-role="condition"></span>
+        </button>
+        <div class="formdesigner-field-list" data-role="field-list"></div>
+    </article>
+</template>
+
+<template id="formdesigner-field-template">
+    <button type="button" class="formdesigner-field-item" data-action="select-field">
+        <span data-role="label"></span>
+        <span data-role="type"></span>
+    </button>
+</template>
+
+<template id="formdesigner-preview-section-template">
+    <section class="formdesigner-preview-section" data-role="preview-section">
+        <h4 data-role="label"></h4>
+        <p data-role="description"></p>
+        <div class="formdesigner-preview-fields" data-role="fields"></div>
+    </section>
+</template>
+
+<template id="formdesigner-preview-field-template">
+    <label class="formdesigner-preview-field">
+        <span data-role="label"></span>
+        <input data-role="control">
+        <small data-role="help"></small>
+    </label>
+</template>
+
+<template id="formdesigner-preview-textarea-template">
+    <label class="formdesigner-preview-field">
+        <span data-role="label"></span>
+        <textarea data-role="control" rows="4"></textarea>
+        <small data-role="help"></small>
+    </label>
+</template>
+
+<template id="formdesigner-preview-select-template">
+    <label class="formdesigner-preview-field">
+        <span data-role="label"></span>
+        <select data-role="control"></select>
+        <small data-role="help"></small>
+    </label>
+</template>
+
+<template id="formdesigner-preview-choice-template">
+    <fieldset class="formdesigner-preview-field">
+        <legend data-role="label"></legend>
+        <div class="formdesigner-preview-options" data-role="options"></div>
+        <small data-role="help"></small>
+    </fieldset>
+</template>
+
+<template id="formdesigner-preview-option-template">
+    <label class="formdesigner-preview-option">
+        <input data-role="control">
+        <span data-role="label"></span>
+    </label>
+</template>

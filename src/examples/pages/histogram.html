@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Histogram Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .demo { margin-bottom: 22px; }
+            .demo-card { border: 1px solid #d9dee8; border-radius: 10px; padding: 12px; background: #ffffff; }
+            .controls { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 7px 11px; cursor: pointer; }
+            .event-log { margin-top: 8px; color: #334155; font-size: 13px; }
+        </style>
+    </head>
+    <body>
+        <h1>Histogram</h1>
+        <p>Counts per time bucket, stacked by series, over a time axis. Hover a bar for its counts, drag across the plot
+            to select a range, click a bar to select its bucket, click a legend entry to hide or show a series.</p>
+
+        <section class="demo">
+            <h2>Variant 1: &lt;histogram&gt; with declared series and a fixed domain (UTC)</h2>
+            <section class="demo-card">
+                <histogram
+                    id="histogram-logs"
+                    height="200"
+                    interval="1m"
+                    timezone="utc"
+                    value-label="events"
+                    from="2026-10-02T10:00:00Z"
+                    to="2026-10-02T11:00:00Z"
+                    series='[
+                        {"key":"error","label":"Errors","color":"#dc2626"},
+                        {"key":"warning","label":"Warnings","color":"#f59e0b"},
+                        {"key":"info","label":"Info","color":"#2563eb"}
+                    ]'
+                    data='[]'>
+                </histogram>
+                <div class="controls">
+                    <button id="btn-randomize">Randomize</button>
+                    <button id="btn-spike">Add an error spike</button>
+                </div>
+                <div class="event-log" id="histogram-log">Event log: none</div>
+            </section>
+        </section>
+
+        <section class="demo">
+            <h2>Variant 2: component="histogram", series inferred, side by side</h2>
+            <section class="demo-card">
+                <section
+                    component="histogram"
+                    id="histogram-grouped"
+                    height="160"
+                    stacked="false"
+                    data='[
+                        {"t":"2026-10-02T00:00:00Z","success":120,"failure":4},
+                        {"t":"2026-10-02T06:00:00Z","success":340,"failure":9},
+                        {"t":"2026-10-02T12:00:00Z","success":410,"failure":31},
+                        {"t":"2026-10-02T18:00:00Z","success":220,"failure":6}
+                    ]'>
+                </section>
+            </section>
+        </section>
+
+        <script>
+            const host = document.getElementById('histogram-logs');
+            const log = document.getElementById('histogram-log');
+            const start = Date.parse('2026-10-02T10:00:00Z');
+
+            const series = (spikeAt = -1) => Array.from({ length: 60 }, (_, i) => ({
+                t: new Date(start + i * 60000).toISOString(),
+                error: Math.floor(Math.random() * 4) + (Math.abs(i - spikeAt) < 3 ? 40 : 0),
+                warning: Math.floor(Math.random() * 10),
+                info: 40 + Math.floor(Math.random() * 30)
+            }));
+
+            const instance = () => host.histogramcomponent;
+            const render = (spikeAt) => instance()?.update(series(spikeAt), {
+                from: '2026-10-02T10:00:00Z', to: '2026-10-02T11:00:00Z'
+            });
+
+            document.getElementById('btn-randomize').addEventListener('click', () => render());
+            document.getElementById('btn-spike').addEventListener('click', () => render(Math.floor(Math.random() * 60)));
+
+            host.addEventListener('histogrambrush', (event) => {
+                log.textContent = `Event log: histogrambrush ${event.detail.from} → ${event.detail.to}`;
+            });
+            host.addEventListener('histogramselect', (event) => {
+                log.textContent = `Event log: histogramselect ${event.detail.from}, ${event.detail.total} events`;
+            });
+            host.addEventListener('histogramseriestoggle', (event) => {
+                log.textContent = `Event log: histogramseriestoggle ${event.detail.key} visible=${event.detail.visible}`;
+            });
+
+            const ready = setInterval(() => {
+                if (!instance()) return;
+                clearInterval(ready);
+                render(25);
+            }, 50);
+        </script>
+    </body>
+</html>

@@ -8,7 +8,7 @@ This document summarizes current component lifecycle and registration behavior.
 - Discovery supports:
   - tag selectors (for example `<menubar>`)
   - `component="<name>"`
-  - `role="<name>"`
+  - `role="holi-<name>"`, and `role="<name>"` when the name is not a WAI-ARIA role
 - Runtime auto-mount is handled by `ComponentRegistry.observeLifecycle(...)` using `MutationObserver`.
 
 ## Role Selector Safety
@@ -16,6 +16,9 @@ This document summarizes current component lifecycle and registration behavior.
 - On initial page bootstrap, role-based discovery is enabled.
 - For runtime mutation scans and nested child scans, role-based discovery is intentionally disabled.
 - This prevents collisions with ARIA roles inside rendered templates (for example `role="dialog"`, `role="tree"`).
+- The lazy loader scans with role selectors too, so the rule that settles it is in the NAME: a component whose name is
+  an ARIA role (`dialog`, `menubar`, `region`, `search`, `tree`, and the explicit `checkbox`/`radio` input forms) is
+  found only by `role="holi-<name>"`, and a template's `role="dialog"` stays an ARIA role (`utils/aria_roles.js`).
 
 ## Component Instance Tracking
 

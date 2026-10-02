@@ -1,10 +1,10 @@
-.holi-dropdown {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown {
     position: relative;
     width: 100%;
     max-width: 360px;
 }
 
-.holi-dropdown .dropdown-control {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-control {
     display: grid;
     grid-template-columns: 1fr auto;
     border: 1px solid #cfd6df;
@@ -13,14 +13,14 @@
     overflow: hidden;
 }
 
-.holi-dropdown .dropdown-control input[data-role="input"] {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-control input[data-role="input"] {
     border: 0;
     padding: 8px 10px;
     min-height: 36px;
     outline: none;
 }
 
-.holi-dropdown .dropdown-control button {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-control button {
     border: 0;
     border-left: 1px solid #dbe2ea;
     background: #f8fafc;
@@ -29,7 +29,7 @@
     cursor: pointer;
 }
 
-.holi-dropdown .dropdown-panel {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-panel {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
@@ -43,27 +43,27 @@
     box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 }
 
-.holi-dropdown .dropdown-options {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-options {
     list-style: none;
     margin: 0;
     padding: 4px 0;
 }
 
-.holi-dropdown .dropdown-options li {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-options li {
     padding: 8px 10px;
     cursor: pointer;
 }
 
-.holi-dropdown .dropdown-options li:hover {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-options li:hover {
     background: #f1f5f9;
 }
 
-.holi-dropdown .dropdown-options li.is-active {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-options li.is-active {
     background: #e8f0fb;
 }
 
-.holi-dropdown .dropdown-loading,
-.holi-dropdown .dropdown-empty {
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-loading,
+:where(body[theme="default"], body:not([theme])) .holi-dropdown .dropdown-empty {
     margin: 0;
     padding: 8px 10px;
     color: #475569;

@@ -1,0 +1,166 @@
+:where(body[theme="default"], body:not([theme])) .holi-rte {
+    --holi-rte-border: #dce3ea;
+    --holi-rte-bg: #ffffff;
+    --holi-rte-toolbar-bg: #f6f8fa;
+    --holi-rte-muted: #5f6b7a;
+    --holi-rte-btn-hover: #e9eef3;
+    --holi-rte-btn-active: #dbe7f5;
+    --holi-rte-accent: #2563eb;
+    --holi-rte-focus: rgba(37, 99, 235, 0.35);
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--holi-rte-border);
+    border-radius: 10px;
+    background: var(--holi-rte-bg);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte:focus-within {
+    border-color: var(--holi-rte-accent);
+    box-shadow: 0 0 0 3px var(--holi-rte-focus);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: var(--holi-rte-toolbar-bg);
+    border-bottom: 1px solid var(--holi-rte-border);
+}
+
+/* Text labels styled to read as formatting affordances. */
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn[data-command="bold"] { font-weight: 800; }
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn[data-command="italic"] { font-style: italic; }
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn[data-command="underline"] { text-decoration: underline; }
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn[data-command="strikeThrough"] { text-decoration: line-through; }
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-sep {
+    width: 1px;
+    align-self: stretch;
+    margin: 2px 4px;
+    background: var(--holi-rte-border);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1;
+    color: var(--holi-rte-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn:hover {
+    background: var(--holi-rte-btn-hover);
+    color: #1f2933;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn[aria-pressed="true"] {
+    background: var(--holi-rte-btn-active);
+    color: var(--holi-rte-accent);
+    border-color: var(--holi-rte-accent);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-surface {
+    min-height: 160px;
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1e293b;
+    outline: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-surface[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: var(--holi-rte-muted);
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-surface > :first-child { margin-top: 0; }
+:where(body[theme="default"], body:not([theme])) .holi-rte-surface > :last-child { margin-bottom: 0; }
+
+:where(body[theme="default"], body:not([theme])) .holi-rte-surface blockquote {
+    margin: 0.6em 0;
+    padding-left: 1em;
+    border-left: 3px solid var(--holi-rte-border);
+    color: var(--holi-rte-muted);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-rte[data-disabled="true"] .holi-rte-surface {
+    background: #f8fafc;
+    color: var(--holi-rte-muted);
+}
+
+/* Dark theme */
+:where(body[theme="dark"]) .holi-rte {
+    --holi-rte-border: #33404f;
+    --holi-rte-bg: #0f172a;
+    --holi-rte-toolbar-bg: #16202e;
+    --holi-rte-muted: #94a3b8;
+    --holi-rte-btn-hover: #1e293b;
+    --holi-rte-btn-active: #1d3a63;
+    --holi-rte-accent: #60a5fa;
+    --holi-rte-focus: rgba(96, 165, 250, 0.35);
+
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--holi-rte-border);
+    border-radius: 10px;
+    background: var(--holi-rte-bg);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+:where(body[theme="dark"]) .holi-rte-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: var(--holi-rte-toolbar-bg);
+    border-bottom: 1px solid var(--holi-rte-border);
+}
+
+:where(body[theme="dark"]) .holi-rte-surface {
+    min-height: 160px;
+    padding: 12px 14px;
+    line-height: 1.7;
+    color: #e2e8f0;
+    outline: none;
+}
+
+:where(body[theme="dark"]) .holi-rte-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--holi-rte-muted);
+}
+
+:where(body[theme="dark"]) .holi-rte-btn:hover {
+    background: var(--holi-rte-btn-hover);
+    color: #f1f5f9;
+}
+
+:where(body[theme="dark"]) .holi-rte-btn[aria-pressed="true"] {
+    background: var(--holi-rte-btn-active);
+    color: var(--holi-rte-accent);
+    border-color: var(--holi-rte-accent);
+}

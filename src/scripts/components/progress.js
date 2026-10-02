@@ -1,3 +1,5 @@
+import { Component } from './component.js';
+
 class ProgressBar extends Component {
     static get selector() {
         return 'progress';
@@ -173,3 +175,5 @@ class ProgressBar extends Component {
         progress.update(percentage);
     }
 }
+
+export { ProgressBar };

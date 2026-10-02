@@ -1,0 +1,195 @@
+<template id="schedule-template">
+    <section class="schedule" data-role="schedule" aria-label="@{label}">
+        <header class="schedule__header">
+            <ul class="schedule__filters" data-role="filters">
+                <slot name="filter-one">
+                    <li>
+                        <label class="schedule__field">
+                            <span>@{filterOneLabel}</span>
+                            <select name="@{filterOneName}" data-filter="one"></select>
+                        </label>
+                    </li>
+                </slot>
+                <slot name="filter-two">
+                    <li>
+                        <label class="schedule__field">
+                            <span>@{filterTwoLabel}</span>
+                            <select name="@{filterTwoName}" data-filter="two" data-ppr-listen="[data-filter='one']"></select>
+                        </label>
+                    </li>
+                </slot>
+                <slot name="filter-three">
+                    <li>
+                        <label class="schedule__field">
+                            <span>@{filterThreeLabel}</span>
+                            <select name="@{filterThreeName}" data-filter="three" data-ppr-listen="[data-filter='one'] [data-filter='two']"></select>
+                        </label>
+                    </li>
+                </slot>
+                <slot name="periodicity">
+                    <li>
+                        <label class="schedule__field">
+                            <span>Periodicity</span>
+                            <select name="periodicity" data-filter="periodicity">
+                                <option value="">Any</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="annually">Annually</option>
+                                <option value="adhoc">Ad Hoc</option>
+                            </select>
+                        </label>
+                    </li>
+                </slot>
+                <slot name="date-filter">
+                    <li>
+                        <label class="schedule__field">
+                            <span>Date</span>
+                            <input type="date" name="date" data-filter="date" />
+                        </label>
+                    </li>
+                </slot>
+                <slot name="actions">
+                    <li class="schedule__action-item">
+                        <button type="button" class="schedule__button" data-action="load">Load</button>
+                        <button type="button" class="schedule__button schedule__button--primary" data-action="open-dialog">Add</button>
+                    </li>
+                </slot>
+            </ul>
+        </header>
+
+        <div class="schedule__content">
+            <nav class="schedule__controls" aria-label="Schedule days">
+                <ul role="tablist" data-role="day-tabs"></ul>
+            </nav>
+            <div class="schedule__days" data-role="days"></div>
+            <div class="schedule__timeline" aria-hidden="true">
+                <ul data-role="timeline"></ul>
+            </div>
+        </div>
+
+        <footer class="schedule__footer">
+            <slot name="footer"></slot>
+        </footer>
+
+        <slot name="dialog" data-mode="large">
+            <section class="schedule__dialog" role="dialog" aria-modal="true" aria-labelledby="@{dialogTitleId}" hidden>
+                <div class="schedule__dialog-panel">
+                    <header class="schedule__dialog-header">
+                        <h2 id="@{dialogTitleId}">Add/Edit an event</h2>
+                        <button type="button" class="schedule__icon-button" data-action="close-dialog" aria-label="Close">X</button>
+                    </header>
+                    <form class="schedule__form" data-role="event-form">
+                        <div class="schedule__form-grid">
+                            <label class="schedule__field schedule__span-6">
+                                <span>Title</span>
+                                <input type="text" name="title" required />
+                            </label>
+                            <label class="schedule__field schedule__span-6">
+                                <span>Description</span>
+                                <textarea name="description" rows="2"></textarea>
+                            </label>
+                            <ul class="schedule__dialog-filters schedule__span-12" data-role="dialog-filters">
+                                <slot name="dialog-filter-one">
+                                    <li class="schedule__span-4">
+                                    <label class="schedule__field">
+                                        <span>@{filterOneLabel}</span>
+                                        <select name="@{filterOneName}" data-dialog-filter="one"></select>
+                                    </label>
+                                    </li>
+                                </slot>
+                                <slot name="dialog-filter-two">
+                                    <li class="schedule__span-4">
+                                    <label class="schedule__field">
+                                        <span>@{filterTwoLabel}</span>
+                                        <select name="@{filterTwoName}" data-dialog-filter="two" data-ppr-listen="[data-dialog-filter='one']"></select>
+                                    </label>
+                                    </li>
+                                </slot>
+                                <slot name="dialog-filter-three">
+                                    <li class="schedule__span-4">
+                                    <label class="schedule__field">
+                                        <span>@{filterThreeLabel}</span>
+                                        <select name="@{filterThreeName}" data-dialog-filter="three" data-ppr-listen="[data-dialog-filter='one'] [data-dialog-filter='two']"></select>
+                                    </label>
+                                    </li>
+                                </slot>
+                            </ul>
+                            <label class="schedule__field schedule__span-6">
+                                <span>Day</span>
+                                <select name="day" data-role="dialog-day"></select>
+                            </label>
+                            <label class="schedule__field schedule__span-6">
+                                <span>Periodicity</span>
+                                <select name="periodicity">
+                                    <option value="">None</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="annually">Annually</option>
+                                    <option value="adhoc">Ad Hoc</option>
+                                </select>
+                            </label>
+                            <label class="schedule__field schedule__span-6">
+                                <span>From</span>
+                                <input type="time" name="since" required />
+                            </label>
+                            <label class="schedule__field schedule__span-6">
+                                <span>To</span>
+                                <input type="time" name="till" required />
+                            </label>
+                            <label class="schedule__field schedule__span-6">
+                                <span>Slot Size</span>
+                                <input type="number" name="slotSize" min="1" />
+                            </label>
+                            <label class="schedule__check schedule__span-6">
+                                <input type="checkbox" name="available" checked />
+                                <span>Available</span>
+                            </label>
+                            <div class="schedule__messages schedule__span-12" data-role="form-messages" aria-live="polite"></div>
+                        </div>
+                        <footer class="schedule__dialog-footer">
+                            <button type="submit" class="schedule__button schedule__button--primary">Save</button>
+                        </footer>
+                    </form>
+                </div>
+            </section>
+        </slot>
+    </section>
+</template>
+
+<template id="schedule-day-tab-template">
+    <li role="presentation">
+        <button type="button" class="schedule__control" role="tab" data-day-index="@{day.index}" aria-selected="@{day.selected}" tabindex="@{day.tabIndex}">
+            <span class="schedule__weekday">@{day.shortLabel}</span>
+            <span class="schedule__date">@{day.dateLabel}</span>
+        </button>
+    </li>
+</template>
+
+<template id="schedule-day-template">
+    <section class="schedule__day" data-day-index="@{day.index}" aria-labelledby="@{day.headerId}">
+        <div class="schedule__day__header" id="@{day.headerId}">
+            <span>@{day.label}</span>
+        </div>
+        <ul class="schedule__events" data-role="events"></ul>
+    </section>
+</template>
+
+<template id="schedule-timeline-item-template">
+    <li>
+        <span>@{tick.label}</span>
+    </li>
+</template>
+
+<template id="schedule-event-template">
+    <li class="schedule__event" data-event-id="@{event.id}" data-state="@{event.state}" style="--schedule-event-top: calc(var(--schedule-unit-height) * @{event.top}); --schedule-event-height: calc(var(--schedule-unit-height) * @{event.height});">
+        <article>
+            <h3 class="title">@{event.title}</h3>
+            <p class="details">@{event.description}</p>
+            <p class="duration">@{event.since} - @{event.till}</p>
+        </article>
+    </li>
+</template>

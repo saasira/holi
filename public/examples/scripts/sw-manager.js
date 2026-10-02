@@ -48,15 +48,18 @@
         appendLog(`Notification permission: ${pushPermission}`);
 
         const handlers = [
-            ServiceWorkerManager.buildHandler('fetch', 'optimize-unsplash-images', {
-                priority: 100,
+            ServiceWorkerManager.registerHandler('optimize-unsplash-images', 'fetch', ['caching'], 100, {
                 match: { method: 'GET', urlIncludes: 'images.unsplash.com' },
                 strategy: 'image-optimize',
+                cache: {
+                    mode: 'cache-first',
+                    cacheName: 'holi-images',
+                    ttlMs: 300000
+                },
                 maxWidth: 960,
                 quality: 72
             }),
-            ServiceWorkerManager.buildHandler('sync', 'sales-background-sync', {
-                priority: 90,
+            ServiceWorkerManager.registerHandler('sales-background-sync', 'sync', ['request-queueing'], 90, {
                 match: { tag: 'sales-sync' },
                 sync: {
                     endpoint: '/examples/api/sales',
@@ -70,8 +73,7 @@
                     }
                 }
             }),
-            ServiceWorkerManager.buildHandler('push', 'notify-on-data-update', {
-                priority: 80,
+            ServiceWorkerManager.registerHandler('notify-on-data-update', 'push', [], 80, {
                 notification: {
                     title: 'Sales Dataset Updated',
                     body: 'Fresh data is available in the background.',

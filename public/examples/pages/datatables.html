@@ -207,33 +207,13 @@
             let localSalesHeaders = [];
 
             function hasDataTableTemplate() {
-                return !!document.getElementById('datatable-template');
-            }
-
-            function injectTemplates(htmlText) {
-                const wrapper = document.createElement('div');
-                wrapper.innerHTML = htmlText;
-                const templates = wrapper.querySelectorAll('template[id]');
-                templates.forEach((tpl) => {
-                    if (!document.getElementById(tpl.id)) {
-                        document.body.appendChild(tpl);
-                    }
-                });
+                return !!window.HoliTemplateRegistry?.hasTemplate?.('datatable-template');
             }
 
             async function ensureTemplateLibrary() {
                 if (hasDataTableTemplate()) return;
-                const urls = ['/dist/holi.html', '/holi.html'];
-                for (let i = 0; i < urls.length; i += 1) {
-                    const url = urls[i];
-                    try {
-                        const response = await fetch(url, { credentials: 'same-origin' });
-                        if (!response.ok) continue;
-                        const html = await response.text();
-                        injectTemplates(html);
-                        if (hasDataTableTemplate()) return;
-                    } catch (_error) {}
-                }
+                await window.HoliTemplateRegistry?.ensureCoreTemplates?.();
+                if (hasDataTableTemplate()) return;
                 throw new Error('DataTable template library not found (datatable-template)');
             }
 

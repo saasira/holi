@@ -1,0 +1,116 @@
+<template id="workflow-template">
+    <section class="holi-workflow" data-role="workflow">
+        <header class="workflow-header">
+            <div>
+                <slot name="title">
+                    <h2>Workflow Builder</h2>
+                </slot>
+                <slot name="summary">
+                    <p>Compose process steps and export an engine-neutral workflow graph.</p>
+                </slot>
+            </div>
+            <div class="workflow-header-actions">
+                <slot name="actions"></slot>
+            </div>
+        </header>
+
+        <section class="workflow-toolbar" aria-label="Workflow actions">
+            <button type="button" data-action="auto-layout">Auto Layout</button>
+            <button type="button" data-action="undo">Undo</button>
+            <button type="button" data-action="redo">Redo</button>
+            <button type="button" data-action="validate">Validate</button>
+            <button type="button" data-action="save">Save</button>
+            <button type="button" data-action="remove-connection">Remove Connection</button>
+            <button type="button" data-action="export-json">Export JSON</button>
+            <button type="button" data-action="import-json">Import JSON</button>
+            <button type="button" data-action="clear">Clear</button>
+        </section>
+
+        <section class="workflow-layout">
+            <aside class="workflow-toolbox" aria-label="Workflow toolbox">
+                <h3>Toolbox</h3>
+                <div class="workflow-node-types" data-role="node-types"></div>
+                <div class="workflow-connection-inspector" data-role="connection-inspector" hidden>
+                    <h3>Connection</h3>
+                    <p class="workflow-connection-summary" data-role="connection-summary"></p>
+                    <label>
+                        <span>Condition</span>
+                        <input data-field="connection-condition" autocomplete="off" spellcheck="false"
+                               placeholder="e.g. amount &gt; 1000">
+                    </label>
+                    <small class="workflow-connection-hint">Boolean expression; blank = default branch.</small>
+                </div>
+                <div class="workflow-status" data-role="status" aria-live="polite"></div>
+                <ul class="workflow-issues" data-role="issues" aria-live="polite"></ul>
+            </aside>
+
+            <section class="workflow-stage" data-role="stage" aria-label="Workflow canvas">
+                <svg class="workflow-lines" data-role="lines" aria-hidden="true"></svg>
+                <div class="workflow-nodes" data-role="nodes"></div>
+            </section>
+        </section>
+
+        <section class="workflow-output">
+            <label>
+                <span>Workflow JSON</span>
+                <textarea data-role="json" rows="10" spellcheck="false"></textarea>
+            </label>
+        </section>
+
+        <div class="workflow-modal" data-role="modal" hidden>
+            <form class="workflow-dialog" data-role="dialog">
+                <header>
+                    <h3 data-role="dialog-title">Configure Node</h3>
+                    <button type="button" data-action="close-dialog" aria-label="Close">x</button>
+                </header>
+                <label>
+                    <span>Name</span>
+                    <input name="title" data-field="title" autocomplete="off">
+                </label>
+                <label>
+                    <span>Workflow Process Step</span>
+                    <input name="processStepSearch" data-field="processStepSearch" autocomplete="off" placeholder="Search process steps">
+                    <select name="processStep" data-field="processStep"></select>
+                </label>
+                <label>
+                    <span>Serialized Step State</span>
+                    <textarea name="serializedState" data-field="serializedState" rows="5" readonly></textarea>
+                </label>
+                <footer>
+                    <button type="button" data-action="delete-node">Delete</button>
+                    <button type="button" data-action="disconnect-node">Clear Outbound Paths</button>
+                    <button type="submit">Apply</button>
+                </footer>
+            </form>
+        </div>
+    </section>
+</template>
+
+<template id="workflow-node-template">
+    <article class="workflow-node" data-role="node">
+        <span class="workflow-port workflow-port-in" data-role="port-in" aria-hidden="true"></span>
+        <header>
+            <strong data-role="title"></strong>
+            <span data-role="type"></span>
+        </header>
+        <p data-role="step"></p>
+        <footer>
+            <button type="button" data-action="edit-node">Edit</button>
+        </footer>
+    </article>
+</template>
+
+<!-- One outgoing port per node branch. Rendered by the component (data-branch set per instance). -->
+<template id="workflow-port-template">
+    <span class="workflow-port workflow-port-out" data-role="port-out">
+        <small class="workflow-port-label" data-role="port-label"></small>
+    </span>
+</template>
+
+<template id="workflow-step-option-template">
+    <option></option>
+</template>
+
+<template id="workflow-node-type-template">
+    <button type="button" draggable="true" data-role="node-type"></button>
+</template>

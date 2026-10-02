@@ -1,22 +1,22 @@
-.holi-textarea {
+:where(body[theme="default"], body:not([theme])) .holi-textarea {
     display: grid;
     gap: 6px;
 }
 
-.holi-textarea .required {
+:where(body[theme="default"], body:not([theme])) .holi-textarea .required {
     color: #b42318;
 }
 
-.holi-textarea textarea {
+:where(body[theme="default"], body:not([theme])) .holi-textarea textarea {
     resize: vertical;
     min-height: 96px;
 }
 
-.holi-textarea .error {
+:where(body[theme="default"], body:not([theme])) .holi-textarea .error {
     color: #b42318;
     font-size: 0.88rem;
 }
 
-.holi-textarea.is-invalid [data-role="control"] {
+:where(body[theme="default"], body:not([theme])) .holi-textarea.is-invalid [data-role="control"] {
     border-color: #b42318;
 }

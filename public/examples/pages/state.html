@@ -121,20 +121,11 @@
                 }
 
                 const ensureTemplateLibrary = async () => {
-                    const hasTemplates = () => !!document.getElementById('datatable-template') && !!document.getElementById('tabs');
+                    const hasTemplates = () => !!window.HoliTemplateRegistry?.hasTemplate?.('datatable-template') && !!window.HoliTemplateRegistry?.hasTemplate?.('tabs');
                     if (hasTemplates()) return;
-                    const response = await fetch('/dist/holi.html', { credentials: 'same-origin' });
-                    if (!response.ok) throw new Error('Failed to load /dist/holi.html');
-                    const html = await response.text();
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = html;
-                    wrapper.querySelectorAll('template[id]').forEach((tpl) => {
-                        if (!document.getElementById(tpl.id)) {
-                            document.body.appendChild(tpl);
-                        }
-                    });
+                    await window.HoliTemplateRegistry?.ensureCoreTemplates?.();
                     if (!hasTemplates()) {
-                        throw new Error('Required templates were not found in holi.html');
+                        throw new Error('Required templates were not found in components.html');
                     }
                 };
 

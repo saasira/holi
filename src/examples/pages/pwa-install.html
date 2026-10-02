@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PWA Install Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <link rel="stylesheet" href="./pwa-install.css">
+        <script src="/dist/holi.js"></script>
+        <script src="./pwa-install.js" defer></script>
+    </head>
+    <body>
+        <main class="pwa-demo">
+            <header class="pwa-demo__hero">
+                <p class="pwa-demo__eyebrow">PWA Install</p>
+                <h1>Install prompt and dynamic manifest wiring</h1>
+                <p>This example initializes the Holi PWA helpers, binds an install button via <code>data-pwa-install</code>, and reports lifecycle events in the log below.</p>
+            </header>
+
+            <section class="pwa-demo__panel">
+                <h2>Install UI</h2>
+                <div class="pwa-demo__actions">
+                    <button type="button" data-pwa-install hidden>Install App</button>
+                    <button type="button" id="btn-register-sw">Register Service Worker</button>
+                    <button type="button" id="btn-refresh-status">Refresh Status</button>
+                </div>
+                <p class="pwa-demo__status">
+                    <span>Status:</span>
+                    <strong data-pwa-install-status>Install unavailable</strong>
+                </p>
+                <p class="pwa-demo__hint">The browser will only expose <code>beforeinstallprompt</code> when PWA installability requirements are met. On unsupported browsers, the button remains hidden.</p>
+            </section>
+
+            <section class="pwa-demo__panel">
+                <h2>Manifest Preview</h2>
+                <dl class="pwa-demo__meta">
+                    <div><dt>Name</dt><dd id="manifest-name">Holi Example App</dd></div>
+                    <div><dt>Start URL</dt><dd id="manifest-start">/examples/pages/pwa-install.html</dd></div>
+                    <div><dt>Theme Color</dt><dd id="manifest-color">#0f766e</dd></div>
+                </dl>
+            </section>
+
+            <section class="pwa-demo__panel">
+                <h2>Event Log</h2>
+                <ul id="pwa-log" class="pwa-demo__log"></ul>
+            </section>
+        </main>
+    </body>
+</html>

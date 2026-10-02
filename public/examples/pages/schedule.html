@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schedule Example</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body {
+                margin: 0;
+                font-family: Segoe UI, sans-serif;
+                background: #f7f9fc;
+                color: #172033;
+            }
+
+            main {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 24px;
+            }
+
+            h1 {
+                margin: 0 0 8px;
+                font-size: 28px;
+            }
+
+            .intro {
+                margin: 0 0 20px;
+                color: #526075;
+            }
+
+            .example-panel {
+                border: 1px solid #dbe3ee;
+                background: #fff;
+                border-radius: 8px;
+                padding: 18px;
+            }
+
+            .event-log {
+                margin-top: 16px;
+                padding: 12px;
+                min-height: 22px;
+                border-radius: 6px;
+                background: #172033;
+                color: #e8edf5;
+                font-family: Consolas, monospace;
+                font-size: 13px;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1>Schedule Component</h1>
+            <p class="intro">Reusable template-driven weekly schedule with slotted filters, generated days, generated timeline, and add-event dialog.</p>
+
+            <section class="example-panel">
+                <schedule
+                    id="clinic-schedule"
+                    label="Clinic appointment schedule"
+                    timeline="08:00-18:00"
+                    step="30"
+                    filter-one-label="Location"
+                    filter-two-label="Provider"
+                    filter-three-label="Room">
+                    <li slot="filter-one">
+                        <label class="schedule__field">
+                            <span>Location</span>
+                            <select name="location" data-filter="one">
+                                <option value="">All locations</option>
+                                <option value="north">North Clinic</option>
+                                <option value="central">Central Clinic</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li slot="filter-two">
+                        <label class="schedule__field">
+                            <span>Provider</span>
+                            <select name="provider" data-filter="two">
+                                <option value="">All providers</option>
+                                <option value="rao">Dr. Rao</option>
+                                <option value="sen">Dr. Sen</option>
+                                <option value="iyer">Dr. Iyer</option>
+                            </select>
+                        </label>
+                    </li>
+                    <li slot="filter-three">
+                        <label class="schedule__field">
+                            <span>Room</span>
+                            <select name="room" data-filter="three">
+                                <option value="">Any room</option>
+                                <option value="a">Room A</option>
+                                <option value="b">Room B</option>
+                                <option value="c">Room C</option>
+                            </select>
+                        </label>
+                    </li>
+                    <p slot="footer">Added events are kept in the component instance for this page session.</p>
+                </schedule>
+
+                <div class="event-log" id="schedule-log">Waiting for schedule events...</div>
+            </section>
+        </main>
+
+        <script>
+            const schedule = document.getElementById('clinic-schedule');
+            schedule.setAttribute('data-events', JSON.stringify([
+                {
+                    id: 'appt-1001',
+                    day: 'monday',
+                    title: 'Initial consults',
+                    description: 'New patient appointment block',
+                    since: '08:30',
+                    till: '10:00'
+                },
+                {
+                    id: 'appt-1002',
+                    day: 'tuesday',
+                    title: 'Follow-up visits',
+                    description: 'Routine 20 minute checks',
+                    since: '11:00',
+                    till: '12:30'
+                },
+                {
+                    id: 'appt-1003',
+                    day: 'wednesday',
+                    title: 'Procedure room',
+                    description: 'Reserved for minor procedures',
+                    since: '13:00',
+                    till: '15:00',
+                    available: false
+                },
+                {
+                    id: 'appt-1004',
+                    day: 'friday',
+                    title: 'Telehealth block',
+                    description: 'Remote consultations',
+                    since: '09:30',
+                    till: '11:30'
+                }
+            ]));
+
+            const log = document.getElementById('schedule-log');
+            schedule.addEventListener('schedulefilterchange', (event) => {
+                log.textContent = `Filters changed: ${JSON.stringify(event.detail.filters)}`;
+            });
+            schedule.addEventListener('scheduledaychange', (event) => {
+                log.textContent = `Selected day: ${event.detail.day.label}`;
+            });
+            schedule.addEventListener('scheduleadd', (event) => {
+                log.textContent = `Added event: ${event.detail.event.title}`;
+            });
+        </script>
+    </body>
+</html>
