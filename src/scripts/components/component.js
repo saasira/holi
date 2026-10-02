@@ -4,6 +4,7 @@ import { Validator } from '../utils/validator.js';
 import { ComponentStateBridge } from '../utils/component_state_bridge.js';
 import { ComponentPPR } from '../utils/ppr.js';
 import { TemplateRegistry } from '../utils/template_registry.js';
+import { componentNameFromRole } from '../utils/aria_roles.js';
 
 class Component {
     static nextComponentId = 1;
@@ -557,6 +558,7 @@ class Component {
             element.getAttribute('data-component-id'),
             element.getAttribute('component'),
             element.getAttribute('role'),
+            componentNameFromRole(element.getAttribute('role')),
             element.getAttribute('data-holi-component-class'),
             String(element.tagName || '').toLowerCase()
         ];

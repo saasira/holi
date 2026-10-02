@@ -1,5 +1,6 @@
 import { HoliApp } from './app.js';
 import { TemplateRegistry } from './template_registry.js';
+import { roleSelectorsFor } from './aria_roles.js';
 
 const standardSelectors = (aliases = []) => {
     const selectors = new Set();
@@ -8,7 +9,8 @@ const standardSelectors = (aliases = []) => {
         if (!value) return;
         selectors.add(value);
         selectors.add(`[component="${value}"]`);
-        selectors.add(`[role="${value}"]`);
+        // role="holi-<name>" always; role="<name>" only when it is not an ARIA role (see aria_roles.js).
+        roleSelectorsFor(value).forEach((selector) => selectors.add(selector));
     });
     return Array.from(selectors);
 };
@@ -83,7 +85,7 @@ const componentEntries = [
         selectors: [
             ...standardSelectors(['holi-checkbox', 'checkbox-group']),
             'input[type="checkbox"][component="checkbox"]',
-            'input[type="checkbox"][role="checkbox"]'
+            'input[type="checkbox"][role="holi-checkbox"]'
         ],
         resolve: (mod) => mod.CheckboxGroupComponent,
         load: () => import('../components/checkbox.js')
@@ -258,7 +260,7 @@ const componentEntries = [
         selectors: [
             ...standardSelectors(['holi-radio', 'radio-group']),
             'input[type="radio"][component="radio"]',
-            'input[type="radio"][role="radio"]'
+            'input[type="radio"][role="holi-radio"]'
         ],
         resolve: (mod) => mod.RadioGroupComponent,
         load: () => import('../components/radio.js')
@@ -301,7 +303,7 @@ const componentEntries = [
         selectors: [
             '[data-search]',
             '[component="search"]',
-            '[role="search"]'
+            '[role="holi-search"]'
         ],
         resolve: (mod) => mod.SearchComponent,
         load: () => import('../components/search.js')

@@ -26,7 +26,8 @@ Rich text editor & its extension API: `docs/rte.md`.
 - Three discovery styles for each component:
   - Tag: `<tabs></tabs>`
   - Attribute: `<section component="tabs"></section>`
-  - Role: `<section role="tabs"></section>`
+  - Role: `<section role="tabs"></section>` or `<section role="holi-tabs"></section>`; a component whose name is an
+    ARIA role (dialog, menubar, region, search, tree) takes only the prefixed form, e.g. `role="holi-menubar"`
 - Component-template bundling (`dist/components.html`) and runtime in-memory template registration.
 - Template bindings:
   - `@{expression}` interpolation

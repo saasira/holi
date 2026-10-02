@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed (breaking for the role form of five components)
+
+- A component name that is also a WAI-ARIA role -- `dialog`, `menubar`, `region`, `search`, `tree` -- is no longer found
+  by `role="<name>"`: templates use those roles for assistive technology, and Holi hydrated them as components inside
+  the component that rendered them. Use `role="holi-<name>"` (e.g. `role="holi-menubar"`); the tag and
+  `component="<name>"` forms are unchanged. The explicit checkbox and radio input forms are now
+  `input[type=checkbox][role="holi-checkbox"]` and `input[type=radio][role="holi-radio"]`. Every component also accepts
+  `role="holi-<name>"`, so the prefixed form can be used throughout. The ARIA role list is `utils/aria_roles.js`.
+
 ### Added
 
 - `accordion` takes its sections from a content provider (`provider` + `data-source`, or inline `items` JSON):
@@ -17,6 +26,10 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 
+- `Navigation` was not in the bundle (nothing imported `utils/navigation.js`), and a route with a parameter
+  (`/profile/:id`) never matched -- the pattern looked for an escaped slash the escaping never produced. The navigation
+  example, which loaded no Holi at all and used APIs that no longer exist, is rewritten on `Navigation` (hash mode),
+  `StateHub` and `StateConnector`.
 - `accordion` cloned its sections and left the originals in place, so every section showed twice -- above the accordion
   and inside it -- and anything inside existed twice. Sections are now moved into their panels.
 - `accordion`'s root carried `role="region"`, which Holi hydrated as a `region` component inside it.

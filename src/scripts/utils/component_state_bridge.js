@@ -1,4 +1,5 @@
 import { StateHub } from './state.js';
+import { componentNameFromRole } from './aria_roles.js';
 
 class ComponentStateBridge {
     constructor(component) {
@@ -23,7 +24,7 @@ class ComponentStateBridge {
 
         const fromComponentAttr = this.container?.getAttribute?.('component');
         const componentName = fromComponentAttr
-            || this.container?.getAttribute?.('role')
+            || componentNameFromRole(this.container?.getAttribute?.('role'))
             || (() => {
                 const tag = String(this.container?.tagName || '').toLowerCase();
                 if (tag.startsWith('holi-')) return tag.slice('holi-'.length);

@@ -69,7 +69,7 @@ class PageComponent extends Component {
     collectNamedBlocks() {
         const blocks = new Map();
         const blockSelectors = ['block', '[component="block"]', '[role="block"]'];
-        const regionSelectors = ['region', '[component="region"]', '[role="region"]'];
+        const regionSelectors = ['region', '[component="region"]', '[role="holi-region"]'];
         const children = Array.from(this.container.children)
             .filter((child) => blockSelectors.some((selector) => child.matches(selector)));
 
