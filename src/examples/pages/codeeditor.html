@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Code editor</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; max-width: 900px; }
+            #log { background: #f1f5f9; padding: 8px; font-size: 12px; white-space: pre-wrap; }
+            section { margin-bottom: 22px; }
+        </style>
+    </head>
+    <body>
+        <h1>Code editor</h1>
+        <p>The editor knows no language: the colours and the completions come from a language registered by name with
+            <code>Holi.CodeLanguages.register(name, language)</code>, and an editor picks one with <code>language="..."</code>. Type two letters for suggestions
+            (or Ctrl+Space); Tab or Enter accepts. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the selection, or all of it; <kbd>Ctrl</kbd>+<kbd>/</kbd> comments lines
+            when the language has a line comment.</p>
+
+        <section>
+            <h2>A language with completions drawn from the page's data (keys of a document)</h2>
+            <codeeditor id="json" language="json" height="150" data='{"keys":["name","price","quantity","currency","tags"]}'>
+{
+  "name": "widget",
+  "price": 12.5,
+  "tags": ["a", "b"],
+  "active": true
+}
+            </codeeditor>
+        </section>
+
+        <section>
+            <h2>The same editor with another language that has a line comment</h2>
+            <codeeditor id="ini" language="ini" height="130" run-label="Apply" hint="Ctrl+Enter applies">
+; settings
+[server]
+port = 8080
+host = "localhost"
+            </codeeditor>
+        </section>
+
+        <pre id="log">pending</pre>
+        <script>
+            // Two small languages, registered from the page. Real ones (SQL, JavaScript, Lua) are registered the same way by the application that has them.
+            Holi.CodeLanguages.register('json', {
+                tokenize(text) {
+                    const tokens = [];
+                    const rule = /"(?:[^"\\\n]|\\.)*"|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?|true|false|null|\s+|[\s\S]/g;
+                    let m;
+                    while ((m = rule.exec(text))) {
+                        const t = m[0];
+                        let type = 'operator';
+                        if (t[0] === '"') type = /^\s*:/.test(text.slice(m.index + t.length)) ? 'property' : 'string';
+                        else if (/^-?\d/.test(t)) type = 'number';
+                        else if (/^(true|false|null)$/.test(t)) type = 'literal';
+                        else if (/^\s+$/.test(t)) type = 'space';
+                        tokens.push({ type, text: t, start: m.index, end: m.index + t.length });
+                    }
+                    return tokens;
+                },
+                suggest(context) {
+                    const lower = context.prefix.toLowerCase();
+                    return (context.data.keys || []).filter((k) => k.toLowerCase().startsWith(lower) && k !== context.prefix).map((label) => ({ label, kind: 'key' }));
+                }
+            });
+            Holi.CodeLanguages.register('ini', {
+                comment: ';',
+                tokenize(text) {
+                    const tokens = [];
+                    const rule = /;[^\n]*|\[[^\]\n]*\]|"[^"\n]*"|\d+(?:\.\d+)?|[A-Za-z_][\w.]*(?=\s*=)|\s+|[\s\S]/g;
+                    let m;
+                    while ((m = rule.exec(text))) {
+                        const t = m[0];
+                        let type = 'operator';
+                        if (t[0] === ';') type = 'comment';
+                        else if (t[0] === '[') type = 'keyword';
+                        else if (t[0] === '"') type = 'string';
+                        else if (/^\d/.test(t)) type = 'number';
+                        else if (/^[A-Za-z_]/.test(t)) type = 'property';
+                        else if (/^\s+$/.test(t)) type = 'space';
+                        tokens.push({ type, text: t, start: m.index, end: m.index + t.length });
+                    }
+                    return tokens;
+                }
+            });
+
+            window.addEventListener('load', () => setTimeout(() => {
+                const log = document.getElementById('log');
+                const lines = [];
+                const say = (text) => { lines.unshift(text); log.textContent = lines.slice(0, 8).join('\n'); };
+                document.addEventListener('codeeditorrun', (e) => say('run: ' + JSON.stringify(e.detail.code.slice(0, 20)) + ' selection=' + e.detail.selection));
+                say('ready');
+            }, 600));
+        </script>
+    </body>
+</html>

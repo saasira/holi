@@ -1,0 +1,23 @@
+<template id="codeeditor-template">
+    <section class="holi-codeeditor">
+        <div class="holi-codeeditor-toolbar" data-role="toolbar">
+            <button type="button" class="holi-codeeditor-run" data-action="run">Run</button>
+            <span class="holi-codeeditor-hint" data-role="hint"></span>
+            <slot name="actions"></slot>
+        </div>
+        <div class="holi-codeeditor-surface" data-role="surface">
+            <pre class="holi-codeeditor-highlight" data-role="highlight" aria-hidden="true"></pre>
+            <textarea class="holi-codeeditor-input" data-role="input" spellcheck="false" wrap="off" autocomplete="off" autocapitalize="off"
+                      aria-label="Code" aria-autocomplete="list"></textarea>
+            <ul class="holi-codeeditor-suggest" data-role="suggest" role="listbox" aria-label="Suggestions" hidden></ul>
+        </div>
+        <div class="holi-codeeditor-footer"><slot name="footer"></slot></div>
+    </section>
+</template>
+
+<template id="codeeditor-suggest-item-template">
+    <li class="holi-codeeditor-suggest-item" role="option" data-index="@{item.index}" aria-selected="false">
+        <span class="holi-codeeditor-suggest-label">@{item.label}</span>
+        <small class="holi-codeeditor-suggest-kind">@{item.kind}</small>
+    </li>
+</template>

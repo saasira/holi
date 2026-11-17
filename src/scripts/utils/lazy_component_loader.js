@@ -304,11 +304,11 @@ const componentEntries = [
         load: () => import('../components/rte.js')
     },
     {
-        id: 'sqleditor',
-        aliases: ['sqleditor'],
-        styles: ['sqleditor'],
-        resolve: (mod) => mod.SqlEditorComponent,
-        load: () => import('../components/sqleditor.js')
+        id: 'codeeditor',
+        aliases: ['codeeditor'],
+        styles: ['codeeditor'],
+        resolve: (mod) => mod.CodeEditorComponent,
+        load: () => import('../components/codeeditor.js')
     },
     {
         id: 'search',
