@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.23.0] - 2026-11-17
+
+### Added
+
+- `codeeditor`: an editor for code in any language. The text is coloured by the tokenizer of the language the editor is given (`language="..."`), completions come from the language, Ctrl+Enter runs (`codeeditorrun`), Ctrl+/ comments lines with the language's line-comment mark, and `data` / `setData()` hands the language what it needs to complete (a database schema, names in scope). Elements slotted as `actions` go in the toolbar and as `footer` under the text. `getValue()`, `setValue()`, `getSelection()`, `insertText()`, `setLanguage()`. New example page `codeeditor`.
+- `Holi.CodeLanguages`: the registry of languages (`register(name, { tokenize, comment, suggest, minPrefix })`, `get`, `has`, `names`, `onRegister`). Holi ships none: an application registers the languages it has, and an editor of a language registered after it was drawn colours itself as soon as the language is there. `utils/code_languages.js` documents the contract.
+
+### Changed
+
+- `schedule`: an event's place is no longer a `style` attribute in the event template (a strict content security policy, `default-src 'self'`, refuses one and reports it each time the templates are read). The component sets two unitless custom properties on the event through the style object, `--schedule-event-start` and `--schedule-event-span`, and the stylesheet turns them into `top` and `height` in units of `--schedule-unit-height`. Anyone styling events by the old `--schedule-event-top` / `--schedule-event-height` properties should use the new ones.
+
+### Removed
+
+- `sqleditor` (added in 0.22.0, a day earlier): SQL, and the parameter rows of a `:name` query, are an application's matter, not a general component's. It is replaced by `codeeditor` with a SQL language registered by the application, which keeps the SQL tokenizer and the parameter rows.
+
 ## [0.22.0] - 2026-11-17
 
 ### Added

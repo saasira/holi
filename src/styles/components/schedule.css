@@ -225,11 +225,12 @@
     margin-right: var(--space-md);
     transition: opacity .2s,background .2s;
 
-    height: var(--schedule-event-height,auto);
+    /* An event's place is two unitless numbers, set by the component (--schedule-event-start, --schedule-event-span), in units of --schedule-unit-height. */
+    height: calc(var(--schedule-unit-height) * var(--schedule-event-span, 1));
     padding: var(--space-xs);
     position: absolute;
     left: 0;
-    top: var(--schedule-event-top,initial);
+    top: calc(var(--schedule-unit-height) * var(--schedule-event-start, 0));
     width: 100%;
     background: darkseagreen;
 
