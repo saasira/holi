@@ -78,6 +78,16 @@ All notable changes to this project are documented in this file.
 - `npm run ci:smoke`; the new components driven in Chromium (hover, brush, select, legend, presets, absolute range,
   refresh, inline tabs).
 
+## [Unreleased]
+
+### Added
+
+- `chart` draws several series from rows of data (`x`, `series`), as line, bar, area or scatter in one chart, on a left and a right value axis, stacked or side by side, with negative values, axis ticks and titles, hover tooltips, and a legend that hides and shows series. New example page `chart-bi`.
+
+### Changed
+
+- `chart`: a single-series bar or line no longer shows a one-entry legend (a pie still lists its slices). The older `{ label, value }` data, `update()`, `setType()` and the `chartpointselect` and `chartupdate` events are unchanged.
+
 ## [0.20.0] - 2026-06-06
 
 ### Added
