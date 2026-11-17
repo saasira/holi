@@ -82,7 +82,7 @@ All notable changes to this project are documented in this file.
 
 ### Added
 
-- `chart` draws several series from rows of data (`x`, `series`), as line, bar, area or scatter in one chart, on a left and a right value axis, stacked or side by side, with negative values, axis ticks and titles, hover tooltips, and a legend that hides and shows series. New example page `chart-bi`.
+- `chart` draws several series from rows of data (`x`, `series`), as line, bar, area or scatter in one chart, on a left and a right value axis, stacked or side by side, with negative values, axis ticks and titles, hover tooltips, and a legend that hides and shows series. New example page `chart-series`.
 
 ### Changed
 
