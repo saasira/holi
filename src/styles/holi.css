@@ -5,6 +5,7 @@
 @import "./styles/components/button.css";
 @import "./styles/components/calendar.css";
 @import "./styles/components/carousel.css";
+@import "./styles/components/codeeditor.css";
 @import "./styles/components/chart.css";
 @import "./styles/components/checkbox.css";
 @import "./styles/components/dashboardgrid.css";
@@ -34,7 +35,6 @@
 @import "./styles/components/schedule.css";
 @import "./styles/components/search.css";
 @import "./styles/components/select.css";
-@import "./styles/components/sqleditor.css";
 @import "./styles/components/statscard.css";
 @import "./styles/components/tabs.css";
 @import "./styles/components/textarea.css";
