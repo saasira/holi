@@ -185,7 +185,7 @@
 </template>
 
 <template id="schedule-event-template">
-    <li class="schedule__event" data-event-id="@{event.id}" data-state="@{event.state}" style="--schedule-event-top: calc(var(--schedule-unit-height) * @{event.top}); --schedule-event-height: calc(var(--schedule-unit-height) * @{event.height});">
+    <li class="schedule__event" data-event-id="@{event.id}" data-state="@{event.state}">
         <article>
             <h3 class="title">@{event.title}</h3>
             <p class="details">@{event.description}</p>

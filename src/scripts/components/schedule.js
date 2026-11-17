@@ -418,7 +418,14 @@ class ScheduleComponent extends Component {
             const eventsEl = section?.querySelector('[data-role="events"]');
             this.events
                 .filter((event) => event.dayIndex === day.index)
-                .forEach((event) => eventsEl?.appendChild(this.renderTemplate(eventTemplate, { event })));
+                .forEach((event) => {
+                    const item = this.renderTemplate(eventTemplate, { event });
+                    // The place is set through the style object, not a style attribute in the template, so a strict content security policy allows it.
+                    const li = item.firstElementChild;
+                    li?.style.setProperty('--schedule-event-start', String(event.top));
+                    li?.style.setProperty('--schedule-event-span', String(event.height));
+                    eventsEl?.appendChild(item);
+                });
             this.daysEl.appendChild(fragment);
         });
         this.syncDayVisibility();
