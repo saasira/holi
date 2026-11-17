@@ -2,6 +2,18 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.22.0] - 2026-11-17
+
+### Added
+
+- `chart` draws several series from rows of data (`x`, `series`), as line, bar, area or scatter in one chart, on a left and a right value axis, stacked or side by side, with negative values, axis ticks and titles, hover tooltips, and a legend that hides and shows series. New example page `chart-series`.
+- `dashboardgrid`: a grid of tiles (any child element: a chart, a card, a table) placed by column, row and size in grid cells. Tiles flow around each other and settle upwards; with `editable` they are dragged by a grip, resized from a corner, or moved and resized from the keyboard (arrow keys, Shift to resize). A saved `layout` is applied through the `layout` attribute or `setLayout()`; `getLayout()`, `addTile()` and `removeTile()` complete the API, and `dashboardlayoutchange` and `dashboardtileremove` report changes. Tiles stack in one column on a narrow screen. Layout arithmetic is in `utils/grid_layout.js`. New example page `dashboardgrid`.
+- `sqleditor`: an editor for SQL with coloured keywords, functions, strings, numbers, comments and `:name` parameters; suggestions for keywords, functions, and the tables and columns of a `schema`; Ctrl+Enter to run the selection or all of it (`sqleditorrun`); Ctrl+/ to comment lines; and a row per parameter for its type and value (`sqleditorparams`, `getParams()`). The tokenizer is in `utils/sql_tokens.js`. New example page `sqleditor`.
+
+### Changed
+
+- `chart`: a single-series bar or line no longer shows a one-entry legend (a pie still lists its slices). The older `{ label, value }` data, `update()`, `setType()` and the `chartpointselect` and `chartupdate` events are unchanged.
+
 ## [0.21.1] - 2026-10-02
 
 ### Changed (breaking for the role form of five components)
@@ -77,18 +89,6 @@ All notable changes to this project are documented in this file.
 
 - `npm run ci:smoke`; the new components driven in Chromium (hover, brush, select, legend, presets, absolute range,
   refresh, inline tabs).
-
-## [Unreleased]
-
-### Added
-
-- `chart` draws several series from rows of data (`x`, `series`), as line, bar, area or scatter in one chart, on a left and a right value axis, stacked or side by side, with negative values, axis ticks and titles, hover tooltips, and a legend that hides and shows series. New example page `chart-series`.
-- `dashboardgrid`: a grid of tiles (any child element: a chart, a card, a table) placed by column, row and size in grid cells. Tiles flow around each other and settle upwards; with `editable` they are dragged by a grip, resized from a corner, or moved and resized from the keyboard (arrow keys, Shift to resize). A saved `layout` is applied through the `layout` attribute or `setLayout()`; `getLayout()`, `addTile()` and `removeTile()` complete the API, and `dashboardlayoutchange` and `dashboardtileremove` report changes. Tiles stack in one column on a narrow screen. Layout arithmetic is in `utils/grid_layout.js`. New example page `dashboardgrid`.
-- `sqleditor`: an editor for SQL with coloured keywords, functions, strings, numbers, comments and `:name` parameters; suggestions for keywords, functions, and the tables and columns of a `schema`; Ctrl+Enter to run the selection or all of it (`sqleditorrun`); Ctrl+/ to comment lines; and a row per parameter for its type and value (`sqleditorparams`, `getParams()`). The tokenizer is in `utils/sql_tokens.js`. New example page `sqleditor`.
-
-### Changed
-
-- `chart`: a single-series bar or line no longer shows a one-entry legend (a pie still lists its slices). The older `{ label, value }` data, `update()`, `setType()` and the `chartpointselect` and `chartupdate` events are unchanged.
 
 ## [0.20.0] - 2026-06-06
 
