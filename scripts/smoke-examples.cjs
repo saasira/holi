@@ -114,6 +114,9 @@ const builtChecks = [
     'public/examples/pages/localeswitcher.html',
     'public/examples/pages/page-layout.html',
     'public/examples/pages/histogram.html',
+    'public/examples/pages/chart-series.html',
+    'public/examples/pages/dashboardgrid.html',
+    'public/examples/pages/sqleditor.html',
     'public/examples/pages/timerange.html',
     'public/examples/pages/tabs.html'
 ];

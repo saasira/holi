@@ -1,0 +1,159 @@
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid {
+    --dg-border: #d9e2ef;
+    --dg-surface: #ffffff;
+    --dg-accent: #2563eb;
+    --dg-muted: #64748b;
+    position: relative;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-surface {
+    --dg-cols: 12;
+    --dg-row-height: 80px;
+    --dg-gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(var(--dg-cols), minmax(0, 1fr));
+    grid-auto-rows: var(--dg-row-height);
+    gap: var(--dg-gap);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-tile {
+    --x: 0;
+    --y: 0;
+    --w: 6;
+    --h: 3;
+    grid-column: calc(var(--x) + 1) / span var(--w);
+    grid-row: calc(var(--y) + 1) / span var(--h);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    border: 1px solid var(--dg-border);
+    border-radius: 12px;
+    background: var(--dg-surface);
+    overflow: hidden;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-tilehead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px 0;
+    min-height: 28px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-title {
+    flex: 1 1 auto;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 6px 10px 10px;
+    overflow: auto;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-body > * {
+    max-width: 100%;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-empty {
+    margin: 0;
+    padding: 24px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--dg-muted);
+}
+
+/* The editing controls exist only while the grid is editable. */
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid:not([data-editable="true"]) .holi-dashboardgrid-grip,
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid:not([data-editable="true"]) .holi-dashboardgrid-remove,
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid:not([data-editable="true"]) .holi-dashboardgrid-resize {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-grip {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    cursor: grab;
+    touch-action: none;
+    background:
+        radial-gradient(circle, var(--dg-muted) 1.4px, transparent 1.6px) 0 0 / 6px 6px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-grip:focus-visible {
+    outline: 2px solid var(--dg-accent);
+    outline-offset: 2px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-remove {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--dg-muted);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-remove:hover {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-resize {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    touch-action: none;
+    background: linear-gradient(135deg, transparent 50%, var(--dg-muted) 50%, var(--dg-muted) 58%, transparent 58%, transparent 72%, var(--dg-muted) 72%, var(--dg-muted) 80%, transparent 80%);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid[data-editable="true"] .holi-dashboardgrid-tile {
+    border-style: dashed;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-tile.is-dragging {
+    z-index: 2;
+    border-style: solid;
+    border-color: var(--dg-accent);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+    user-select: none;
+}
+
+/* One column on a narrow screen. */
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid[data-stacked="true"] .holi-dashboardgrid-surface {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid[data-stacked="true"] .holi-dashboardgrid-tile {
+    grid-column: 1 / -1;
+    grid-row: auto / span var(--h);
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid[data-stacked="true"] .holi-dashboardgrid-grip,
+:where(body[theme="default"], body:not([theme])) .holi-dashboardgrid[data-stacked="true"] .holi-dashboardgrid-resize {
+    display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :where(body[theme="default"], body:not([theme])) .holi-dashboardgrid-tile:not(.is-dragging) {
+        transition: box-shadow 0.15s ease;
+    }
+}

@@ -7,6 +7,7 @@
 @import "./styles/components/carousel.css";
 @import "./styles/components/chart.css";
 @import "./styles/components/checkbox.css";
+@import "./styles/components/dashboardgrid.css";
 @import "./styles/components/datagrid.css";
 @import "./styles/components/datatable.css";
 @import "./styles/components/details.css";
@@ -33,6 +34,7 @@
 @import "./styles/components/schedule.css";
 @import "./styles/components/search.css";
 @import "./styles/components/select.css";
+@import "./styles/components/sqleditor.css";
 @import "./styles/components/statscard.css";
 @import "./styles/components/tabs.css";
 @import "./styles/components/textarea.css";

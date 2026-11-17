@@ -1,7 +1,35 @@
 import { Component } from './component.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+const DEFAULT_COLORS = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#7c3aed', '#14b8a6', '#f97316'];
+const TYPES = ['line', 'bar', 'area', 'pie', 'doughnut', 'scatter'];
+const SERIES_TYPES = ['line', 'bar', 'area', 'scatter'];
+const MARGIN = { top: 10, right: 12, bottom: 30, left: 54 };
+const RIGHT_AXIS_MARGIN = 54;
+const TITLE_ROOM = 14;
+/** How near, in pixels, a pointer must be to a scatter point to pick it. */
+const HIT_RADIUS = 24;
 
+/**
+ * A chart over rows of data: lines, bars, areas and scatter points on one or two value axes, stacked or side by side, and pie or doughnut.
+ *
+ * Data is one object per row. `x` names the column that is the x axis (its text for lines and bars, its number for scatter); `series` names the
+ * columns drawn, as strings or as `{ key, label, color, type, axis }` where `type` is line, bar, area or scatter (so a bar series and a line series
+ * share a chart) and `axis` is "left" (the default) or "right" (a second value axis, with its own scale):
+ *
+ * ```html
+ * <chart type="bar" x="month" series='[{"key":"revenue"},{"key":"margin","type":"line","axis":"right"}]'
+ *        data='[{"month":"Jan","revenue":120,"margin":0.31},{"month":"Feb","revenue":-40,"margin":0.12}]'></chart>
+ * ```
+ *
+ * Values may be negative; a bar grows from zero in either direction. `stacked` stacks bar and area series (positives up from zero, negatives down).
+ * Without `x` or `series` the first column is x and every other numeric column a series. The older form, one series of `{ label, value }`, still
+ * works, and is what pie and doughnut draw (a slice per row). Hovering shows the values; clicking a legend entry hides or shows its series.
+ *
+ * Events (on the chart element, bubbling):
+ * - `chartpointselect` -- a clicked point, bar or slice: `{ index, item, type, series }`
+ * - `chartupdate` -- after `update()`: `{ type, count }`
+ */
 class ChartComponent extends Component {
     static get selector() {
         return 'chart';
@@ -17,375 +45,675 @@ class ChartComponent extends Component {
 
     static templateId = 'chart-template';
 
+    static props = {
+        type: { attr: 'type', default: 'line' },
+        height: { attr: 'height', type: 'number', default: 220 },
+        showLegend: { attr: 'show-legend', type: 'boolean', default: true },
+        title: { attr: 'title', default: '' },
+        colors: { attr: 'colors', default: '' },
+        data: { attr: 'data', type: 'array', default: [] },
+        series: { attr: 'series', type: 'array', default: [] },
+        x: { attr: 'x', default: '' },
+        stacked: { attr: 'stacked', type: 'boolean', default: false },
+        xTitle: { attr: 'x-title', default: '' },
+        yTitle: { attr: 'y-title', default: '' },
+        y2Title: { attr: 'y2-title', default: '' }
+    };
+
+    static events = {
+        'click [data-action="toggle-series"]': 'toggleSeries'
+    };
+
     constructor(container, options = {}) {
         super(container, options);
         this.templateId = ChartComponent.templateId;
-
-        this.type = this.resolveType(options.type || this.readAttr('type', 'line'));
-        this.height = this.parseNumber(options.height, this.readAttr('height', '220'), 220);
-        this.showLegend = this.parseBoolean(options.showLegend, this.readAttr('show-legend', 'true'), true);
-        this.title = String(options.title || this.readAttr('title', '')).trim();
-        this.colors = this.resolveColors(options.colors || this.readAttr('colors', ''));
-        this.data = this.resolveData(options.data);
-
-        this.element = null;
-        this.svgEl = null;
-        this.legendEl = null;
-        this.emptyEl = null;
-        this.boundClick = (event) => this.handlePointClick(event);
-
-        this.init();
+        this.rows = [];
+        this.series = [];
+        this.values = {};
+        this.categories = [];
+        this.hidden = new Set();
+        this.legacy = false;
+        this.hover = null;
+        this.onPointerMove = (event) => this.pointerMove(event);
+        this.onPointerLeave = () => this.clearHover();
+        this.onClick = (event) => this.pointClicked(event);
+        this.initComponent();
     }
 
-    readAttr(name, fallback = '') {
-        const direct = this.container.getAttribute(name);
-        if (direct != null) return direct;
-        return this.container.getAttribute(`data-${name}`) ?? fallback;
+    setup() {
+        this.props.type = ChartComponent.resolveType(this.props.type);
+        this.load(this.props.data, this.props);
     }
 
-    parseNumber(...values) {
-        const fallback = values[values.length - 1];
-        for (let i = 0; i < values.length - 1; i += 1) {
-            const value = values[i];
-            if (value == null || value === '') continue;
-            const parsed = Number(value);
-            if (Number.isFinite(parsed)) return parsed;
-        }
-        return fallback;
-    }
-
-    parseBoolean(...values) {
-        const fallback = values[values.length - 1];
-        for (let i = 0; i < values.length - 1; i += 1) {
-            const value = values[i];
-            if (value == null || value === '') continue;
-            if (typeof value === 'boolean') return value;
-            const normalized = String(value).trim().toLowerCase();
-            if (['1', 'true', 'yes', 'on'].includes(normalized)) return true;
-            if (['0', 'false', 'no', 'off'].includes(normalized)) return false;
-        }
-        return fallback;
-    }
-
-    resolveType(type) {
-        const next = String(type || 'line').trim().toLowerCase();
-        const allowed = new Set(['line', 'bar', 'area', 'pie', 'doughnut']);
-        return allowed.has(next) ? next : 'line';
-    }
-
-    resolveColors(colors) {
-        if (Array.isArray(colors)) {
-            return colors.map((color) => String(color).trim()).filter(Boolean);
-        }
-        const value = String(colors || '').trim();
-        if (!value) {
-            return ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#7c3aed', '#14b8a6', '#f97316'];
-        }
-        if (value.startsWith('[')) {
-            try {
-                const parsed = JSON.parse(value);
-                if (Array.isArray(parsed)) {
-                    return parsed.map((color) => String(color).trim()).filter(Boolean);
-                }
-            } catch (_error) {}
-        }
-        return value.split(',').map((color) => color.trim()).filter(Boolean);
-    }
-
-    resolveData(inputData) {
-        if (Array.isArray(inputData)) return this.normalizeData(inputData);
-
-        const dataAttr = this.readAttr('data', this.readAttr('series', ''));
-        if (dataAttr) {
-            try {
-                const parsed = JSON.parse(dataAttr);
-                if (Array.isArray(parsed)) return this.normalizeData(parsed);
-            } catch (_error) {}
-        }
-
-        const children = Array.from(this.container.querySelectorAll('[data-point], [data-value], li'));
-        if (children.length) {
-            const series = children.map((node, index) => ({
-                label: node.getAttribute('data-label') || node.getAttribute('label') || node.textContent?.trim() || `Item ${index + 1}`,
-                value: this.parseNumber(node.getAttribute('data-point'), node.getAttribute('data-value'), node.getAttribute('value'), 0)
-            }));
-            return this.normalizeData(series);
-        }
-
-        return [];
-    }
-
-    normalizeData(series) {
-        return (Array.isArray(series) ? series : []).map((item, index) => {
-            const label = item?.label ?? item?.name ?? item?.x ?? `Item ${index + 1}`;
-            const value = this.parseNumber(item?.value, item?.y, item?.amount, 0);
-            return {
-                label: String(label),
-                value: Math.max(0, Number(value) || 0)
-            };
-        });
-    }
-
-    async init() {
-        this.validateStructure();
-        await this.render();
-        this.bindEvents();
-    }
-
-    async render() {
-        await super.render();
+    afterRender() {
         this.element = this.container.querySelector('.holi-chart');
-        this.svgEl = this.container.querySelector('[data-role="svg"]');
-        this.legendEl = this.container.querySelector('[data-role="legend"]');
-        this.emptyEl = this.container.querySelector('[data-role="empty"]');
-        this.titleEl = this.container.querySelector('[data-role="title"]');
-
-        if (!this.element || !this.svgEl || !this.legendEl || !this.emptyEl || !this.titleEl) {
+        this.plotEl = this.element.querySelector('[data-role="plot"]');
+        this.svgEl = this.element.querySelector('[data-role="svg"]');
+        this.emptyEl = this.element.querySelector('[data-role="empty"]');
+        this.legendEl = this.element.querySelector('[data-role="legend"]');
+        this.titleEl = this.element.querySelector('[data-role="title"]');
+        this.tooltipEl = this.element.querySelector('[data-role="tooltip"]');
+        this.tooltipHeadEl = this.element.querySelector('[data-role="tooltip-head"]');
+        this.tooltipRowsEl = this.element.querySelector('[data-role="tooltip-rows"]');
+        if (!this.svgEl || !this.legendEl || !this.emptyEl || !this.titleEl || !this.plotEl || !this.tooltipEl) {
             throw new Error('Chart template is missing required nodes');
         }
+        this.element.style.setProperty('--chart-height', `${Math.max(120, this.props.height)}px`);
+        this.titleEl.textContent = this.props.title;
+        this.titleEl.hidden = !this.props.title;
 
-        this.element.style.setProperty('--chart-height', `${Math.max(120, this.height)}px`);
-        this.titleEl.textContent = this.title;
-        this.titleEl.hidden = !this.title;
-
+        this.plotEl.addEventListener('pointermove', this.onPointerMove);
+        this.plotEl.addEventListener('pointerleave', this.onPointerLeave);
+        this.svgEl.addEventListener('click', this.onClick);
+        if (typeof ResizeObserver !== 'undefined') {
+            this.resizeObserver = new ResizeObserver(() => this.scheduleDraw());
+            this.resizeObserver.observe(this.plotEl);
+        }
         this.draw();
     }
 
-    bindEvents() {
-        this.svgEl?.addEventListener('click', this.boundClick);
+    // ---- data -----------------------------------------------------------------------------------------
+
+    static resolveType(type) {
+        const next = String(type || 'line').trim().toLowerCase();
+        return TYPES.includes(next) ? next : 'line';
     }
 
-    handlePointClick(event) {
-        const target = event.target?.closest?.('[data-point-index]');
-        if (!target) return;
-        const index = Number(target.getAttribute('data-point-index'));
-        if (!Number.isFinite(index) || index < 0 || index >= this.data.length) return;
-        this.dispatchEvent('chartpointselect', { index, item: this.data[index], type: this.type });
+    static toNumber(value) {
+        if (value == null || value === '' || typeof value === 'boolean') return null;
+        const n = typeof value === 'number' ? value : Number(value);
+        return Number.isFinite(n) ? n : null;
+    }
+
+    palette() {
+        const raw = this.props.colors;
+        let list = [];
+        if (Array.isArray(raw)) list = raw;
+        else if (String(raw || '').trim().startsWith('[')) {
+            try {
+                list = JSON.parse(raw);
+            } catch (_error) {
+                list = [];
+            }
+        } else if (String(raw || '').trim()) {
+            list = String(raw).split(',');
+        }
+        list = list.map((c) => String(c).trim()).filter(Boolean);
+        return list.length ? list : DEFAULT_COLORS;
+    }
+
+    /** Reads rows, the x column and the series out of the data and the options (series, x) that go with it. */
+    load(data, options = {}) {
+        let rows = (Array.isArray(data) ? data : []).filter((r) => r && typeof r === 'object');
+        let specs = Array.isArray(options.series) ? options.series : [];
+        let xKey = String(options.x || '');
+
+        // The older attribute `series` carried the data itself, [{label, value}].
+        if (!rows.length && specs.length && specs.every((s) => s && typeof s === 'object' && !('key' in s) && ('value' in s))) {
+            rows = specs;
+            specs = [];
+        }
+        const oldShape = !specs.length && !xKey && rows.length
+            && rows.every((r) => ('value' in r || 'y' in r || 'amount' in r) && ('label' in r || 'name' in r || 'x' in r));
+        this.legacy = oldShape;
+        if (oldShape) {
+            this.data = rows.map((r, i) => ({
+                label: String(r.label ?? r.name ?? r.x ?? `Item ${i + 1}`),
+                value: Math.max(0, ChartComponent.toNumber(r.value ?? r.y ?? r.amount) ?? 0)
+            }));
+            rows = this.data;
+            xKey = 'label';
+            specs = [{ key: 'value', label: this.props.title || 'value' }];
+        } else {
+            this.data = rows;
+            if (!xKey && rows.length) xKey = Object.keys(rows[0])[0] || '';
+            if (!specs.length) {
+                const keys = [];
+                rows.forEach((r) => Object.keys(r).forEach((k) => {
+                    if (k !== xKey && !keys.includes(k)) keys.push(k);
+                }));
+                specs = keys.filter((k) => rows.some((r) => ChartComponent.toNumber(r[k]) != null));
+            }
+        }
+
+        const colors = this.palette();
+        const defaultType = SERIES_TYPES.includes(this.props.type) ? this.props.type : 'bar';
+        this.xKey = xKey;
+        this.rows = rows;
+        this.series = specs.map((spec, index) => {
+            const o = typeof spec === 'string' ? { key: spec } : spec;
+            const type = SERIES_TYPES.includes(String(o.type || '').toLowerCase()) ? String(o.type).toLowerCase() : defaultType;
+            return {
+                key: String(o.key),
+                label: String(o.label ?? o.key),
+                color: String(o.color || colors[index % colors.length]),
+                type,
+                axis: String(o.axis || '').toLowerCase() === 'right' ? 'right' : 'left'
+            };
+        });
+        this.values = Object.fromEntries(this.series.map((s) => [s.key, rows.map((r) => ChartComponent.toNumber(r[s.key]))]));
+        this.categories = rows.map((r, i) => (r[xKey] == null ? `Item ${i + 1}` : String(r[xKey])));
+        this.xs = rows.map((r) => ChartComponent.toNumber(r[xKey]));
+        // x is a number line when every series is scatter; otherwise rows sit side by side as categories.
+        this.linear = this.series.length > 0 && this.series.every((s) => s.type === 'scatter')
+            && this.props.type !== 'pie' && this.props.type !== 'doughnut';
+        this.hidden = new Set([...this.hidden].filter((k) => this.series.some((s) => s.key === k)));
+    }
+
+    /** Replaces the data. Options may also carry type, height, colors, title, showLegend, series, x and stacked. */
+    update(data = [], options = {}) {
+        if (options.type) this.props.type = ChartComponent.resolveType(options.type);
+        if (options.height != null) {
+            this.props.height = ChartComponent.toNumber(options.height) ?? this.props.height;
+            this.element?.style.setProperty('--chart-height', `${Math.max(120, this.props.height)}px`);
+        }
+        if (options.colors) this.props.colors = options.colors;
+        if (options.title != null) {
+            this.props.title = String(options.title || '').trim();
+            if (this.titleEl) {
+                this.titleEl.textContent = this.props.title;
+                this.titleEl.hidden = !this.props.title;
+            }
+        }
+        if (options.showLegend != null) this.props.showLegend = !!options.showLegend;
+        if (options.stacked != null) this.props.stacked = !!options.stacked;
+        ['xTitle', 'yTitle', 'y2Title'].forEach((k) => {
+            if (options[k] != null) this.props[k] = String(options[k]);
+        });
+        this.hidden = new Set();
+        this.load(data, { series: options.series ?? [], x: options.x ?? '' });
+        this.draw();
+        this.dispatchEvent('chartupdate', { type: this.props.type, count: this.rows.length });
+    }
+
+    setType(nextType) {
+        this.props.type = ChartComponent.resolveType(nextType);
+        this.load(this.data, { series: this.legacy ? [] : this.series, x: this.legacy ? '' : this.xKey });
+        this.draw();
+    }
+
+    // ---- scales ---------------------------------------------------------------------------------------
+
+    static niceNum(range, round) {
+        const exp = Math.floor(Math.log10(range));
+        const f = range / (10 ** exp);
+        let nf;
+        if (round) nf = f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10;
+        else nf = f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10;
+        return nf * (10 ** exp);
+    }
+
+    /** A round range around min..max, with at most about `maxTicks` round ticks: `{ lo, hi, step, ticks }`. */
+    static niceScale(min, max, maxTicks = 5) {
+        let lo = Number.isFinite(min) ? min : 0;
+        let hi = Number.isFinite(max) ? max : 1;
+        if (lo === hi) {
+            const pad = lo === 0 ? 1 : Math.abs(lo) * 0.1;
+            lo -= pad;
+            hi += pad;
+        }
+        const step = ChartComponent.niceNum(ChartComponent.niceNum(hi - lo, false) / Math.max(1, maxTicks - 1), true);
+        const first = Math.floor(lo / step) * step;
+        const last = Math.ceil(hi / step) * step;
+        const ticks = [];
+        for (let i = 0; first + (i * step) <= last + (step / 2); i += 1) ticks.push(Number((first + (i * step)).toPrecision(12)));
+        return { lo: ticks[0], hi: ticks[ticks.length - 1], step, ticks };
+    }
+
+    static formatNumber(value) {
+        const a = Math.abs(value);
+        if (a >= 1e9) return `${+(value / 1e9).toPrecision(3)}B`;
+        if (a >= 1e6) return `${+(value / 1e6).toPrecision(3)}M`;
+        if (a >= 1e4) return `${+(value / 1e3).toPrecision(3)}k`;
+        if (a >= 1 || a === 0) return String(+value.toFixed(2));
+        return String(+value.toPrecision(2));
+    }
+
+    static formatFull(value) {
+        return new Intl.NumberFormat(undefined, { maximumFractionDigits: 4 }).format(value);
+    }
+
+    // ---- drawing --------------------------------------------------------------------------------------
+
+    scheduleDraw() {
+        if (this.drawPending) return;
+        this.drawPending = true;
+        requestAnimationFrame(() => {
+            this.drawPending = false;
+            this.draw();
+        });
+    }
+
+    isPie() {
+        return this.props.type === 'pie' || this.props.type === 'doughnut';
     }
 
     draw() {
-        if (!this.svgEl || !this.legendEl || !this.emptyEl) return;
+        if (!this.svgEl) return;
         this.svgEl.replaceChildren();
-        this.legendEl.replaceChildren();
-
-        const series = this.normalizeData(this.data);
-        this.data = series;
-        const hasData = series.length > 0 && series.some((item) => item.value > 0);
-
+        this.clearHover();
+        const hasData = this.rows.length > 0 && this.series.some((s) => this.values[s.key].some((v) => v != null))
+            && (!this.isPie() || this.values[this.series[0].key].some((v) => v != null && v > 0));
         this.emptyEl.hidden = hasData;
         this.svgEl.hidden = !hasData;
-        this.legendEl.hidden = !hasData || !this.showLegend;
-        if (!hasData) return;
-
-        this.svgEl.setAttribute('viewBox', '0 0 100 100');
-        this.svgEl.setAttribute('aria-label', `Chart (${this.type})`);
-        this.svgEl.setAttribute('preserveAspectRatio', this.type === 'pie' || this.type === 'doughnut'
-            ? 'xMidYMid meet'
-            : 'none');
-
-        if (this.type === 'bar') {
-            this.drawBars(series);
-        } else if (this.type === 'pie' || this.type === 'doughnut') {
-            this.drawPie(series, this.type === 'doughnut');
-        } else {
-            this.drawLine(series, this.type === 'area');
+        this.drawLegend();
+        if (!hasData) {
+            this.legendEl.hidden = true;
+            return;
         }
-
-        if (this.showLegend) this.drawLegend(series);
+        const width = Math.max(160, Math.floor(this.plotEl.clientWidth || 480));
+        const height = Math.max(120, this.props.height);
+        this.svgEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        this.svgEl.setAttribute('width', String(width));
+        this.svgEl.setAttribute('height', String(height));
+        this.svgEl.setAttribute('aria-label', `Chart (${this.props.type})`);
+        if (this.isPie()) this.drawPie(width, height);
+        else this.drawCartesian(width, height);
     }
 
-    drawLine(series, fillArea = false) {
-        const points = this.calculateCartesianPoints(series);
-        const gridGroup = this.createSvgNode('g', { class: 'holi-chart-grid' });
-
-        for (let i = 0; i <= 4; i += 1) {
-            const y = 10 + (i * 20);
-            gridGroup.appendChild(this.createSvgNode('line', {
-                x1: 8,
-                y1: y,
-                x2: 96,
-                y2: y
-            }));
-        }
-        this.svgEl.appendChild(gridGroup);
-
-        if (fillArea) {
-            const first = points[0];
-            const last = points[points.length - 1];
-            const areaPath = [
-                `M ${first.x} 90`,
-                ...points.map((point, index) => `${index === 0 ? 'L' : 'L'} ${point.x} ${point.y}`),
-                `L ${last.x} 90 Z`
-            ].join(' ');
-            this.svgEl.appendChild(this.createSvgNode('path', {
-                d: areaPath,
-                class: 'holi-chart-area'
-            }));
-        }
-
-        const d = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
-        this.svgEl.appendChild(this.createSvgNode('path', {
-            d,
-            class: 'holi-chart-line',
-            stroke: this.resolveColor(0)
-        }));
-
-        points.forEach((point) => {
-            const marker = this.createSvgNode('circle', {
-                cx: point.x,
-                cy: point.y,
-                r: 2.2,
-                class: 'holi-chart-dot',
-                fill: this.resolveColor(point.index),
-                'data-point-index': point.index
-            });
-            this.svgEl.appendChild(marker);
-        });
-    }
-
-    drawBars(series) {
-        const maxValue = Math.max(...series.map((item) => item.value), 1);
-        const usableWidth = 88;
-        const startX = 8;
-        const gap = 2;
-        const barWidth = Math.max(4, (usableWidth - (gap * (series.length - 1))) / series.length);
-
-        series.forEach((item, index) => {
-            const height = (item.value / maxValue) * 72;
-            const x = startX + (index * (barWidth + gap));
-            const y = 90 - height;
-            this.svgEl.appendChild(this.createSvgNode('rect', {
-                x,
-                y,
-                width: barWidth,
-                height,
-                rx: 1.5,
-                fill: this.resolveColor(index),
-                class: 'holi-chart-bar',
-                'data-point-index': index
-            }));
-        });
-    }
-
-    drawPie(series, isDoughnut) {
-        const total = series.reduce((sum, item) => sum + item.value, 0);
-        if (total <= 0) return;
-
-        let startAngle = -Math.PI / 2;
-        series.forEach((item, index) => {
-            const angle = (item.value / total) * Math.PI * 2;
-            const endAngle = startAngle + angle;
-
-            const path = this.describeArc(50, 50, 36, startAngle, endAngle);
-            this.svgEl.appendChild(this.createSvgNode('path', {
-                d: path,
-                fill: this.resolveColor(index),
-                class: 'holi-chart-slice',
-                'data-point-index': index
-            }));
-            startAngle = endAngle;
-        });
-
-        if (isDoughnut) {
-            this.svgEl.appendChild(this.createSvgNode('circle', {
-                cx: 50,
-                cy: 50,
-                r: 19,
-                class: 'holi-chart-hole'
-            }));
-        }
-    }
-
-    calculateCartesianPoints(series) {
-        const maxValue = Math.max(...series.map((item) => item.value), 1);
-        const minX = 10;
-        const maxX = 94;
-        const minY = 14;
-        const maxY = 90;
-        const step = series.length > 1 ? (maxX - minX) / (series.length - 1) : 0;
-
-        return series.map((item, index) => {
-            const x = minX + (index * step);
-            const ratio = item.value / maxValue;
-            const y = maxY - ((maxY - minY) * ratio);
-            return { x, y, index };
-        });
-    }
-
-    describeArc(cx, cy, r, startAngle, endAngle) {
-        const sx = cx + (r * Math.cos(startAngle));
-        const sy = cy + (r * Math.sin(startAngle));
-        const ex = cx + (r * Math.cos(endAngle));
-        const ey = cy + (r * Math.sin(endAngle));
-        const largeArcFlag = endAngle - startAngle > Math.PI ? 1 : 0;
-        return `M ${cx} ${cy} L ${sx} ${sy} A ${r} ${r} 0 ${largeArcFlag} 1 ${ex} ${ey} Z`;
-    }
-
-    drawLegend(series) {
-        series.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = 'holi-chart-legend-item';
-            li.setAttribute('data-point-index', String(index));
-
-            const swatch = document.createElement('span');
-            swatch.className = 'holi-chart-legend-swatch';
-            swatch.style.backgroundColor = this.resolveColor(index);
-
-            const label = document.createElement('span');
-            label.className = 'holi-chart-legend-label';
-            label.textContent = `${item.label} (${item.value})`;
-
-            li.append(swatch, label);
-            this.legendEl.appendChild(li);
-        });
-    }
-
-    createSvgNode(tag, attrs = {}) {
+    svgNode(tag, attrs = {}) {
         const node = document.createElementNS(SVG_NS, tag);
         Object.entries(attrs).forEach(([name, value]) => {
-            if (value == null) return;
-            node.setAttribute(name, String(value));
+            if (value != null) node.setAttribute(name, String(value));
         });
         return node;
     }
 
-    resolveColor(index) {
-        if (!this.colors.length) return '#2563eb';
-        return this.colors[index % this.colors.length];
+    visibleSeries() {
+        return this.series.filter((s) => !this.hidden.has(s.key));
     }
 
-    setType(nextType) {
-        this.type = this.resolveType(nextType);
-        this.draw();
+    /** Stacked extents of bar and area series on one axis (positives up, negatives down), and the from/to of each value. */
+    stackFor(seriesOnAxis) {
+        const n = this.rows.length;
+        const pos = new Array(n).fill(0);
+        const neg = new Array(n).fill(0);
+        const spans = {};
+        seriesOnAxis.forEach((s) => {
+            spans[s.key] = this.values[s.key].map((v, i) => {
+                if (v == null) return null;
+                const stackable = this.props.stacked && (s.type === 'bar' || s.type === 'area');
+                if (!stackable) return { from: 0, to: v };
+                if (v >= 0) {
+                    const from = pos[i];
+                    pos[i] += v;
+                    return { from, to: pos[i] };
+                }
+                const from = neg[i];
+                neg[i] += v;
+                return { from, to: neg[i] };
+            });
+        });
+        return spans;
     }
 
-    update(data = [], options = {}) {
-        if (options.type) this.type = this.resolveType(options.type);
-        if (options.height != null) {
-            this.height = this.parseNumber(options.height, this.height);
-            this.element?.style.setProperty('--chart-height', `${Math.max(120, this.height)}px`);
-        }
-        if (options.colors) this.colors = this.resolveColors(options.colors);
-        if (options.title != null) {
-            this.title = String(options.title || '').trim();
-            if (this.titleEl) {
-                this.titleEl.textContent = this.title;
-                this.titleEl.hidden = !this.title;
+    drawCartesian(width, height) {
+        const visible = this.visibleSeries();
+        const hasRight = visible.some((s) => s.axis === 'right');
+        const xTitle = !!this.props.xTitle;
+        const plot = {
+            x: MARGIN.left,
+            y: MARGIN.top,
+            w: width - MARGIN.left - (hasRight ? RIGHT_AXIS_MARGIN : MARGIN.right),
+            h: height - MARGIN.top - MARGIN.bottom - (xTitle ? TITLE_ROOM : 0)
+        };
+        this.plot = plot;
+        const maxTicks = Math.max(2, Math.floor(plot.h / 38));
+
+        // value axes
+        this.axes = {};
+        this.spans = {};
+        ['left', 'right'].forEach((name) => {
+            const on = visible.filter((s) => s.axis === name);
+            if (!on.length) return;
+            const spans = this.stackFor(on);
+            Object.assign(this.spans, spans);
+            let min = Infinity;
+            let max = -Infinity;
+            on.forEach((s) => spans[s.key].forEach((span) => {
+                if (!span) return;
+                min = Math.min(min, span.from, span.to);
+                max = Math.max(max, span.from, span.to);
+            }));
+            // Bars and areas grow from zero, so zero is on the axis; a line or scatter axis fits its data.
+            if (on.some((s) => s.type === 'bar' || s.type === 'area')) {
+                min = Math.min(min, 0);
+                max = Math.max(max, 0);
             }
+            const scale = ChartComponent.niceScale(min, max, maxTicks);
+            this.axes[name] = { ...scale, yOf: (v) => plot.y + plot.h - ((v - scale.lo) / (scale.hi - scale.lo)) * plot.h };
+        });
+
+        // x axis
+        if (this.linear) {
+            const xs = [];
+            visible.forEach((s) => this.xs.forEach((x, i) => { if (x != null && this.values[s.key][i] != null) xs.push(x); }));
+            const scale = ChartComponent.niceScale(Math.min(...xs), Math.max(...xs), Math.max(2, Math.floor(plot.w / 80)));
+            this.xScale = scale;
+            this.xOf = (i) => plot.x + ((this.xs[i] - scale.lo) / (scale.hi - scale.lo)) * plot.w;
+        } else {
+            this.band = plot.w / Math.max(1, this.rows.length);
+            this.xOf = (i) => plot.x + (this.band * (i + 0.5));
         }
-        if (options.showLegend != null) {
-            this.showLegend = this.parseBoolean(options.showLegend, this.showLegend);
+
+        this.drawGrid(plot);
+        this.drawXAxis(plot);
+        this.drawAxisTitles(plot, height);
+
+        const layer = this.svgNode('g', { class: 'holi-chart-series' });
+        this.svgEl.appendChild(layer);
+        ['area', 'bar', 'line', 'scatter'].forEach((type) => {
+            const ofType = visible.filter((s) => s.type === type);
+            if (type === 'bar') this.drawBars(layer, ofType);
+            else ofType.forEach((s) => this.drawSeries(layer, s));
+        });
+
+        this.hoverEl = this.svgNode('rect', { class: 'holi-chart-hover', x: 0, y: plot.y, width: 0, height: plot.h, visibility: 'hidden' });
+        this.ringEl = this.svgNode('circle', { class: 'holi-chart-ring', r: 6, visibility: 'hidden' });
+        this.svgEl.append(this.hoverEl, this.ringEl);
+    }
+
+    drawGrid(plot) {
+        const grid = this.svgNode('g', { class: 'holi-chart-grid' });
+        const primary = this.axes.left || this.axes.right;
+        primary.ticks.forEach((v) => {
+            const y = primary.yOf(v);
+            grid.appendChild(this.svgNode('line', { x1: plot.x, y1: y, x2: plot.x + plot.w, y2: y, class: v === 0 ? 'holi-chart-zero' : null }));
+        });
+        this.svgEl.appendChild(grid);
+        const labels = this.svgNode('g', { class: 'holi-chart-axis-y' });
+        if (this.axes.left) {
+            this.axes.left.ticks.forEach((v) => {
+                const t = this.svgNode('text', { x: plot.x - 6, y: this.axes.left.yOf(v) + 4, 'text-anchor': 'end' });
+                t.textContent = ChartComponent.formatNumber(v);
+                labels.appendChild(t);
+            });
         }
-        this.data = this.normalizeData(data);
-        this.draw();
-        this.dispatchEvent('chartupdate', {
-            type: this.type,
-            count: this.data.length
+        if (this.axes.right) {
+            this.axes.right.ticks.forEach((v) => {
+                const t = this.svgNode('text', { x: plot.x + plot.w + 6, y: this.axes.right.yOf(v) + 4, 'text-anchor': 'start' });
+                t.textContent = ChartComponent.formatNumber(v);
+                labels.appendChild(t);
+            });
+        }
+        this.svgEl.appendChild(labels);
+    }
+
+    drawXAxis(plot) {
+        const axis = this.svgNode('g', { class: 'holi-chart-axis-x' });
+        const base = plot.y + plot.h;
+        axis.appendChild(this.svgNode('line', { x1: plot.x, y1: base, x2: plot.x + plot.w, y2: base }));
+        const label = (x, text) => {
+            axis.appendChild(this.svgNode('line', { x1: x, y1: base, x2: x, y2: base + 4 }));
+            const t = this.svgNode('text', { x, y: base + 17, 'text-anchor': 'middle' });
+            t.textContent = text;
+            axis.appendChild(t);
+        };
+        if (this.linear) {
+            this.xScale.ticks.forEach((v) => label(plot.x + ((v - this.xScale.lo) / (this.xScale.hi - this.xScale.lo)) * plot.w, ChartComponent.formatNumber(v)));
+        } else {
+            const fit = Math.max(1, Math.floor(plot.w / 64));
+            const stride = Math.ceil(this.rows.length / fit);
+            this.categories.forEach((c, i) => {
+                if (i % stride !== 0) return;
+                label(this.xOf(i), c.length > 14 ? `${c.slice(0, 13)}…` : c);
+            });
+        }
+        this.svgEl.appendChild(axis);
+    }
+
+    drawAxisTitles(plot, height) {
+        const titles = this.svgNode('g', { class: 'holi-chart-axis-title' });
+        const add = (text, attrs) => {
+            if (!text) return;
+            const t = this.svgNode('text', attrs);
+            t.textContent = text;
+            titles.appendChild(t);
+        };
+        add(this.props.xTitle, { x: plot.x + (plot.w / 2), y: height - 3, 'text-anchor': 'middle' });
+        const mid = plot.y + (plot.h / 2);
+        add(this.props.yTitle, { x: 0, y: 0, 'text-anchor': 'middle', transform: `translate(11 ${mid}) rotate(-90)` });
+        if (this.axes.right) {
+            add(this.props.y2Title, { x: 0, y: 0, 'text-anchor': 'middle', transform: `translate(${plot.x + plot.w + RIGHT_AXIS_MARGIN - 6} ${mid}) rotate(90)` });
+        }
+        this.svgEl.appendChild(titles);
+    }
+
+    /** Runs of consecutive rows that have a value, so a gap in the data is a gap in the line. */
+    runs(s) {
+        const runs = [];
+        let run = [];
+        this.values[s.key].forEach((v, i) => {
+            if (v == null || (this.linear && this.xs[i] == null)) {
+                if (run.length) runs.push(run);
+                run = [];
+            } else {
+                run.push(i);
+            }
+        });
+        if (run.length) runs.push(run);
+        return runs;
+    }
+
+    drawSeries(layer, s) {
+        const axis = this.axes[s.axis];
+        const spans = this.spans[s.key];
+        if (s.type === 'scatter') {
+            this.values[s.key].forEach((v, i) => {
+                if (v == null || this.xs[i] == null) return;
+                layer.appendChild(this.svgNode('circle', {
+                    cx: this.xOf(i), cy: axis.yOf(v), r: 3.6, fill: s.color, class: 'holi-chart-point',
+                    'data-point-index': i, 'data-series': s.key
+                }));
+            });
+            return;
+        }
+        this.runs(s).forEach((run) => {
+            const top = run.map((i) => `${this.xOf(i)} ${axis.yOf(spans[i].to)}`);
+            if (s.type === 'area') {
+                const back = run.slice().reverse().map((i) => `${this.xOf(i)} ${axis.yOf(spans[i].from)}`);
+                const area = this.svgNode('path', { d: `M ${top.join(' L ')} L ${back.join(' L ')} Z`, class: 'holi-chart-area' });
+                area.style.fill = s.color;   // a style property, not an attribute: the stylesheet's own fill would win over an attribute
+                layer.appendChild(area);
+            }
+            const line = this.svgNode('path', { d: `M ${top.join(' L ')}`, class: 'holi-chart-line' });
+            line.style.stroke = s.color;
+            layer.appendChild(line);
+            if (run.length <= 80) {
+                run.forEach((i) => layer.appendChild(this.svgNode('circle', {
+                    cx: this.xOf(i), cy: axis.yOf(spans[i].to), r: 2.6, fill: s.color, class: 'holi-chart-dot',
+                    'data-point-index': i, 'data-series': s.key
+                })));
+            }
         });
     }
 
+    drawBars(layer, bars) {
+        if (!bars.length) return;
+        const stacked = this.props.stacked;
+        const group = this.band * 0.8;
+        const each = stacked ? group : group / bars.length;
+        bars.forEach((s, k) => {
+            const axis = this.axes[s.axis];
+            this.spans[s.key].forEach((span, i) => {
+                if (!span) return;
+                const y1 = axis.yOf(span.from);
+                const y2 = axis.yOf(span.to);
+                layer.appendChild(this.svgNode('rect', {
+                    x: this.plot.x + (this.band * i) + ((this.band - group) / 2) + (stacked ? 0 : each * k),
+                    y: Math.min(y1, y2),
+                    width: Math.max(1, each - (each > 6 && !stacked ? 1 : 0)),
+                    height: Math.max(1, Math.abs(y2 - y1)),
+                    rx: 1.5,
+                    fill: s.color,
+                    class: 'holi-chart-bar',
+                    'data-point-index': i,
+                    'data-series': s.key
+                }));
+            });
+        });
+    }
+
+    pieSlices() {
+        const series = this.series[0];
+        const colors = this.palette();
+        return this.rows.map((row, i) => ({
+            index: i,
+            key: `c${i}`,
+            label: this.categories[i],
+            value: this.values[series.key][i],
+            color: colors[i % colors.length]
+        })).filter((slice) => slice.value != null && slice.value > 0);
+    }
+
+    drawPie(width, height) {
+        const slices = this.pieSlices().filter((s) => !this.hidden.has(s.key));
+        const total = slices.reduce((sum, s) => sum + s.value, 0);
+        if (total <= 0) return;
+        const cx = width / 2;
+        const cy = height / 2;
+        const r = Math.max(20, Math.min(width, height) / 2 - 8);
+        this.pie = { cx, cy, r, total, slices };
+        let start = -Math.PI / 2;
+        slices.forEach((slice) => {
+            const angle = (slice.value / total) * Math.PI * 2;
+            const attrs = { fill: slice.color, class: 'holi-chart-slice', 'data-point-index': slice.index };
+            if (slices.length === 1) {
+                this.svgEl.appendChild(this.svgNode('circle', { cx, cy, r, ...attrs }));
+            } else {
+                this.svgEl.appendChild(this.svgNode('path', { d: ChartComponent.arc(cx, cy, r, start, start + angle), ...attrs }));
+            }
+            start += angle;
+        });
+        if (this.props.type === 'doughnut') {
+            this.svgEl.appendChild(this.svgNode('circle', { cx, cy, r: r * 0.52, class: 'holi-chart-hole' }));
+        }
+    }
+
+    static arc(cx, cy, r, a0, a1) {
+        const large = a1 - a0 > Math.PI ? 1 : 0;
+        return `M ${cx} ${cy} L ${cx + (r * Math.cos(a0))} ${cy + (r * Math.sin(a0))} A ${r} ${r} 0 ${large} 1 ${cx + (r * Math.cos(a1))} ${cy + (r * Math.sin(a1))} Z`;
+    }
+
+    drawLegend() {
+        const pie = this.isPie();
+        const items = pie
+            ? this.pieSlices().map((s) => ({ key: s.key, label: `${s.label} (${ChartComponent.formatFull(s.value)})`, color: s.color }))
+            : this.series.map((s) => ({ key: s.key, label: s.axis === 'right' ? `${s.label} (right axis)` : s.label, color: s.color }));
+        // One entry is not a legend; the title or the axis already says what it is. (A pie lists its slices, one series or not.)
+        this.legendEl.hidden = !this.props.showLegend || (!pie && items.length < 2) || !items.length;
+        if (this.legendEl.hidden) return;
+        this.renderList(this.legendEl, 'chart-legend-item-template', items);
+        this.legendEl.querySelectorAll('[data-action="toggle-series"]').forEach((button, index) => {
+            const item = items[index];
+            button.querySelector('[data-role="swatch"]').style.backgroundColor = item.color;
+            button.setAttribute('aria-pressed', String(!this.hidden.has(item.key)));
+            button.classList.toggle('is-hidden', this.hidden.has(item.key));
+        });
+    }
+
+    toggleSeries(_event, trigger) {
+        const key = trigger.getAttribute('data-series');
+        const total = this.isPie() ? this.pieSlices().length : this.series.length;
+        if (this.hidden.has(key)) this.hidden.delete(key);
+        else if (this.hidden.size < total - 1) this.hidden.add(key);   // one always stays visible
+        this.draw();
+    }
+
+    // ---- interaction ----------------------------------------------------------------------------------
+
+    localPoint(event) {
+        const box = this.svgEl.getBoundingClientRect();
+        return { x: event.clientX - box.left, y: event.clientY - box.top };
+    }
+
+    pointerMove(event) {
+        if (this.svgEl.hidden || (!this.plot && !this.pie)) return;
+        const p = this.localPoint(event);
+        if (this.isPie()) {
+            const target = event.target?.closest?.('[data-point-index]');
+            if (!target || !this.pie) {
+                this.clearHover();
+                return;
+            }
+            const slice = this.pie.slices.find((s) => s.index === Number(target.getAttribute('data-point-index')));
+            if (!slice) {
+                this.clearHover();
+                return;
+            }
+            this.hover = { index: slice.index };
+            const share = Math.round((slice.value / this.pie.total) * 1000) / 10;
+            this.showTooltip(slice.label, [{ label: this.series[0].label, value: `${ChartComponent.formatFull(slice.value)} (${share}%)`, color: slice.color }], p.x);
+            return;
+        }
+        const plot = this.plot;
+        if (p.x < plot.x || p.x > plot.x + plot.w || p.y < plot.y || p.y > plot.y + plot.h) {
+            this.clearHover();
+            return;
+        }
+        if (this.linear) this.hoverPoint(p);
+        else this.hoverBand(p);
+    }
+
+    hoverBand(p) {
+        const i = Math.min(this.rows.length - 1, Math.max(0, Math.floor((p.x - this.plot.x) / this.band)));
+        this.hover = { index: i };
+        this.hoverEl.setAttribute('x', String(this.plot.x + (this.band * i)));
+        this.hoverEl.setAttribute('width', String(this.band));
+        this.hoverEl.setAttribute('visibility', 'visible');
+        const rows = this.visibleSeries().filter((s) => this.values[s.key][i] != null)
+            .map((s) => ({ label: s.label, value: ChartComponent.formatFull(this.values[s.key][i]), color: s.color }));
+        this.showTooltip(this.categories[i], rows, p.x);
+    }
+
+    hoverPoint(p) {
+        let best = null;
+        this.visibleSeries().forEach((s) => this.values[s.key].forEach((v, i) => {
+            if (v == null || this.xs[i] == null) return;
+            const d = Math.hypot(this.xOf(i) - p.x, this.axes[s.axis].yOf(v) - p.y);
+            if (d <= HIT_RADIUS && (!best || d < best.d)) best = { d, s, i, v };
+        }));
+        if (!best) {
+            this.clearHover();
+            return;
+        }
+        this.hover = { index: best.i, key: best.s.key };
+        this.ringEl.setAttribute('cx', String(this.xOf(best.i)));
+        this.ringEl.setAttribute('cy', String(this.axes[best.s.axis].yOf(best.v)));
+        this.ringEl.setAttribute('visibility', 'visible');
+        this.showTooltip(`${this.xKey}: ${ChartComponent.formatFull(this.xs[best.i])}`,
+            [{ label: best.s.label, value: ChartComponent.formatFull(best.v), color: best.s.color }], p.x);
+    }
+
+    clearHover() {
+        this.hover = null;
+        if (this.tooltipEl) this.tooltipEl.hidden = true;
+        this.hoverEl?.setAttribute('visibility', 'hidden');
+        this.ringEl?.setAttribute('visibility', 'hidden');
+    }
+
+    showTooltip(head, rows, x) {
+        this.tooltipHeadEl.textContent = head;
+        this.renderList(this.tooltipRowsEl, 'chart-tooltip-row-template', rows.map((r) => ({ label: r.label, value: r.value })));
+        this.tooltipRowsEl.querySelectorAll('[data-role="swatch"]').forEach((swatch, i) => { swatch.style.backgroundColor = rows[i].color; });
+        this.tooltipEl.hidden = false;
+        const room = this.plotEl.clientWidth - this.tooltipEl.offsetWidth - 4;
+        this.tooltipEl.style.left = `${Math.max(0, Math.min(room, x + 12))}px`;
+    }
+
+    pointClicked(event) {
+        const target = event.target?.closest?.('[data-point-index]');
+        const index = target ? Number(target.getAttribute('data-point-index')) : this.hover?.index;
+        if (index == null || !Number.isFinite(index) || index < 0 || index >= this.rows.length) return;
+        const key = target?.getAttribute('data-series') ?? this.hover?.key ?? null;
+        this.dispatchEvent('chartpointselect', { index, item: this.data[index], type: this.props.type, series: key });
+    }
+
     destroy() {
-        this.svgEl?.removeEventListener('click', this.boundClick);
+        this.resizeObserver?.disconnect();
+        this.plotEl?.removeEventListener('pointermove', this.onPointerMove);
+        this.plotEl?.removeEventListener('pointerleave', this.onPointerLeave);
+        this.svgEl?.removeEventListener('click', this.onClick);
         super.destroy();
     }
 }
