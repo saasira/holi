@@ -1,0 +1,19 @@
+<template id="dashboardgrid-template">
+    <section class="holi-dashboardgrid" data-editable="false">
+        <div class="holi-dashboardgrid-surface" data-role="surface"></div>
+        <p class="holi-dashboardgrid-empty" data-role="empty" hidden>Nothing on this dashboard yet.</p>
+    </section>
+</template>
+
+<template id="dashboardgrid-tile-template">
+    <article class="holi-dashboardgrid-tile" data-tile="@{item.id}">
+        <header class="holi-dashboardgrid-tilehead">
+            <span class="holi-dashboardgrid-grip" data-role="handle" tabindex="-1" role="button" aria-roledescription="draggable tile"
+                  aria-label="Move or resize tile"></span>
+            <h3 class="holi-dashboardgrid-title" data-role="title"></h3>
+            <button type="button" class="holi-dashboardgrid-remove" data-action="remove-tile" data-tile="@{item.id}" aria-label="Remove tile">&times;</button>
+        </header>
+        <div class="holi-dashboardgrid-body" data-role="body"></div>
+        <span class="holi-dashboardgrid-resize" data-role="resize" aria-hidden="true"></span>
+    </article>
+</template>

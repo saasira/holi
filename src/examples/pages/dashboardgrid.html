@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard grid</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .controls { margin: 10px 0; display: flex; gap: 8px; flex-wrap: wrap; }
+            .controls button { border: 1px solid #cfd6df; border-radius: 6px; background: #fff; padding: 7px 11px; cursor: pointer; }
+            pre { background: #f1f5f9; padding: 8px; font-size: 12px; white-space: pre-wrap; }
+            .big { font-size: 34px; font-weight: 600; margin: 0; }
+        </style>
+    </head>
+    <body>
+        <h1>Dashboard grid</h1>
+        <p>Each child of <code>&lt;dashboardgrid&gt;</code> is a tile with a place and size in grid cells. Turn editing on, then drag a tile by its grip,
+            resize it from its corner, or focus the grip and use the arrow keys (Shift with the arrows resizes). Tiles flow around each other.</p>
+
+        <div class="controls">
+            <button type="button" id="toggle">Edit layout</button>
+            <button type="button" id="add">Add a tile</button>
+            <button type="button" id="reset">Apply the first layout</button>
+        </div>
+
+        <dashboardgrid id="grid" cols="12" row-height="70" gap="12">
+            <div id="revenue" data-title="Revenue by month" data-x="0" data-y="0" data-w="8" data-h="4">
+                <chart type="bar" x="month" height="200"
+                       data='[{"month":"Jan","revenue":120},{"month":"Feb","revenue":-40},{"month":"Mar","revenue":90},{"month":"Apr","revenue":160}]'></chart>
+            </div>
+            <div id="orders" data-title="Orders today" data-x="8" data-y="0" data-w="4" data-h="2">
+                <p class="big">1,284</p>
+            </div>
+            <div id="margin" data-title="Margin" data-x="8" data-y="2" data-w="4" data-h="2">
+                <p class="big">31%</p>
+            </div>
+            <div id="notes" data-title="Notes" data-w="12" data-h="2">
+                <p>Tiles without a place go to the first free spot.</p>
+            </div>
+        </dashboardgrid>
+
+        <pre id="log">pending</pre>
+        <script>
+            const first = [
+                { id: 'revenue', x: 0, y: 0, w: 8, h: 4 }, { id: 'orders', x: 8, y: 0, w: 4, h: 2 },
+                { id: 'margin', x: 8, y: 2, w: 4, h: 2 }, { id: 'notes', x: 0, y: 4, w: 12, h: 2 }
+            ];
+            const grid = document.getElementById('grid');
+            const log = document.getElementById('log');
+            // The component instance is kept on its element, under its class name in lower case.
+            const instance = () => grid.dashboardgridcomponent;
+            let added = 0;
+            window.addEventListener('load', () => setTimeout(() => {
+                const el = grid.querySelector('.holi-dashboardgrid');
+                const tiles = () => Array.from(document.querySelectorAll('.holi-dashboardgrid-tile')).map((t) => t.dataset.tile).join(', ');
+                const report = (what) => { log.textContent = [what, 'tiles: ' + tiles(), 'layout: ' + JSON.stringify(instance().getLayout())].join(String.fromCharCode(10)); };
+                el.addEventListener('dashboardlayoutchange', () => report('layout changed'));
+                document.getElementById('toggle').addEventListener('click', () => {
+                    const on = !instance().editable;
+                    instance().setEditable(on);
+                    document.getElementById('toggle').textContent = on ? 'Stop editing' : 'Edit layout';
+                });
+                document.getElementById('add').addEventListener('click', () => {
+                    const tile = document.createElement('div');
+                    added += 1;
+                    tile.textContent = 'A tile added by script, number ' + added;
+                    instance().addTile(tile, { title: 'Added ' + added, w: 4, h: 2 });
+                });
+                document.getElementById('reset').addEventListener('click', () => instance().setLayout(first));
+                report('ready');
+            }, 600));
+        </script>
+    </body>
+</html>

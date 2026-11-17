@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Chart: series, axes and scatter</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; }
+            h2 { font-size: 14px; margin: 0 0 6px; }
+            pre { background: #f1f5f9; padding: 8px; font-size: 12px; white-space: pre-wrap; }
+        </style>
+    </head>
+    <body>
+        <h1>Chart: series, axes and scatter</h1>
+        <p>One chart element draws several series, on one or two value axes, with negative values. Hover for the values; click a legend entry to hide a series.</p>
+
+        <div class="grid">
+            <section>
+                <h2>Bars and a line on a second axis (negative revenue in February)</h2>
+                <chart id="combo" type="bar" x="month" height="260" x-title="Month" y-title="Revenue" y2-title="Margin"
+                       series='[{"key":"revenue","label":"Revenue"},{"key":"margin","label":"Margin","type":"line","axis":"right"}]'
+                       data='[{"month":"Jan","revenue":120,"margin":0.31},{"month":"Feb","revenue":-40,"margin":0.12},{"month":"Mar","revenue":90,"margin":0.27},{"month":"Apr","revenue":160,"margin":0.35}]'></chart>
+            </section>
+
+            <section>
+                <h2>Stacked bars, positive and negative</h2>
+                <chart id="stacked" type="bar" x="q" stacked="true" height="260"
+                       data='[{"q":"Q1","product":50,"services":30,"refunds":-10},{"q":"Q2","product":70,"services":20,"refunds":-25},{"q":"Q3","product":40,"services":45,"refunds":-5}]'></chart>
+            </section>
+
+            <section>
+                <h2>Areas, two series</h2>
+                <chart id="areas" type="area" x="day" height="240"
+                       data='[{"day":"Mon","web":12,"app":5},{"day":"Tue","web":18,"app":9},{"day":"Wed","web":9,"app":14},{"day":"Thu","web":22,"app":11},{"day":"Fri","web":16,"app":19}]'></chart>
+            </section>
+
+            <section>
+                <h2>Scatter, two series</h2>
+                <chart id="scatter" type="scatter" x="price" height="260" x-title="Price" y-title="Units sold"
+                       series='[{"key":"north","label":"North"},{"key":"south","label":"South"}]'
+                       data='[{"price":10,"north":120},{"price":14,"north":95},{"price":18,"north":70},{"price":12,"south":80},{"price":16,"south":78},{"price":22,"south":40}]'></chart>
+            </section>
+
+            <section>
+                <h2>Doughnut (first series, a slice per row)</h2>
+                <chart id="doughnut" type="doughnut" x="region" height="240"
+                       data='[{"region":"North","sales":50},{"region":"South","sales":30},{"region":"East","sales":20}]'></chart>
+            </section>
+
+            <section>
+                <h2>The older form: one series of label and value</h2>
+                <chart id="legacy" type="bar" height="220"
+                       data='[{"label":"Jan","value":28},{"label":"Feb","value":39},{"label":"Mar","value":33}]'></chart>
+            </section>
+        </div>
+
+        <pre id="summary">pending</pre>
+        <script>
+            window.addEventListener('load', () => setTimeout(() => {
+                const count = (id, sel) => document.querySelectorAll(`#${id} ${sel}`).length;
+                const text = (id, sel) => Array.from(document.querySelectorAll(`#${id} ${sel}`)).map((n) => n.textContent).join('|');
+                const lines = [];
+                ['combo', 'stacked', 'areas', 'scatter', 'doughnut', 'legacy'].forEach((id) => {
+                    lines.push(`${id}: bars=${count(id, '.holi-chart-bar')} lines=${count(id, '.holi-chart-line')} areas=${count(id, '.holi-chart-area')} `
+                        + `points=${count(id, '.holi-chart-point')} slices=${count(id, '.holi-chart-slice')} legend=${count(id, '.holi-chart-legend-item')} `
+                        + `yticks=${text(id, '.holi-chart-axis-y text')} empty=${!document.querySelector(`#${id} [data-role=empty]`).hidden}`);
+                });
+                // Interaction: hover a band, a scatter point and a slice; click a bar; hide a series from the legend.
+                const move = (el, x, y) => el.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y, bubbles: true }));
+                const tip = (id) => document.querySelector(`#${id} [data-role=tooltip]`);
+                const box = (id) => document.querySelector(`#${id} svg`).getBoundingClientRect();
+                const plotOf = (id) => document.querySelector(`#${id} [data-role=plot]`);
+                const words = (el) => el.textContent.replace(/\s+/g, ' ').trim();
+                move(plotOf('combo'), box('combo').left + 150, box('combo').top + 100);
+                lines.push(`hover combo: hidden=${tip('combo').hidden} text=${words(tip('combo'))}`);
+                const dot = document.querySelector('#scatter .holi-chart-point').getBoundingClientRect();
+                move(plotOf('scatter'), dot.left + dot.width / 2 + 3, dot.top + dot.height / 2 + 3);
+                lines.push(`hover scatter: hidden=${tip('scatter').hidden} text=${words(tip('scatter'))}`);
+                document.querySelector('#doughnut .holi-chart-slice')
+                    .dispatchEvent(new PointerEvent('pointermove', { clientX: box('doughnut').left + 200, clientY: box('doughnut').top + 100, bubbles: true }));
+                lines.push(`hover doughnut: hidden=${tip('doughnut').hidden} text=${words(tip('doughnut'))}`);
+                let picked = 'none';
+                document.querySelector('#combo .holi-chart').addEventListener('chartpointselect', (e) => { picked = JSON.stringify(e.detail); });
+                document.querySelector('#combo .holi-chart-bar').dispatchEvent(new MouseEvent('click', { bubbles: true }));
+                lines.push(`click bar: ${picked}`);
+                document.querySelector('#combo [data-action=toggle-series]').click();
+                lines.push(`hide revenue: bars=${count('combo', '.holi-chart-bar')} lines=${count('combo', '.holi-chart-line')} `
+                    + `pressed=${document.querySelector('#combo [data-action=toggle-series]').getAttribute('aria-pressed')} yticks=${text('combo', '.holi-chart-axis-y text')}`);
+                document.getElementById('summary').textContent = lines.join('\n');
+            }, 800));
+        </script>
+    </body>
+</html>

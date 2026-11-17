@@ -91,6 +91,13 @@ const componentEntries = [
         load: () => import('../components/checkbox.js')
     },
     {
+        id: 'dashboardgrid',
+        aliases: ['dashboardgrid'],
+        styles: ['dashboardgrid'],
+        resolve: (mod) => mod.DashboardGridComponent,
+        load: () => import('../components/dashboardgrid.js')
+    },
+    {
         id: 'datagrid',
         aliases: ['datagrid'],
         styles: ['datagrid'],
@@ -295,6 +302,13 @@ const componentEntries = [
         styles: ['rte'],
         resolve: (mod) => mod.RteComponent,
         load: () => import('../components/rte.js')
+    },
+    {
+        id: 'sqleditor',
+        aliases: ['sqleditor'],
+        styles: ['sqleditor'],
+        resolve: (mod) => mod.SqlEditorComponent,
+        load: () => import('../components/sqleditor.js')
     },
     {
         id: 'search',

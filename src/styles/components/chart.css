@@ -94,3 +94,124 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/* ---- multi-series cartesian charts: axes, scatter, hover, tooltip ---- */
+
+:where(body[theme="default"], body:not([theme])) .holi-chart {
+    --chart-axis: #64748b;
+    --chart-zero: #94a3b8;
+    --chart-surface: #ffffff;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-plot {
+    position: relative;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-empty[hidden],
+:where(body[theme="default"], body:not([theme])) .holi-chart-svg[hidden],
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend[hidden] {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-axis-x line {
+    stroke: var(--chart-zero);
+    stroke-width: 1;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-axis-x text,
+:where(body[theme="default"], body:not([theme])) .holi-chart-axis-y text,
+:where(body[theme="default"], body:not([theme])) .holi-chart-axis-title text {
+    fill: var(--chart-axis);
+    font-size: 11px;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-zero {
+    stroke: var(--chart-zero);
+    stroke-width: 1;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-area {
+    fill-opacity: 0.18;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-line {
+    fill: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-point {
+    fill-opacity: 0.75;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-hover {
+    fill: var(--chart-line);
+    fill-opacity: 0.08;
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-ring {
+    fill: none;
+    stroke: var(--chart-axis);
+    stroke-width: 1.5;
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip {
+    position: absolute;
+    top: 4px;
+    z-index: 10;
+    min-width: 140px;
+    padding: 8px 10px;
+    border: 1px solid var(--chart-border);
+    border-radius: 8px;
+    background: var(--chart-surface);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+    font-size: 12px;
+    pointer-events: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip[hidden] {
+    display: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip-head {
+    margin-bottom: 4px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip-rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip-row {
+    display: grid;
+    grid-template-columns: 10px 1fr auto;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.6;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-tooltip-value {
+    font-variant-numeric: tabular-nums;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    padding: 2px 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+:where(body[theme="default"], body:not([theme])) .holi-chart-legend-button.is-hidden {
+    opacity: 0.4;
+    text-decoration: line-through;
+}

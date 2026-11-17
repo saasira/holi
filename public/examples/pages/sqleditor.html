@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SQL editor</title>
+        <link rel="stylesheet" href="/dist/holi.css">
+        <script src="/dist/holi.js"></script>
+        <style>
+            body { font-family: Segoe UI, sans-serif; margin: 20px; max-width: 900px; }
+            #log { background: #f1f5f9; padding: 8px; font-size: 12px; white-space: pre-wrap; }
+        </style>
+    </head>
+    <body>
+        <h1>SQL editor</h1>
+        <p>Keywords, strings, numbers, comments and <code>:name</code> parameters are coloured. Type two letters for suggestions (or Ctrl+Space); Tab or Enter
+            accepts. <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the selection, or all of it; <kbd>Ctrl</kbd>+<kbd>/</kbd> comments lines.
+            Each parameter gets a row for its type and value.</p>
+
+        <sqleditor id="editor" height="220" schema='{"orders":["id","region","total","placed_at"],"customers":["id","name","country"]}'>
+-- Revenue by region for a period
+SELECT region, count(*) AS orders, sum(total) AS revenue
+FROM orders
+WHERE placed_at >= :from AND region <> 'n/a' AND total > 10.5
+GROUP BY region
+ORDER BY revenue DESC
+LIMIT :top;
+        </sqleditor>
+
+        <pre id="log">pending</pre>
+        <script>
+            window.addEventListener('load', () => setTimeout(() => {
+                const el = document.querySelector('#editor .holi-sqleditor');
+                const log = document.getElementById('log');
+                const lines = [];
+                const say = (text) => { lines.unshift(text); log.textContent = lines.slice(0, 8).join('\n'); };
+                el.addEventListener('sqleditorrun', (e) => say('run: ' + JSON.stringify({ selection: e.detail.selection, params: e.detail.params, chars: e.detail.sql.length })));
+                el.addEventListener('sqleditorparams', (e) => say('params: ' + JSON.stringify(e.detail.params)));
+                say('ready');
+            }, 600));
+        </script>
+    </body>
+</html>
