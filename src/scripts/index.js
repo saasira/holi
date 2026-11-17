@@ -5,6 +5,7 @@ import { ServiceWorkerManager } from './utils/sw.js';
 import { TemplateRegistry } from './utils/template_registry.js';
 import { ThemeRegistry } from './utils/theme_registry.js';
 import { LazyComponentLoader } from './utils/lazy_component_loader.js';
+import { CodeLanguages } from './utils/code_languages.js';
 import './utils/content_provider.js';
 import './utils/state.js';
 // The client-side router: documented and used by the navigation example, but not in the bundle until now.
@@ -32,7 +33,7 @@ const initRuntime = async (container = document) => {
 
 captureBundleBase();
 
-window.HoliApp = { instance: HoliApp, HoliApp, ServiceWorkerManager, ThemeRegistry, LocaleRegistry, ReleaseAssetRegistry, TemplateRegistry };
+window.HoliApp = { instance: HoliApp, HoliApp, ServiceWorkerManager, ThemeRegistry, LocaleRegistry, ReleaseAssetRegistry, TemplateRegistry, CodeLanguages };
 window.Holi = window.HoliApp;
 window.HoliLoader = LazyComponentLoader;
 

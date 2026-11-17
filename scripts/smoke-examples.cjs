@@ -86,6 +86,18 @@ const sourceChecks = [
         patterns: ['<histogram', 'component="histogram"', 'interval="1m"', 'histogrambrush', 'histogramselect']
     },
     {
+        file: 'src/examples/pages/chart-series.html',
+        patterns: ['<chart', 'series=', 'chartpointselect', 'toggle-series']
+    },
+    {
+        file: 'src/examples/pages/dashboardgrid.html',
+        patterns: ['<dashboardgrid', 'data-title=', 'dashboardlayoutchange', 'setLayout']
+    },
+    {
+        file: 'src/examples/pages/codeeditor.html',
+        patterns: ['<codeeditor', 'language=', 'CodeLanguages.register', 'codeeditorrun']
+    },
+    {
         file: 'src/examples/pages/timerange.html',
         patterns: ['<timerange', 'component="timerange"', 'timezone="utc"', 'timerangechange', 'setAbsolute']
     },
@@ -116,7 +128,7 @@ const builtChecks = [
     'public/examples/pages/histogram.html',
     'public/examples/pages/chart-series.html',
     'public/examples/pages/dashboardgrid.html',
-    'public/examples/pages/sqleditor.html',
+    'public/examples/pages/codeeditor.html',
     'public/examples/pages/timerange.html',
     'public/examples/pages/tabs.html'
 ];
