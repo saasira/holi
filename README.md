@@ -36,7 +36,7 @@ Rich text editor & its extension API: `docs/rte.md`.
 - Lifecycle-aware component registry with DOM mutation observation.
 - Content provider pattern for dynamic/lazy content per component.
 - jQuery-like utility surface (`Q`) and native HTTP helper (`HTTP`).
-- Prebuilt component set including accordion, calendar, carousel, chart, datagrid, datatable, dialog, drawer, dropdown, form controls, gallery, histogram, tabs, timerange, toast, tree, wizard, and more.
+- Prebuilt component set including accordion, calendar, carousel, chart, dashboardgrid, datagrid, datatable, dialog, drawer, dropdown, form controls, gallery, histogram, sqleditor, tabs, timerange, toast, tree, wizard, and more.
 
 ## Declarative Dependencies
 

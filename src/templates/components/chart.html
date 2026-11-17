@@ -1,8 +1,31 @@
 <template id="chart-template">
     <section class="holi-chart" role="img">
         <h3 class="holi-chart-title" data-role="title" hidden></h3>
-        <svg class="holi-chart-svg" data-role="svg"></svg>
-        <p class="holi-chart-empty" data-role="empty">No chart data available.</p>
+        <div class="holi-chart-plot" data-role="plot">
+            <svg class="holi-chart-svg" data-role="svg"></svg>
+            <div class="holi-chart-tooltip" data-role="tooltip" role="tooltip" hidden>
+                <div class="holi-chart-tooltip-head" data-role="tooltip-head"></div>
+                <ul class="holi-chart-tooltip-rows" data-role="tooltip-rows"></ul>
+            </div>
+        </div>
+        <p class="holi-chart-empty" data-role="empty" hidden>No chart data available.</p>
         <ul class="holi-chart-legend" data-role="legend"></ul>
     </section>
+</template>
+
+<template id="chart-legend-item-template">
+    <li class="holi-chart-legend-item">
+        <button type="button" class="holi-chart-legend-button" data-action="toggle-series" data-series="@{item.key}" aria-pressed="true">
+            <span class="holi-chart-legend-swatch" data-role="swatch"></span>
+            <span class="holi-chart-legend-label">@{item.label}</span>
+        </button>
+    </li>
+</template>
+
+<template id="chart-tooltip-row-template">
+    <li class="holi-chart-tooltip-row">
+        <span class="holi-chart-legend-swatch" data-role="swatch"></span>
+        <span class="holi-chart-tooltip-label">@{item.label}</span>
+        <span class="holi-chart-tooltip-value">@{item.value}</span>
+    </li>
 </template>
